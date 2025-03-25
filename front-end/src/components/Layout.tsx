@@ -1,8 +1,11 @@
-import { Outlet } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useAuth } from "../lib/AuthContext";
 
-export default function Layout() {
+interface LayoutProps {
+  children: React.ReactNode;
+}
+
+export default function Layout({ children }: LayoutProps) {
   const { currentUser, userProfile, logout, loading } = useAuth();
 
   return (
@@ -22,7 +25,11 @@ export default function Layout() {
                 <div className="flex items-center space-x-4">
                   <Link to="/dashboard">Dashboard</Link>
                   {userProfile?.photoURL && (
-                    <img src={userProfile.photoURL} alt="Avatar" className="w-8 h-8 rounded-full" />
+                    <img
+                      src={userProfile.photoURL}
+                      alt="Avatar"
+                      className="w-8 h-8 rounded-full"
+                    />
                   )}
                   <button
                     onClick={() => logout()}
@@ -32,7 +39,10 @@ export default function Layout() {
                   </button>
                 </div>
               ) : (
-                <Link to="/login" className="bg-white text-primary hover:bg-gray-100 px-4 py-2 rounded font-medium">
+                <Link
+                  to="/login"
+                  className="bg-white text-primary hover:bg-gray-100 px-4 py-2 rounded font-medium"
+                >
                   Log-in
                 </Link>
               )}
@@ -42,14 +52,15 @@ export default function Layout() {
       </header>
 
       {/* Conteúdo principal */}
-      <main className="flex-grow container mx-auto px-4 py-8">
-        <Outlet />
-      </main>
+      <main className="flex-grow container mx-auto px-4 py-8">{children}</main>
 
       {/* Footer simplificado */}
       <footer className="bg-gray-800 text-white py-6">
         <div className="container mx-auto px-4 text-center">
-          <p>© 2025 Open Source Radar - Developed by Team 6 - Hackathon A BASE / Programadores Sem Pátria</p>
+          <p>
+            © 2025 Open Source Radar - Developed by Team 6 - Hackathon A BASE /
+            Programadores Sem Pátria
+          </p>
         </div>
       </footer>
     </div>

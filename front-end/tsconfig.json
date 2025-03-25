@@ -1,6 +1,13 @@
 {
   "files": [],
+<<<<<<< HEAD
   "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }],
+=======
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ],
+>>>>>>> fd39d30 (chore: configure alias path)
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {

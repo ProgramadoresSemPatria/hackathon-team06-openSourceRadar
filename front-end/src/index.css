@@ -118,6 +118,7 @@
   }
   body {
     @apply bg-background text-foreground;
+<<<<<<< HEAD
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -191,3 +192,7 @@ button:focus-visible {
 =======
 @import "tailwindcss";
 >>>>>>> 7b99408 (feat: add tailwind)
+=======
+  }
+}
+>>>>>>> ca557f0 (feat: add shadcn)

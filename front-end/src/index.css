@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -184,3 +185,5 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+=======
+>>>>>>> fa66fbe (feat: add react-router)

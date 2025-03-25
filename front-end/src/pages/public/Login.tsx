@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/AuthContext";
-import { Github, GitPullRequestArrow } from "lucide-react";
+import { ArrowLeft, Github, GitPullRequestArrow } from "lucide-react";
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
 
 export default function Login() {
@@ -24,7 +24,12 @@ export default function Login() {
   };
 
   return (
-    <div className="w-full h-svh flex items-center justify-center px-8">
+    <div className="relative w-full h-svh flex items-center justify-center px-8">
+      <Link to={"/"} className="absolute top-8 left-8">
+        <Button variant="outline">
+          <ArrowLeft />
+        </Button>
+      </Link>
       <div className="flex flex-col gap-6 max-w-96">
         <form>
           <div className="flex flex-col gap-6">

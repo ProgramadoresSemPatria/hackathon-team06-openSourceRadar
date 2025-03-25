@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.15",
+<<<<<<< HEAD
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.483.0",
@@ -24,6 +25,12 @@
 =======
     "react-router": "^7.4.0"
 >>>>>>> fa66fbe (feat: add react-router)
+=======
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router": "^7.4.0",
+    "tailwindcss": "^4.0.15"
+>>>>>>> 7b99408 (feat: add tailwind)
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",

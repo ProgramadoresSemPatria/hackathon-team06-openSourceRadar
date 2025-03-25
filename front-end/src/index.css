@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -187,3 +188,6 @@ button:focus-visible {
 }
 =======
 >>>>>>> fa66fbe (feat: add react-router)
+=======
+@import "tailwindcss";
+>>>>>>> 7b99408 (feat: add tailwind)

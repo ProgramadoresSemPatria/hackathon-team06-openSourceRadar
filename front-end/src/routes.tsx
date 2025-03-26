@@ -3,6 +3,7 @@ import LandingPage from "./pages/public/LandingPage";
 import Dashboard from "./pages/private/Dashboard";
 import Login from "./pages/public/Login";
 import ProtectedLayout from "./components/ProtectedLayout";
+import Onboarding from "./pages/private/Onboarding";
 
 export const router = createBrowserRouter([
   {
@@ -19,7 +20,17 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: "/panel",
+    path: "onboarding",
+    element: <ProtectedLayout />,
+    children: [
+      {
+        index: true,
+        element: <Onboarding />,
+      },
+    ],
+  },
+  {
+    path: "panel",
     element: <ProtectedLayout />,
     children: [
       {

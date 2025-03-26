@@ -60,7 +60,7 @@ export default function Onboarding() {
 
   return (
     <div className="w-full h-svh flex items-center justify-center">
-      <Card className="w-full max-w-2xl mx-auto">
+      <Card className="w-full max-w-2xl mx-auto border-0 shadow-none">
         <form onSubmit={handleSubmit}>
           <CardHeader>
             <CardTitle className="text-xl font-medium">

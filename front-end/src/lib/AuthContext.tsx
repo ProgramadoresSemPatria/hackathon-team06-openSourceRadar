@@ -35,6 +35,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      console.log("Auth state changed:", user?.uid || "No user");
       setCurrentUser(user);
 
       if (user) {
@@ -45,6 +46,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
           if (userDoc.exists()) {
             setUserProfile(userDoc.data() as UserProfile);
+          } else {
+            console.log("User doc doesn't exist in Firestore");
           }
         } catch (error) {
           console.error("Erro ao buscar perfil do usuário:", error);

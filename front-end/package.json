@@ -41,9 +41,13 @@
     "lucide-react": "^0.483.0",
     "next-themes": "^0.4.6",
 <<<<<<< HEAD
+<<<<<<< HEAD
     "octokit": "^4.1.2",
 =======
 >>>>>>> b308eda (feat: add login page with toaster)
+=======
+    "octokit": "^4.1.2",
+>>>>>>> 972223e (feat: add repository search on the landing page)
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router": "^7.4.0",

@@ -1,11 +1,13 @@
+// src/components/SearchLandingPage/index.tsx
 import { Clock3, GitFork, Package, Search, Star, Loader2 } from "lucide-react";
 import { Input } from "../ui/input";
 import { Badge } from "../ui/badge";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Octokit } from "octokit";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "../ui/button";
 import { useDebounce } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
 
 interface RepositoryType {
   id: number;
@@ -19,68 +21,59 @@ interface RepositoryType {
   updated_at: string;
 }
 
+// Create a singleton Octokit instance
+const octokit = new Octokit();
+
 export default function SearchLandingPage() {
-  const octokit = new Octokit();
-  const [repositories, setRepositories] = useState<RepositoryType[]>([]);
   const [searchInput, setSearchInput] = useState<string>("");
   const debouncedSearch = useDebounce(searchInput, 500);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalCount, setTotalCount] = useState<number>(0);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
   const perPage = 3;
-  const hasNextPage = currentPage * perPage < totalCount;
 
-  useEffect(() => {
-    if (debouncedSearch || currentPage > 1) {
-      searchOpenSourceRepos();
-    }
-  }, [debouncedSearch, currentPage]);
+  const fetchRepositories = async ({ queryKey }: any) => {
+    const [_, search, page] = queryKey;
+    const query = `${search || "stars:>10000"} is:public license:mit`;
 
-  const searchOpenSourceRepos = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
+    const response = await octokit.request("GET /search/repositories", {
+      q: query,
+      sort: "stars",
+      order: "desc",
+      per_page: perPage,
+      page: page,
+    });
 
-      const response = await octokit.request("GET /search/repositories", {
-        q: `${debouncedSearch || "stars:>10000"} is:public license:mit`,
-        sort: "stars",
-        order: "desc",
-        per_page: perPage,
-        page: currentPage,
-      });
+    const items = response.data.items.map((item: any) => {
+      const date = new Date(item.updated_at);
+      const formattedDate = date.toISOString().split("T")[0];
 
-      const values: RepositoryType[] = response?.data?.items.map((value) => {
-        const date = new Date(value.updated_at);
-        const formattedDate = date.toISOString().split("T")[0];
+      return {
+        id: item.id,
+        name: item.name,
+        full_name: item.full_name,
+        description: item.description || "Sem descrição",
+        forks_count: item.forks_count,
+        language: item.language || "Não especificado",
+        open_issues_count: item.open_issues_count,
+        stargazers_count: item.stargazers_count,
+        updated_at: formattedDate,
+      };
+    });
 
-        return {
-          id: value.id,
-          name: value.name,
-          full_name: value.full_name,
-          description: value.description || "Sem descrição",
-          forks_count: value.forks_count,
-          language: value.language || "Não especificado",
-          open_issues_count: value.open_issues_count,
-          stargazers_count: value.stargazers_count,
-          updated_at: formattedDate,
-        };
-      });
-
-      setRepositories(values);
-      setTotalCount(response?.data?.total_count || 0);
-    } catch (error) {
-      console.error("Erro ao buscar repositórios:", error);
-      setError("Não foi possível carregar os repositórios. Tente novamente mais tarde.");
-    } finally {
-      setIsLoading(false);
-    }
+    return {
+      repositories: items,
+      totalCount: response.data.total_count,
+    };
   };
 
-  // Initial load of popular repositories
-  useEffect(() => {
-    searchOpenSourceRepos();
-  }, []);
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["repositories", debouncedSearch, currentPage],
+    queryFn: fetchRepositories,
+    keepPreviousData: true, // Keep previous data while fetching new data
+  });
+
+  const repositories = data?.repositories || [];
+  const totalCount = data?.totalCount || 0;
+  const hasNextPage = currentPage * perPage < totalCount;
 
   return (
     <section className="bg-muted/40 py-20 flex items-center justify-center">
@@ -105,7 +98,7 @@ export default function SearchLandingPage() {
 
         <div className="space-y-4 mb-6">
           <Badge variant="outline" className="px-3 py-1 text-sm">
-            Recomendados
+            {searchInput ? "Resultados" : "Recomendados"}
           </Badge>
         </div>
 
@@ -115,7 +108,7 @@ export default function SearchLandingPage() {
           </div>
         ) : error ? (
           <div className="text-center py-8 text-destructive">
-            <p>{error}</p>
+            <p>Não foi possível carregar os repositórios. Tente novamente mais tarde.</p>
           </div>
         ) : (
           <div className="space-y-4 mb-6">
@@ -156,38 +149,40 @@ export default function SearchLandingPage() {
           </div>
         )}
 
-        <div className="space-y-4">
-          <div className="flex justify-between">
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => setCurrentPage((prev) => prev - 1)}
-              disabled={currentPage <= 1 || isLoading}
-            >
-              Anterior
-            </Button>
-
-            <div className="flex gap-2">
-              <Button size="sm" variant="outline" disabled>
-                {currentPage}
+        {totalCount > 0 && (
+          <div className="space-y-4">
+            <div className="flex justify-between">
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setCurrentPage((prev) => prev - 1)}
+                disabled={currentPage <= 1 || isLoading}
+              >
+                Anterior
               </Button>
-              {hasNextPage && (
-                <Button size="sm" variant="outline" onClick={() => setCurrentPage((prev) => prev + 1)}>
-                  {currentPage + 1}
-                </Button>
-              )}
-            </div>
 
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => setCurrentPage((prev) => prev + 1)}
-              disabled={!hasNextPage || isLoading}
-            >
-              Próximo
-            </Button>
+              <div className="flex gap-2">
+                <Button size="sm" variant="outline" disabled>
+                  {currentPage}
+                </Button>
+                {hasNextPage && (
+                  <Button size="sm" variant="outline" onClick={() => setCurrentPage((prev) => prev + 1)}>
+                    {currentPage + 1}
+                  </Button>
+                )}
+              </div>
+
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setCurrentPage((prev) => prev + 1)}
+                disabled={!hasNextPage || isLoading}
+              >
+                Próximo
+              </Button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );

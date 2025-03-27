@@ -80,6 +80,7 @@ export const ProfileDialog = ({ children }: ProfileDialogProps) => {
             </RadioGroup>
           </div>
         </div>
+
         <DialogFooter>
           <DialogClose>
             <Button className="w-full" onClick={handleProfileSave}>

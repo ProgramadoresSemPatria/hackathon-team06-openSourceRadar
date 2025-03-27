@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router";
+import SearchLandingPage from "@/components/SearchLandingPage";
 
 export default function LandingPage() {
   return (
@@ -47,6 +48,8 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      <SearchLandingPage />
 
       {/* Features Section */}
       <section className="bg-muted/40 py-20 flex items-center justify-center">

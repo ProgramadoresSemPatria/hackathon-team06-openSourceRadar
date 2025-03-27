@@ -34,7 +34,9 @@ export const ProfileDialog = ({ children }: ProfileDialogProps) => {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogTrigger asChild>
+        <div className="w-full">{children}</div>
+      </DialogTrigger>
 
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

@@ -4,6 +4,7 @@ import Dashboard from "./pages/private/Dashboard";
 import Login from "./pages/public/Login";
 import ProtectedLayout from "./components/ProtectedLayout";
 import Onboarding from "./pages/private/Onboarding";
+import Explore from "./pages/private/Search";
 
 export const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ export const router = createBrowserRouter([
       {
         path: "dashboard",
         element: <Dashboard />,
+      },
+      {
+        path: "explore",
+        element: <Explore />,
       },
     ],
   },

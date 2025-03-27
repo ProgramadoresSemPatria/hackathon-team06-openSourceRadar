@@ -11,7 +11,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { repositories } from "@/data";
-import { RepositoryCard } from "./RepositoryCard";
+import { RepositoryCard } from "../../../components/RepositoryCard";
 import { Filters } from "./Filters";
 
 export default function Explore() {

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { AlertCircle } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Pagination,
@@ -10,8 +9,6 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { repositories } from "@/data";
-import { RepositoryCard } from "../../../components/RepositoryCard";
 import { Filters } from "./Filters";
 
 export default function Explore() {
@@ -53,7 +50,7 @@ export default function Explore() {
           </Tabs>
         </div>
 
-        {repositories.length > 0 ? (
+        {/*         {repositories.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {repositories.map((repo) => (
               <RepositoryCard key={repo.id} repo={repo} />
@@ -69,7 +66,7 @@ export default function Explore() {
                 : "Try adjusting your filters to find more repositories."}
             </p>
           </div>
-        )}
+        )} */}
 
         {/* Pagination */}
         {totalPages > 1 && (

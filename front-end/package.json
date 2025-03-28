@@ -11,6 +11,9 @@
   },
   "dependencies": {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 2a5a384 (refactor: break components and functions)
     "@octokit/types": "^13.10.0",
     "@radix-ui/react-avatar": "^1.1.3",
     "@radix-ui/react-dialog": "^1.1.6",

@@ -1,34 +1,12 @@
-// src/components/SearchLandingPage/index.tsx
-import { Clock3, GitFork, Package, Search, Star, Loader2 } from "lucide-react";
+import { Search, Loader2 } from "lucide-react";
 import { Input } from "../../../components/ui/input";
-import { Badge } from "../../../components/ui/badge";
 import { useState } from "react";
-import { Octokit } from "octokit";
 import { Button } from "../../../components/ui/button";
-import { useDebounce } from "@/lib/utils";
+import { useDebounce } from "@/lib/useDebounce";
 import { useQuery } from "@tanstack/react-query";
 import { RepositoryCard } from "../../../components/RepositoryCard";
-
-// Define proper types
-export interface Repository {
-  id: number;
-  name: string;
-  full_name: string;
-  description: string;
-  forks_count: number;
-  language: string;
-  open_issues_count: number;
-  stargazers_count: number;
-  updated_at: string;
-}
-
-interface RepositoriesData {
-  repositories: Repository[];
-  totalCount: number;
-}
-
-// Create a singleton Octokit instance
-const octokit = new Octokit();
+import { RepositoriesData, Repository } from "@/types/repository";
+import { fetchRepositories } from "@/lib/fetchRepositories";
 
 export default function SearchSection() {
   const [searchInput, setSearchInput] = useState<string>("");
@@ -36,80 +14,11 @@ export default function SearchSection() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const perPage = 3;
 
-  // The query function
-  const fetchRepositories = async (): Promise<RepositoriesData> => {
-    const query = `${debouncedSearch || "stars:>10000"} is:public license:mit`;
-
-    try {
-      const response = await octokit.request("GET /search/repositories", {
-        q: query,
-        sort: "stars",
-        order: "desc",
-        per_page: perPage,
-        page: currentPage,
-      });
-
-      const items = response.data.items.map((item: any) => {
-        const date = new Date(item.updated_at);
-        const formattedDate = date.toISOString().split("T")[0];
-
-        return {
-          id: item.id,
-          name: item.name,
-          full_name: item.full_name,
-          description: item.description || "Sem descrição",
-          forks_count: item.forks_count,
-          language: item.language || "Não especificado",
-          open_issues_count: item.open_issues_count,
-          stargazers_count: item.stargazers_count,
-          updated_at: formattedDate,
-        };
-      });
-
-      return {
-        repositories: items,
-        totalCount: response.data.total_count,
-      };
-    } catch (error: unknown) {
-      // Type guard for the error
-      if (
-        typeof error === "object" &&
-        error !== null &&
-        "status" in error &&
-        error.status === 403 &&
-        "response" in error &&
-        error.response &&
-        typeof error.response === "object" &&
-        "headers" in error.response &&
-        error.response.headers &&
-        typeof error.response.headers === "object" &&
-        "x-ratelimit-remaining" in error.response.headers &&
-        error.response.headers["x-ratelimit-remaining"] === "0"
-      ) {
-        const headers = error.response.headers;
-        if ("x-ratelimit-reset" in headers && headers["x-ratelimit-reset"]) {
-          const resetTime = headers["x-ratelimit-reset"];
-          const resetDate =
-            typeof resetTime === "string"
-              ? new Date(parseInt(resetTime) * 1000)
-              : new Date();
-          throw new Error(
-            `Limite de requisições GitHub atingido. Tente novamente após ${resetDate.toLocaleTimeString()}.`
-          );
-        }
-      }
-      throw new Error("Erro ao buscar repositórios: " + String(error));
-    }
-  };
-
-  // Use React Query with explicit typing
-  const { data, isLoading, error } = useQuery<RepositoriesData, Error>({
+  const { data, isLoading, error } = useQuery<RepositoriesData | undefined>({
     queryKey: ["repositories", debouncedSearch, currentPage],
-    queryFn: fetchRepositories,
-    // Remove keepPreviousData as it's causing typing issues
+    queryFn: () => fetchRepositories(debouncedSearch, perPage, currentPage),
   });
 
-  // Use empty arrays as defaults to avoid null/undefined errors
   const repositories = data?.repositories ?? [];
   const totalCount = data?.totalCount ?? 0;
   const hasNextPage = currentPage * perPage < totalCount;

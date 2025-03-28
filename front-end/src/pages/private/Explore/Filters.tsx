@@ -14,7 +14,7 @@ import {
   forkFilters,
   issueFilters,
   topicFilters,
-} from "@/data";
+} from "@/lib/data";
 import { Filter, Search } from "lucide-react";
 import { useState } from "react";
 

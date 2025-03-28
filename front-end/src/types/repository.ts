@@ -8,6 +8,8 @@ export interface Repository {
   open_issues_count: number;
   stargazers_count: number;
   updated_at: string;
+  url: string;
+  topics?: string[];
 }
 
 export interface RepositoriesData {

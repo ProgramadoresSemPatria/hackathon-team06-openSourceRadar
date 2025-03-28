@@ -30,6 +30,8 @@ export const fetchRepositories = async (
     language: repository.language || "Não especificado",
     open_issues_count: repository.open_issues_count,
     stargazers_count: repository.stargazers_count,
+    url: repository.html_url,
+    topics: repository.topics,
     updated_at: new Date(repository.updated_at).toLocaleDateString(),
   }));
 

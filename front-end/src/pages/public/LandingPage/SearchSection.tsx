@@ -1,6 +1,6 @@
 import { Search } from "lucide-react";
 import { Input } from "../../../components/ui/input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDebounce } from "@/lib/useDebounce";
 import { useQuery } from "@tanstack/react-query";
 import { RepositoryCard } from "../../../components/RespositoryCard";
@@ -22,6 +22,10 @@ export default function SearchSection() {
 
   const repositories = data?.repositories ?? [];
   const totalCount = data?.totalCount ?? 0;
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedSearch]);
 
   return (
     <section className="flex flex-col">

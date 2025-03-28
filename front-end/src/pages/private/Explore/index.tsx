@@ -1,15 +1,7 @@
 import { useState } from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 import { Filters } from "./Filters";
+import { Pagination } from "@/components/Pagination";
 
 export default function Explore() {
   const [activeTab, setActiveTab] = useState("recommended");
@@ -69,48 +61,11 @@ export default function Explore() {
         )} */}
 
         {/* Pagination */}
-        {totalPages > 1 && (
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious />
-              </PaginationItem>
-
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                (page) => {
-                  // Show first page, last page, and pages around current page
-                  if (
-                    page === 1 ||
-                    page === totalPages ||
-                    (page >= currentPage - 1 && page <= currentPage + 1)
-                  ) {
-                    return (
-                      <PaginationItem key={page}>
-                        <PaginationLink isActive={page === currentPage}>
-                          {page}
-                        </PaginationLink>
-                      </PaginationItem>
-                    );
-                  } else if (
-                    (page === 2 && currentPage > 3) ||
-                    (page === totalPages - 1 && currentPage < totalPages - 2)
-                  ) {
-                    return (
-                      <PaginationItem key={page}>
-                        <PaginationEllipsis />
-                      </PaginationItem>
-                    );
-                  }
-                  return null;
-                }
-              )}
-
-              <PaginationItem>
-                <PaginationNext />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
-        )}
+        <Pagination
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPages={totalPages}
+        />
       </div>
     </div>
   );

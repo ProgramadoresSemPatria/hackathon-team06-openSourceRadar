@@ -1,13 +1,13 @@
 import { Search } from "lucide-react";
 import { Input } from "../../../components/ui/input";
 import { useState } from "react";
-import { Button } from "../../../components/ui/button";
 import { useDebounce } from "@/lib/useDebounce";
 import { useQuery } from "@tanstack/react-query";
 import { RepositoryCard } from "../../../components/RespositoryCard";
 import { RepositoriesData, Repository } from "@/types/repository";
 import { fetchRepositories } from "@/lib/fetchRepositories";
 import { Skeleton } from "@/components/RespositoryCard/skeleton";
+import { Pagination } from "@/components/Pagination";
 
 export default function SearchSection() {
   const [searchInput, setSearchInput] = useState<string>("");
@@ -22,7 +22,6 @@ export default function SearchSection() {
 
   const repositories = data?.repositories ?? [];
   const totalCount = data?.totalCount ?? 0;
-  const hasNextPage = currentPage * perPage < totalCount;
 
   return (
     <section className="flex flex-col">
@@ -65,44 +64,12 @@ export default function SearchSection() {
         </div>
       )}
 
-      {totalCount > 0 && (
-        <div className="space-y-4">
-          <div className="flex justify-between">
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => setCurrentPage((prev) => prev - 1)}
-              disabled={currentPage <= 1 || isLoading}
-            >
-              Anterior
-            </Button>
-
-            <div className="flex gap-2">
-              <Button size="sm" variant="outline" disabled>
-                {currentPage}
-              </Button>
-              {hasNextPage && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => setCurrentPage((prev) => prev + 1)}
-                >
-                  {currentPage + 1}
-                </Button>
-              )}
-            </div>
-
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => setCurrentPage((prev) => prev + 1)}
-              disabled={!hasNextPage || isLoading}
-            >
-              Próximo
-            </Button>
-          </div>
-        </div>
-      )}
+      <Pagination
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        totalPages={totalCount}
+        disabled={isLoading}
+      />
     </section>
   );
 }

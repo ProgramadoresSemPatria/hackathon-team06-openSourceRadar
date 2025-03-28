@@ -28,7 +28,7 @@ export default function SearchSection() {
   }, [debouncedSearch]);
 
   return (
-    <section className="flex flex-col">
+    <section className="flex flex-col -mt-16 lg:mt-0">
       <div className="space-y-4 mb-6">
         <h2 className="text-muted-foreground max-w-2xl font-medium">
           Discover open source projects that match your interests and skill
@@ -60,7 +60,7 @@ export default function SearchSection() {
         </div>
       ) : (
         <div className="space-y-4 mb-6">
-          <div className="grid gap-8 md:grid-cols-3">
+          <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
             {repositories.map((repository: Repository) => (
               <RepositoryCard repository={repository} />
             ))}

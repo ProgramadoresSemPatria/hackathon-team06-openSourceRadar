@@ -1,10 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { Github, Compass, Lock } from "lucide-react";
+import { Compass, Lock } from "lucide-react";
 import { Radar } from "./Radar";
+import { Link } from "react-router";
 
 export function HeroSection() {
   return (
-    <section className="grid gap-12 md:grid-cols-2 md:gap-16 items-center ">
+    <section className="grid gap-12 lg:grid-cols-2 md:gap-16 items-center ">
       {/* Text container */}
       <div className="flex flex-col gap-6">
         <div className="inline-flex items-center rounded-full border px-3 py-1 text-sm">
@@ -13,20 +14,22 @@ export function HeroSection() {
         </div>
 
         <div className="space-y-4">
-          <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
+          <h1 className="font-bold tracking-tighter text-5xl xl:text-6xl">
             Your personal <span className="text-foreground">open source</span>{" "}
             radar
           </h1>
-          <p className="text-muted-foreground md:text-xl">
+          <p className="text-muted-foreground text-base sm:text-lg xl:text-xl">
             Find projects that match your skills, track your contributions, and
             build your developer profile in the open source community.
           </p>
         </div>
 
-        <Button size="lg" className="w-full md:max-w-52 gap-2">
-          <Github className="h-5 w-5" />
-          <span>Connect with GitHub</span>
-        </Button>
+        <Link to={"/panel/explore"}>
+          <Button size="lg" className="w-full md:max-w-52 gap-2">
+            <Compass className="h-5 w-5" />
+            <span>Explore more</span>
+          </Button>
+        </Link>
       </div>
 
       {/* Radar Card */}

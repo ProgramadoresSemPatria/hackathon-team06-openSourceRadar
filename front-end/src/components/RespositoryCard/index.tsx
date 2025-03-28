@@ -5,7 +5,7 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-import { languaguesData } from "@/lib/languaguesData";
+import { languaguesData } from "@/lib/data";
 import { Repository } from "@/types/repository";
 import { BookOpen, Star, GitFork, AlertCircle, Clock } from "lucide-react";
 

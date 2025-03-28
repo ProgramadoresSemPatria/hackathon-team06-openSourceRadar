@@ -15,6 +15,7 @@ interface RepositoryCardProps {
   hasFavoriteButton?: boolean;
 }
 
+//we don't have difficulty badges yet
 const difficultyConfig = {
   beginner: {
     variant: "outline",
@@ -32,6 +33,7 @@ const difficultyConfig = {
   },
 } as const;
 
+// hasFavoriteButton it's not being used since we didn't implement the like function yet
 export const RepositoryCard = ({
   repository,
   hasFavoriteButton,
@@ -54,7 +56,7 @@ export const RepositoryCard = ({
               <CardTitle className="flex items-center">
                 <BookOpen className="h-4 w-4 mr-2 shrink-0" />
                 <div>
-                  <span className="text-muted-foreground mr-1">
+                  <span className="text-muted-foreground">
                     {repository.full_name.split("/")[0]}/
                   </span>
                   {repository.full_name.split("/")[1]}

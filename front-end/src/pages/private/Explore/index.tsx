@@ -1,63 +1,28 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AlertCircle } from "lucide-react";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Filters } from "./Filters";
-import { Octokit } from "octokit";
 import { Pagination } from "@/components/Pagination";
 import { RepositoryCard } from "@/components/RespositoryCard";
-import { Repository } from "@/types/repository";
+import { RepositoriesData } from "@/types/repository";
+import { fetchRepositories } from "@/lib/fetchRepositories";
+import { useQuery } from "@tanstack/react-query";
+import { Skeleton } from "@/components/RespositoryCard/skeleton";
 
 export default function Explore() {
-  const octokit = new Octokit();
   const [activeTab, setActiveTab] = useState("recommended");
   const [currentPage, setCurrentPage] = useState(1);
-  const [repositories, setRepositories] = useState<Repository[]>([]);
-  const [totalPages, setTotalPages] = useState(1);
   const perPage = 12;
 
-  useEffect(() => {
-    searchOpenSourceRepos();
-  }, [currentPage]);
+  const { data, isLoading, error } = useQuery<RepositoriesData | undefined>({
+    queryKey: ["repositories", "", currentPage],
+    queryFn: () => fetchRepositories("", perPage, currentPage),
+  });
 
-  const searchOpenSourceRepos = async () => {
-    try {
-      const response = await octokit.request("GET /search/repositories", {
-        q: `stars:>1000 is:public license:mit`,
-        sort: "stars",
-        order: "desc",
-        per_page: perPage,
-        page: currentPage,
-      });
-
-      const values: Repository[] = response?.data?.items.map((value) => {
-        const date = new Date(value.updated_at);
-        const formattedDate = date.toISOString().split("T")[0];
-
-        return {
-          id: value.id,
-          name: value.name,
-          full_name: value.full_name,
-          description: value.description || "No description",
-          forks_count: value.forks_count,
-          language: value.language || "Not specified",
-          open_issues_count: value.open_issues_count,
-          stargazers_count: value.stargazers_count,
-          updated_at: formattedDate,
-          url: "",
-        };
-      });
-
-      setRepositories(values);
-
-      setTotalPages(
-        response?.data?.total_count
-          ? Math.ceil(response.data.total_count / perPage)
-          : 1
-      );
-    } catch (error) {
-      console.error("Error fetching repositories:", error);
-    }
-  };
+  const repositories = data?.repositories ?? [];
+  const totalPages = data?.totalCount
+    ? Math.ceil(data?.totalCount / perPage)
+    : 1;
 
   return (
     <div className="py-6 space-y-8">
@@ -71,52 +36,75 @@ export default function Explore() {
 
       <Filters />
 
-      {/* Tabs and repository display */}
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <Tabs
             defaultValue="recommended"
-            className="w-full md:max-w-md"
+            className="w-full"
             onValueChange={setActiveTab}
           >
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger
-                value="recommended"
-                onClick={() => setCurrentPage(1)}
-              >
-                Recommended
-              </TabsTrigger>
-              <TabsTrigger value="favorites" onClick={() => setCurrentPage(1)}>
-                Favorites
-              </TabsTrigger>
+            <TabsList className="flex ">
+              <div className="grid gap-2 w-full grid-cols-2">
+                <TabsTrigger
+                  value="recommended"
+                  onClick={() => setCurrentPage(1)}
+                >
+                  Recommended
+                </TabsTrigger>
+                <TabsTrigger
+                  value="favorites"
+                  onClick={() => setCurrentPage(1)}
+                >
+                  Favorites
+                </TabsTrigger>
+              </div>
             </TabsList>
+
+            <TabsContent value="recommended" className="w-full">
+              {isLoading ? (
+                <div className="grid gap-8 md:grid-cols-3 pb-6">
+                  {new Array(perPage).fill(null).map(() => (
+                    <Skeleton />
+                  ))}
+                </div>
+              ) : error ? (
+                <div className="text-center py-12 border rounded-lg bg-muted/20">
+                  <AlertCircle className="h-10 w-10 mx-auto text-muted-foreground mb-4" />
+                  <h3 className="text-lg font-medium">No repositories found</h3>
+                  <p className="text-muted-foreground mt-2">
+                    {activeTab === "favorites"
+                      ? "You haven't added any repositories to your favorites yet."
+                      : "Try adjusting your filters to find more repositories."}
+                  </p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {repositories.map((repo) => (
+                    <RepositoryCard key={repo.id} repository={repo} />
+                  ))}
+                </div>
+              )}
+
+              <Pagination
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                totalPages={totalPages}
+              />
+            </TabsContent>
+
+            <TabsContent value="favorites">
+              <div className="text-center py-12 border rounded-lg bg-muted/20">
+                <AlertCircle className="h-10 w-10 mx-auto text-muted-foreground mb-4" />
+                <h3 className="text-lg font-medium">No repositories found</h3>
+                <p className="text-muted-foreground mt-2">
+                  {activeTab === "favorites"
+                    ? "You haven't added any repositories to your favorites yet."
+                    : "Try adjusting your filters to find more repositories."}
+                </p>
+              </div>
+            </TabsContent>
           </Tabs>
         </div>
-
-        {repositories.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {repositories.map((repo) => (
-              <RepositoryCard key={repo.id} repository={repo} />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-12 border rounded-lg bg-muted/20">
-            <AlertCircle className="h-10 w-10 mx-auto text-muted-foreground mb-4" />
-            <h3 className="text-lg font-medium">No repositories found</h3>
-            <p className="text-muted-foreground mt-2">
-              {activeTab === "favorites"
-                ? "You haven't added any repositories to your favorites yet."
-                : "Try adjusting your filters to find more repositories."}
-            </p>
-          </div>
-        )}
-
-        {/* Pagination */}
-        <Pagination
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          totalPages={totalPages}
-        />
       </div>
     </div>
   );

@@ -1,6 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
 import Dashboard from "./pages/private/Dashboard";
-import Login from "./pages/public/Login";
 import ProtectedLayout from "./components/ProtectedLayout";
 import Onboarding from "./pages/private/Onboarding";
 import Explore from "./pages/private/Explore";
@@ -13,10 +12,6 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <LandingPage />,
-      },
-      {
-        path: "login",
-        element: <Login />,
       },
     ],
   },

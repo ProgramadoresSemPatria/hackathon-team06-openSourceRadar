@@ -2,7 +2,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { auth, signInWithGitHub, signOut } from "./firebase";
 import { onAuthStateChanged, User } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "./firebase";
 
 interface AuthContextType {
@@ -11,6 +11,7 @@ interface AuthContextType {
   loading: boolean;
   signIn: () => Promise<void>;
   logout: () => Promise<void>;
+  saveOnboardingData: (languages: string[], experienceLevel: string) => Promise<boolean | undefined>;
 }
 
 export interface UserProfile {
@@ -24,6 +25,8 @@ export interface UserProfile {
   favoriteRepos?: string[];
   createdAt?: Date;
   lastLogin?: Date;
+  hasCompletedOnboarding?: boolean;
+  experienceLevel?: string;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -88,12 +91,49 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  // Função para salvar dados de onboarding
+  const saveOnboardingData = async (languages: string[], experienceLevel: string) => {
+    if (!currentUser) return;
+
+    try {
+      const userDocRef = doc(db, "users", currentUser.uid);
+      await setDoc(
+        userDocRef,
+        {
+          preferredLanguages: languages,
+          experienceLevel: experienceLevel,
+          hasCompletedOnboarding: true,
+          updatedAt: new Date(),
+        },
+        { merge: true }
+      );
+
+      // Update local state
+      setUserProfile((prev) =>
+        prev
+          ? {
+              ...prev,
+              preferredLanguages: languages,
+              experienceLevel: experienceLevel,
+              hasCompletedOnboarding: true,
+            }
+          : null
+      );
+
+      return true;
+    } catch (error) {
+      console.error("Erro ao salvar dados de onboarding:", error);
+      throw error;
+    }
+  };
+
   const value = {
     currentUser,
     userProfile,
     loading,
     signIn,
     logout,
+    saveOnboardingData,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

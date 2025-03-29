@@ -7,6 +7,8 @@ import {
   UserCredential,
   signInWithPopup,
   signOut as firebaseSignOut,
+  setPersistence,
+  browserLocalPersistence,
 } from "firebase/auth";
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 
@@ -25,6 +27,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+
+// Set persistence to LOCAL to keep the user logged in
+setPersistence(auth, browserLocalPersistence);
 
 // Usar idioma default do sistema para auth
 auth.useDeviceLanguage();
@@ -69,6 +74,7 @@ export async function signInWithGitHub() {
           lastLogin: new Date(),
           favoriteRepos: [],
           preferredLanguages: [],
+          hasCompletedOnboarding: false,
         });
       } else {
         // Atualiza apenas o login mais recente e o token

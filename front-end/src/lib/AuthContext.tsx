@@ -2,7 +2,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { auth, signInWithGitHub, signOut } from "./firebase";
 import { onAuthStateChanged, User } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "./firebase";
 
 interface AuthContextType {
@@ -24,6 +24,8 @@ export interface UserProfile {
   favoriteRepos?: string[];
   createdAt?: Date;
   lastLogin?: Date;
+  hasCompletedOnboarding?: boolean;
+  experienceLevel?: string;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -88,12 +90,49 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  // Função para atualizar perfil com dados do onboarding
+  const saveOnboardingData = async (languages: string[], experienceLevel: string) => {
+    if (!currentUser) return;
+
+    try {
+      const userDocRef = doc(db, "users", currentUser.uid);
+      await setDoc(
+        userDocRef,
+        {
+          preferredLanguages: languages,
+          experienceLevel: experienceLevel,
+          hasCompletedOnboarding: true,
+          updatedAt: new Date(),
+        },
+        { merge: true }
+      );
+
+      // Atualizar local state
+      setUserProfile((prev) =>
+        prev
+          ? {
+              ...prev,
+              preferredLanguages: languages,
+              experienceLevel: experienceLevel,
+              hasCompletedOnboarding: true,
+            }
+          : null
+      );
+
+      return true;
+    } catch (error) {
+      console.error("Error saving onboarding data:", error);
+      throw error;
+    }
+  };
+
   const value = {
     currentUser,
     userProfile,
     loading,
     signIn,
     logout,
+    saveOnboardingData,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -1,10 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
-import LandingPage from "./pages/public/LandingPage";
 import Dashboard from "./pages/private/Dashboard";
 import Login from "./pages/public/Login";
 import ProtectedLayout from "./components/ProtectedLayout";
 import Onboarding from "./pages/private/Onboarding";
 import Explore from "./pages/private/Explore";
+import { LandingPage } from "./pages/public/LandingPage";
 
 export const router = createBrowserRouter([
   {

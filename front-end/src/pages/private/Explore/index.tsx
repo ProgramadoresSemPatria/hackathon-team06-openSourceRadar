@@ -1,17 +1,6 @@
 import { useEffect, useState } from "react";
-import { AlertCircle } from "lucide-react";
+// import { AlertCircle } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-import { repositories } from "@/data";
-import { RepositoryCard } from "./RepositoryCard";
 import { Filters } from "./Filters";
 import { Octokit } from "octokit";
 
@@ -26,6 +15,7 @@ interface repositoriesType {
   stargazers_count: number;
   updated_at: string;
 }
+import { Pagination } from "@/components/Pagination";
 
 export default function Explore() {
   const [activeTab, setActiveTab] = useState("recommended");
@@ -109,7 +99,7 @@ export default function Explore() {
           </Tabs>
         </div>
 
-        {repositories.length > 0 ? (
+        {/*         {repositories.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {repositories.map((repo) => (
               <RepositoryCard key={repo.id} repo={repo} />
@@ -125,51 +115,14 @@ export default function Explore() {
                 : "Try adjusting your filters to find more repositories."}
             </p>
           </div>
-        )}
+        )} */}
 
         {/* Pagination */}
-        {totalPages > 1 && (
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious />
-              </PaginationItem>
-
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                (page) => {
-                  // Show first page, last page, and pages around current page
-                  if (
-                    page === 1 ||
-                    page === totalPages ||
-                    (page >= currentPage - 1 && page <= currentPage + 1)
-                  ) {
-                    return (
-                      <PaginationItem key={page}>
-                        <PaginationLink isActive={page === currentPage}>
-                          {page}
-                        </PaginationLink>
-                      </PaginationItem>
-                    );
-                  } else if (
-                    (page === 2 && currentPage > 3) ||
-                    (page === totalPages - 1 && currentPage < totalPages - 2)
-                  ) {
-                    return (
-                      <PaginationItem key={page}>
-                        <PaginationEllipsis />
-                      </PaginationItem>
-                    );
-                  }
-                  return null;
-                }
-              )}
-
-              <PaginationItem>
-                <PaginationNext />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
-        )}
+        <Pagination
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPages={totalPages}
+        />
       </div>
     </div>
   );

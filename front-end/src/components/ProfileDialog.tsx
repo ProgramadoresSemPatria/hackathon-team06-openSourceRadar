@@ -1,4 +1,4 @@
-import { programmingLanguages, experienceLevels } from "@/data";
+import { programmingLanguages, experienceLevels } from "@/lib/data";
 import { Save } from "lucide-react";
 import { Button } from "./ui/button";
 import {
@@ -80,6 +80,7 @@ export const ProfileDialog = ({ children }: ProfileDialogProps) => {
             </RadioGroup>
           </div>
         </div>
+
         <DialogFooter>
           <DialogClose>
             <Button className="w-full" onClick={handleProfileSave}>

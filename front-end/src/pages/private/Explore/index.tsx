@@ -1,34 +1,23 @@
 import { useEffect, useState } from "react";
-// import { AlertCircle } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Filters } from "./Filters";
 import { Octokit } from "octokit";
-
-interface repositoriesType {
-  id: number;
-  name: string;
-  full_name: string;
-  description: string;
-  forks_count: number;
-  language: string;
-  open_issues_count: number;
-  stargazers_count: number;
-  updated_at: string;
-}
 import { Pagination } from "@/components/Pagination";
+import { RepositoryCard } from "@/components/RespositoryCard";
+import { Repository } from "@/types/repository";
 
 export default function Explore() {
+  const octokit = new Octokit();
   const [activeTab, setActiveTab] = useState("recommended");
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = 10;
-
-  const octokit = new Octokit();
-
+  const [repositories, setRepositories] = useState<Repository[]>([]);
+  const [totalPages, setTotalPages] = useState(1);
   const perPage = 12;
 
   useEffect(() => {
     searchOpenSourceRepos();
-  }, []);
+  }, [currentPage]);
 
   const searchOpenSourceRepos = async () => {
     try {
@@ -40,7 +29,7 @@ export default function Explore() {
         page: currentPage,
       });
 
-      const values: repositoriesType[] = response?.data?.items.map((value) => {
+      const values: Repository[] = response?.data?.items.map((value) => {
         const date = new Date(value.updated_at);
         const formattedDate = date.toISOString().split("T")[0];
 
@@ -54,12 +43,17 @@ export default function Explore() {
           open_issues_count: value.open_issues_count,
           stargazers_count: value.stargazers_count,
           updated_at: formattedDate,
+          url: "",
         };
       });
 
-      // setRepositories(values);
-      // setTotalCount(response?.data?.total_count || 0);
-      console.log(response, values);
+      setRepositories(values);
+
+      setTotalPages(
+        response?.data?.total_count
+          ? Math.ceil(response.data.total_count / perPage)
+          : 1
+      );
     } catch (error) {
       console.error("Error fetching repositories:", error);
     }
@@ -99,10 +93,10 @@ export default function Explore() {
           </Tabs>
         </div>
 
-        {/*         {repositories.length > 0 ? (
+        {repositories.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {repositories.map((repo) => (
-              <RepositoryCard key={repo.id} repo={repo} />
+              <RepositoryCard key={repo.id} repository={repo} />
             ))}
           </div>
         ) : (
@@ -115,7 +109,7 @@ export default function Explore() {
                 : "Try adjusting your filters to find more repositories."}
             </p>
           </div>
-        )} */}
+        )}
 
         {/* Pagination */}
         <Pagination

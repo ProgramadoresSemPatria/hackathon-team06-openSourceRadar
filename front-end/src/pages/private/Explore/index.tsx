@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AlertCircle } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Filters } from "./Filters";
@@ -8,15 +8,23 @@ import { RepositoriesData } from "@/types/repository";
 import { fetchRepositories } from "@/lib/fetchRepositories";
 import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/components/RespositoryCard/skeleton";
+import { useDebounce } from "@/lib/useDebounce";
 
 export default function Explore() {
   const [activeTab, setActiveTab] = useState("recommended");
   const [currentPage, setCurrentPage] = useState(1);
   const perPage = 12;
 
+  const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearch = useDebounce(searchQuery, 500);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedSearch]);
+
   const { data, isLoading, error } = useQuery<RepositoriesData | undefined>({
-    queryKey: ["repositories", "", currentPage],
-    queryFn: () => fetchRepositories("", perPage, currentPage),
+    queryKey: ["repositories", debouncedSearch, currentPage],
+    queryFn: () => fetchRepositories(debouncedSearch, perPage, currentPage),
   });
 
   const repositories = data?.repositories ?? [];
@@ -34,7 +42,10 @@ export default function Explore() {
         </p>
       </div>
 
-      <Filters />
+      <Filters
+        searchQuery={searchQuery}
+        handleSearchQuery={(search) => setSearchQuery(search)}
+      />
 
       <div className="space-y-6">
         <div className="flex items-center justify-between">

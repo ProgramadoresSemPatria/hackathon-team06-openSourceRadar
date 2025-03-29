@@ -18,8 +18,12 @@ import {
 import { Filter, Search } from "lucide-react";
 import { useState } from "react";
 
-export function Filters() {
-  const [searchQuery, setSearchQuery] = useState("");
+type FiltersProps = {
+  searchQuery: string;
+  handleSearchQuery: (searchQuery: string) => void;
+};
+
+export function Filters({ searchQuery, handleSearchQuery }: FiltersProps) {
   const [selectedLanguage, setSelectedLanguage] = useState("all");
   const [selectedDifficulty, setSelectedDifficulty] = useState("all");
   const [selectedStars, setSelectedStars] = useState("all");
@@ -36,7 +40,7 @@ export function Filters() {
             placeholder="Search repositories..."
             className="pl-10"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => handleSearchQuery(e.target.value)}
           />
         </div>
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AlertCircle } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -13,11 +13,67 @@ import {
 import { repositories } from "@/data";
 import { RepositoryCard } from "./RepositoryCard";
 import { Filters } from "./Filters";
+import { Octokit } from "octokit";
+
+interface repositoriesType {
+  id: number;
+  name: string;
+  full_name: string;
+  description: string;
+  forks_count: number;
+  language: string;
+  open_issues_count: number;
+  stargazers_count: number;
+  updated_at: string;
+}
 
 export default function Explore() {
   const [activeTab, setActiveTab] = useState("recommended");
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = 1;
+  const totalPages = 10;
+
+  const octokit = new Octokit();
+
+  const perPage = 12;
+
+  useEffect(() => {
+    searchOpenSourceRepos();
+  }, []);
+
+  const searchOpenSourceRepos = async () => {
+    try {
+      const response = await octokit.request("GET /search/repositories", {
+        q: `stars:>1000 is:public license:mit`,
+        sort: "stars",
+        order: "desc",
+        per_page: perPage,
+        page: currentPage,
+      });
+
+      const values: repositoriesType[] = response?.data?.items.map((value) => {
+        const date = new Date(value.updated_at);
+        const formattedDate = date.toISOString().split("T")[0];
+
+        return {
+          id: value.id,
+          name: value.name,
+          full_name: value.full_name,
+          description: value.description || "No description",
+          forks_count: value.forks_count,
+          language: value.language || "Not specified",
+          open_issues_count: value.open_issues_count,
+          stargazers_count: value.stargazers_count,
+          updated_at: formattedDate,
+        };
+      });
+
+      // setRepositories(values);
+      // setTotalCount(response?.data?.total_count || 0);
+      console.log(response, values);
+    } catch (error) {
+      console.error("Error fetching repositories:", error);
+    }
+  };
 
   return (
     <div className="py-6 space-y-8">

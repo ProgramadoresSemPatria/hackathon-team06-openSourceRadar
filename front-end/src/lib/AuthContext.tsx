@@ -11,6 +11,7 @@ interface AuthContextType {
   loading: boolean;
   signIn: () => Promise<void>;
   logout: () => Promise<void>;
+  saveOnboardingData: (languages: string[], experienceLevel: string) => Promise<boolean | undefined>;
 }
 
 export interface UserProfile {
@@ -90,7 +91,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  // Função para atualizar perfil com dados do onboarding
+  // Função para salvar dados de onboarding
   const saveOnboardingData = async (languages: string[], experienceLevel: string) => {
     if (!currentUser) return;
 
@@ -107,7 +108,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         { merge: true }
       );
 
-      // Atualizar local state
+      // Update local state
       setUserProfile((prev) =>
         prev
           ? {
@@ -121,7 +122,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       return true;
     } catch (error) {
-      console.error("Error saving onboarding data:", error);
+      console.error("Erro ao salvar dados de onboarding:", error);
       throw error;
     }
   };

@@ -1,3 +1,4 @@
+// src/components/Navbar/NavBarDropdown.tsx
 import { LogOut, User } from "lucide-react";
 import {
   DropdownMenu,
@@ -37,16 +38,14 @@ export function NavBarDropdown() {
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-          <ProfileDialog>
-            <p>Perfil</p>
-          </ProfileDialog>
-        </DropdownMenuItem>
+      <DropdownMenuContent align="end">
+        <ProfileDialog>
+          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>Perfil</DropdownMenuItem>
+        </ProfileDialog>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogout}>
           <LogOut className="text-red-400 mr-2 h-4 w-4" />
-          <p className="text-red-400 font-semibold">Sair</p>
+          <span className="text-red-400 font-semibold">Sair</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

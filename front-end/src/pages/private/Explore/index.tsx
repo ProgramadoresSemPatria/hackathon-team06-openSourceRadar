@@ -4,7 +4,7 @@ import { Filters, FilterValues } from "./Filters";
 import { Pagination } from "@/components/Pagination";
 import { PageLayout } from "@/components/PageLayout";
 import { RepositoryCard } from "@/components/RespositoryCard";
-import { fetchRepositories } from "@/lib/fetchRepositories";
+import { fetchRepositories, fetchFavoriteRepositories } from "@/lib/fetchRepositories";
 import { Repository } from "@/types/repository";
 import { Skeleton } from "@/components/RespositoryCard/skeleton";
 import { AlertCircle } from "lucide-react";
@@ -32,7 +32,20 @@ export default function Explore() {
   const buildSearchQuery = (filters: FilterValues) => {
     let query = filters.searchQuery || "";
 
-    // Adicionar parâmetros de linguagem
+    // Se estamos na aba de recomendações e não há busca específica, usar as preferências do usuário
+    if (activeTab === "recommended" && !query && userProfile?.preferredLanguages?.length) {
+      // Construir uma query baseada nas linguagens preferidas do usuário
+      const langQuery = userProfile.preferredLanguages
+        .slice(0, 3) // Limitar a 3 linguagens para não sobrecarregar a query
+        .map((lang) => `language:${lang}`)
+        .join(" OR ");
+
+      if (langQuery) {
+        query = `(${langQuery})`;
+      }
+    }
+
+    // Adicionar parâmetros de linguagem se não estiver usando as preferências
     if (filters.language !== "all") {
       query += ` language:${filters.language}`;
     }
@@ -101,12 +114,24 @@ export default function Explore() {
 
   // Efeito para carregar repositórios favoritos quando a aba for alterada
   useEffect(() => {
-    if (activeTab === "favorites" && userProfile?.favoriteRepos) {
-      // Aqui, você implementaria a lógica para buscar os repositórios favoritos
-      // Com base nos IDs armazenados em userProfile.favoriteRepos
-      // Por enquanto, apenas mostramos um array vazio
-      setFavoriteRepos([]);
-    }
+    const loadFavorites = async () => {
+      if (activeTab === "favorites" && userProfile?.favoriteRepos && userProfile.favoriteRepos.length > 0) {
+        setIsLoading(true);
+        try {
+          const favoriteReposData = await fetchFavoriteRepositories(userProfile.favoriteRepos);
+          setFavoriteRepos(favoriteReposData);
+        } catch (error) {
+          console.error("Erro ao carregar repositórios favoritos:", error);
+          setFavoriteRepos([]);
+        } finally {
+          setIsLoading(false);
+        }
+      } else if (activeTab === "favorites") {
+        setFavoriteRepos([]);
+      }
+    };
+
+    loadFavorites();
   }, [activeTab, userProfile]);
 
   // Handler para quando os filtros são alterados
@@ -169,7 +194,13 @@ export default function Explore() {
               </TabsContent>
 
               <TabsContent value="favorites" className="mt-6">
-                {favoriteRepos.length > 0 ? (
+                {isLoading ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {Array.from({ length: Math.min(userProfile?.favoriteRepos?.length || 0, 9) }).map((_, index) => (
+                      <Skeleton key={index} />
+                    ))}
+                  </div>
+                ) : favoriteRepos.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {favoriteRepos.map((repo) => (
                       <RepositoryCard key={repo.id} repository={repo} hasFavoriteButton={true} />

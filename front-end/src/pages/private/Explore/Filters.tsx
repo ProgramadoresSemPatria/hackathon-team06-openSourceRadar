@@ -4,11 +4,13 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { languages, difficulties, starFilters, forkFilters, issueFilters, topicFilters } from "@/lib/data";
 import { Filter, Search } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface FiltersProps {
   onFilterChange: (filters: FilterValues) => void;
+  onResetFilters: () => void;
   isLoading: boolean;
+  currentFilters: FilterValues;
 }
 
 export interface FilterValues {
@@ -21,21 +23,30 @@ export interface FilterValues {
   topic: string;
 }
 
-export function Filters({ onFilterChange, isLoading }: FiltersProps) {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedLanguage, setSelectedLanguage] = useState("all");
-  const [selectedDifficulty, setSelectedDifficulty] = useState("all");
-  const [selectedStars, setSelectedStars] = useState("all");
-  const [selectedForks, setSelectedForks] = useState("all");
-  const [selectedIssues, setSelectedIssues] = useState("all");
-  const [selectedTopic, setSelectedTopic] = useState("all");
+export function Filters({ onFilterChange, onResetFilters, isLoading, currentFilters }: FiltersProps) {
+  const [searchQuery, setSearchQuery] = useState(currentFilters.searchQuery || "");
+  const [selectedLanguage, setSelectedLanguage] = useState(currentFilters.language || "all");
+  const [selectedDifficulty, setSelectedDifficulty] = useState(currentFilters.difficulty || "all");
+  const [selectedStars, setSelectedStars] = useState(currentFilters.stars || "all");
+  const [selectedForks, setSelectedForks] = useState(currentFilters.forks || "all");
+  const [selectedIssues, setSelectedIssues] = useState(currentFilters.issues || "all");
+  const [selectedTopic, setSelectedTopic] = useState(currentFilters.topic || "all");
 
-  // Removemos o useEffect para evitar loops
+  // Sincronizar com os filtros atuais quando mudarem externamente
+  useEffect(() => {
+    setSearchQuery(currentFilters.searchQuery || "");
+    setSelectedLanguage(currentFilters.language || "all");
+    setSelectedDifficulty(currentFilters.difficulty || "all");
+    setSelectedStars(currentFilters.stars || "all");
+    setSelectedForks(currentFilters.forks || "all");
+    setSelectedIssues(currentFilters.issues || "all");
+    setSelectedTopic(currentFilters.topic || "all");
+  }, [currentFilters]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    onFilterChange({
+    const newFilters = {
       searchQuery,
       language: selectedLanguage,
       difficulty: selectedDifficulty,
@@ -43,10 +54,13 @@ export function Filters({ onFilterChange, isLoading }: FiltersProps) {
       forks: selectedForks,
       issues: selectedIssues,
       topic: selectedTopic,
-    });
+    };
+
+    onFilterChange(newFilters);
   };
 
   const handleReset = () => {
+    // Resetar os estados locais
     setSearchQuery("");
     setSelectedLanguage("all");
     setSelectedDifficulty("all");
@@ -55,50 +69,8 @@ export function Filters({ onFilterChange, isLoading }: FiltersProps) {
     setSelectedIssues("all");
     setSelectedTopic("all");
 
-    // Chamar onFilterChange somente após o reset
-    onFilterChange({
-      searchQuery: "",
-      language: "all",
-      difficulty: "all",
-      stars: "all",
-      forks: "all",
-      issues: "all",
-      topic: "all",
-    });
-  };
-
-  const handleSelectChange = (key: keyof FilterValues, value: string) => {
-    switch (key) {
-      case "language":
-        setSelectedLanguage(value);
-        break;
-      case "difficulty":
-        setSelectedDifficulty(value);
-        break;
-      case "stars":
-        setSelectedStars(value);
-        break;
-      case "forks":
-        setSelectedForks(value);
-        break;
-      case "issues":
-        setSelectedIssues(value);
-        break;
-      case "topic":
-        setSelectedTopic(value);
-        break;
-    }
-
-    // Aplicar filtros com a seleção atualizada
-    onFilterChange({
-      searchQuery,
-      language: key === "language" ? value : selectedLanguage,
-      difficulty: key === "difficulty" ? value : selectedDifficulty,
-      stars: key === "stars" ? value : selectedStars,
-      forks: key === "forks" ? value : selectedForks,
-      issues: key === "issues" ? value : selectedIssues,
-      topic: key === "topic" ? value : selectedTopic,
-    });
+    // Chamar a função de reset fornecida pelo componente pai
+    onResetFilters();
   };
 
   return (
@@ -114,7 +86,7 @@ export function Filters({ onFilterChange, isLoading }: FiltersProps) {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        <Select value={selectedLanguage} onValueChange={(value) => handleSelectChange("language", value)}>
+        <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Linguagem" />
           </SelectTrigger>
@@ -127,7 +99,7 @@ export function Filters({ onFilterChange, isLoading }: FiltersProps) {
           </SelectContent>
         </Select>
 
-        <Select value={selectedDifficulty} onValueChange={(value) => handleSelectChange("difficulty", value)}>
+        <Select value={selectedDifficulty} onValueChange={setSelectedDifficulty}>
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Dificuldade" />
           </SelectTrigger>
@@ -140,7 +112,7 @@ export function Filters({ onFilterChange, isLoading }: FiltersProps) {
           </SelectContent>
         </Select>
 
-        <Select value={selectedStars} onValueChange={(value) => handleSelectChange("stars", value)}>
+        <Select value={selectedStars} onValueChange={setSelectedStars}>
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Estrelas" />
           </SelectTrigger>
@@ -153,7 +125,7 @@ export function Filters({ onFilterChange, isLoading }: FiltersProps) {
           </SelectContent>
         </Select>
 
-        <Select value={selectedForks} onValueChange={(value) => handleSelectChange("forks", value)}>
+        <Select value={selectedForks} onValueChange={setSelectedForks}>
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Forks" />
           </SelectTrigger>
@@ -166,7 +138,7 @@ export function Filters({ onFilterChange, isLoading }: FiltersProps) {
           </SelectContent>
         </Select>
 
-        <Select value={selectedIssues} onValueChange={(value) => handleSelectChange("issues", value)}>
+        <Select value={selectedIssues} onValueChange={setSelectedIssues}>
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Issues Abertas" />
           </SelectTrigger>
@@ -179,7 +151,7 @@ export function Filters({ onFilterChange, isLoading }: FiltersProps) {
           </SelectContent>
         </Select>
 
-        <Select value={selectedTopic} onValueChange={(value) => handleSelectChange("topic", value)}>
+        <Select value={selectedTopic} onValueChange={setSelectedTopic}>
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Tópico" />
           </SelectTrigger>
@@ -199,7 +171,7 @@ export function Filters({ onFilterChange, isLoading }: FiltersProps) {
         </Button>
         <Button type="submit" className="gap-2" disabled={isLoading}>
           <Filter className="h-4 w-4" />
-          Buscar
+          Aplicar Filtros
         </Button>
       </div>
     </form>

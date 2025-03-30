@@ -1,6 +1,5 @@
 // src/pages/private/Explore/index.tsx
-
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Filters, FilterValues } from "./Filters";
 import { Pagination } from "@/components/Pagination";
@@ -12,16 +11,13 @@ import { RepositoriesData } from "@/types/repository";
 import { Skeleton } from "@/components/RespositoryCard/skeleton";
 import { AlertCircle } from "lucide-react";
 import { useAuth } from "@/lib/AuthContext";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useDebounce } from "@/lib/useDebounce";
-import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Explore() {
   const [activeTab, setActiveTab] = useState("recommended");
   const [currentPage, setCurrentPage] = useState(1);
   const { userProfile } = useAuth();
-  const queryClient = useQueryClient();
-  const perPage = 6; // Reduzir de 9 para 6 para diminuir o número de itens por página
+  const perPage = 6; // Menos itens por página
 
   // Estado para armazenar os filtros atuais
   const [filters, setFilters] = useState<FilterValues>({
@@ -34,116 +30,78 @@ export default function Explore() {
     topic: "all",
   });
 
-  // Debounce dos filtros
-  const debouncedFilters = useDebounce(filters, 300);
-
   // Construir a query com base nos filtros
-  const buildQuery = useCallback(
-    (filters: FilterValues) => {
-      // Verificar se há algum filtro específico aplicado
-      const hasSpecificFilters =
-        filters.searchQuery.trim() !== "" ||
-        filters.language !== "all" ||
-        filters.stars !== "all" ||
-        filters.forks !== "all" ||
-        filters.issues !== "all" ||
-        filters.topic !== "all";
+  const buildQuery = useCallback(() => {
+    let query = filters.searchQuery || "";
 
-      // Se tiver filtros específicos, usá-los
-      if (hasSpecificFilters) {
-        let query = filters.searchQuery || "";
+    // Adicionar parâmetros de linguagem
+    if (filters.language !== "all") {
+      query += ` language:${filters.language}`;
+    }
 
-        // Adicionar parâmetros de linguagem
-        if (filters.language !== "all") {
-          query += ` language:${filters.language}`;
-        }
+    // Adicionar parâmetros de estrelas
+    if (filters.stars !== "all") {
+      query += ` stars:>${filters.stars}`;
+    }
 
-        // Adicionar parâmetros de estrelas
-        if (filters.stars !== "all") {
-          query += ` stars:>${filters.stars}`;
-        }
+    // Adicionar parâmetros de forks
+    if (filters.forks !== "all") {
+      query += ` forks:>${filters.forks}`;
+    }
 
-        // Adicionar parâmetros de forks
-        if (filters.forks !== "all") {
-          query += ` forks:>${filters.forks}`;
-        }
-
-        // Adicionar parâmetros de issues
-        if (filters.issues !== "all") {
-          if (filters.issues === "low") {
-            query += ` open-issues:<500`;
-          } else if (filters.issues === "medium") {
-            query += ` open-issues:500..2000`;
-          } else if (filters.issues === "high") {
-            query += ` open-issues:>2000`;
-          }
-        }
-
-        // Adicionar tópicos
-        if (filters.topic !== "all") {
-          query += ` topic:${filters.topic}`;
-        }
-
-        return query.trim();
+    // Adicionar parâmetros de issues
+    if (filters.issues !== "all") {
+      if (filters.issues === "low") {
+        query += ` open-issues:<500`;
+      } else if (filters.issues === "medium") {
+        query += ` open-issues:500..2000`;
+      } else if (filters.issues === "high") {
+        query += ` open-issues:>2000`;
       }
+    }
 
-      // Se não tiver filtros específicos e o usuário tiver preferências
-      if (userProfile?.preferredLanguages?.length) {
-        // Usar apenas a primeira linguagem preferida para evitar queries complexas
-        return `language:${userProfile.preferredLanguages[0]} stars:>1000`;
-      }
+    // Adicionar tópicos
+    if (filters.topic !== "all") {
+      query += ` topic:${filters.topic}`;
+    }
 
-      // Query padrão se nada for aplicado - mais simples para economizar rate limit
-      return "stars:>10000 sort:stars";
-    },
-    [userProfile]
-  );
+    // Se não tiver nenhum filtro específico e o usuário tiver preferências
+    if (!query.trim() && userProfile?.preferredLanguages?.length) {
+      // Usar apenas a primeira linguagem preferida
+      return `language:${userProfile.preferredLanguages[0]} stars:>1000`;
+    }
 
-  // Flag para controlar se devemos buscar repos
-  const shouldFetchRecommended = activeTab === "recommended";
+    // Se não tiver query, usar query padrão
+    return query.trim() || "stars:>10000";
+  }, [filters, userProfile]);
 
   // Query para buscar repositórios recomendados
   const recommendedQuery = useQuery<RepositoriesData | undefined>({
-    queryKey: ["recommended", buildQuery(debouncedFilters), currentPage],
-    queryFn: async () => {
-      const query = buildQuery(debouncedFilters);
-      console.log("Executando busca com query:", query);
-      try {
-        return fetchRepositories(query, perPage, currentPage);
-      } catch (error) {
-        console.error("Erro na consulta:", error);
-        toast.error("Erro ao buscar repositórios");
-        return { repositories: [], totalCount: 0 };
-      }
-    },
-    enabled: shouldFetchRecommended,
-    staleTime: 2 * 60 * 1000, // 2 minutos
-    refetchOnWindowFocus: false,
-  });
-
-  // Query para buscar repositórios favoritos - com flag para desativar quando não necessário
-  const shouldFetchFavorites = activeTab === "favorites" && Boolean(userProfile?.favoriteRepos?.length);
-
-  const favoritesQuery = useQuery({
-    queryKey: ["favorites", userProfile?.favoriteRepos],
-    queryFn: () => fetchFavoriteRepositories(userProfile?.favoriteRepos || []),
-    enabled: shouldFetchFavorites,
+    queryKey: ["repositories", buildQuery(), currentPage],
+    queryFn: () => fetchRepositories(buildQuery(), perPage, currentPage),
+    enabled: activeTab === "recommended",
     staleTime: 5 * 60 * 1000, // 5 minutos
     refetchOnWindowFocus: false,
   });
 
-  // Handler para quando os filtros são alterados
+  // Query para buscar repositórios favoritos
+  const favoritesQuery = useQuery({
+    queryKey: ["favorites", userProfile?.favoriteRepos],
+    queryFn: () => fetchFavoriteRepositories(userProfile?.favoriteRepos || []),
+    enabled: activeTab === "favorites" && Boolean(userProfile?.favoriteRepos?.length),
+    staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
+  });
+
+  // Handler para quando os filtros são aplicados
   const handleFilterChange = (newFilters: FilterValues) => {
-    console.log("Filtros alterados:", newFilters);
     setFilters(newFilters);
-    setCurrentPage(1); // Resetar para a primeira página
+    setCurrentPage(1);
   };
 
   // Handler para limpar filtros
   const handleResetFilters = () => {
-    console.log("Limpando filtros");
-    // Limpar filtros
-    const resetFilters = {
+    setFilters({
       searchQuery: "",
       language: "all",
       difficulty: "all",
@@ -151,9 +109,7 @@ export default function Explore() {
       forks: "all",
       issues: "all",
       topic: "all",
-    };
-
-    setFilters(resetFilters);
+    });
     setCurrentPage(1);
   };
 
@@ -162,27 +118,6 @@ export default function Explore() {
     setActiveTab(value);
     setCurrentPage(1);
   };
-
-  // Prefetch de dados ao carregar
-  useEffect(() => {
-    if (activeTab === "recommended" && !recommendedQuery.data) {
-      const defaultQuery = "stars:>10000 sort:stars";
-      console.log("Pré-carregando dados com query padrão...");
-
-      // Verificar se já existe no cache antes de buscar
-      const existingData = queryClient.getQueryData(["recommended", defaultQuery, 1]);
-
-      if (!existingData) {
-        fetchRepositories(defaultQuery, perPage, 1)
-          .then((data) => {
-            if (data) {
-              queryClient.setQueryData(["recommended", defaultQuery, 1], data);
-            }
-          })
-          .catch((err) => console.error("Erro ao pré-carregar dados:", err));
-      }
-    }
-  }, [activeTab, queryClient, recommendedQuery.data]);
 
   return (
     <PageLayout>
@@ -221,10 +156,10 @@ export default function Explore() {
                   <AlertCircle className="h-10 w-10 mx-auto text-destructive mb-4" />
                   <h3 className="text-lg font-medium">Erro ao carregar repositórios</h3>
                   <p className="text-muted-foreground mt-2">
-                    Ocorreu um erro ao buscar repositórios. Pode ser que você tenha atingido o limite de requisições.
+                    Atingimos o limite de requisições da API do GitHub. Por favor, tente novamente em alguns minutos.
                   </p>
                   <Button onClick={() => recommendedQuery.refetch()} variant="outline" className="mt-4">
-                    Tentar novamente
+                    Tentar Novamente
                   </Button>
                 </div>
               ) : recommendedQuery.data?.repositories && recommendedQuery.data.repositories.length > 0 ? (
@@ -274,7 +209,7 @@ export default function Explore() {
             </TabsContent>
           </Tabs>
 
-          {/* Pagination - mostrar apenas na aba de recomendados e se tiver dados */}
+          {/* Pagination - mostrar apenas na aba de recomendados com resultados */}
           {activeTab === "recommended" &&
             recommendedQuery.data?.repositories &&
             recommendedQuery.data.repositories.length > 0 && (

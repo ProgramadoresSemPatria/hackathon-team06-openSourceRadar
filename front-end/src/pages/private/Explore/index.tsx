@@ -5,6 +5,7 @@ import { Pagination } from "@/components/Pagination";
 import { PageLayout } from "@/components/PageLayout";
 import { RepositoryCard } from "@/components/RespositoryCard";
 import { fetchRepositories, fetchFavoriteRepositories } from "@/lib/fetchRepositories";
+import { fetchRecommendedRepositories } from "@/lib/fetchRecommendedRepositories";
 import { Repository } from "@/types/repository";
 import { Skeleton } from "@/components/RespositoryCard/skeleton";
 import { AlertCircle } from "lucide-react";
@@ -83,18 +84,39 @@ export default function Explore() {
   const loadRepositories = async () => {
     setIsLoading(true);
     try {
-      const query = buildSearchQuery(filters);
-      const perPage = 9; // Quantidade de itens por página
+      // Se estamos usando filtros específicos, usar a busca normal
+      if (
+        filters.searchQuery ||
+        filters.language !== "all" ||
+        filters.stars !== "all" ||
+        filters.forks !== "all" ||
+        filters.issues !== "all" ||
+        filters.topic !== "all"
+      ) {
+        const query = buildSearchQuery(filters);
+        const perPage = 9;
 
-      const data = await fetchRepositories(query, perPage, currentPage);
+        const data = await fetchRepositories(query, perPage, currentPage);
 
-      if (data) {
-        setRepositories(data.repositories);
-        const totalCount = Math.min(data.totalCount, 1000); // GitHub API limita a 1000 resultados
-        setTotalPages(Math.ceil(totalCount / perPage));
-      } else {
-        setRepositories([]);
-        setTotalPages(1);
+        if (data) {
+          setRepositories(data.repositories);
+          setTotalPages(Math.ceil(Math.min(data.totalCount, 1000) / perPage));
+        } else {
+          setRepositories([]);
+          setTotalPages(1);
+        }
+      }
+      // Se não temos filtros específicos, usar recomendações personalizadas
+      else {
+        const result = await fetchRecommendedRepositories(userProfile, {
+          languages: userProfile?.preferredLanguages,
+          experienceLevel: userProfile?.experienceLevel,
+          perPage: 9,
+          page: currentPage,
+        });
+
+        setRepositories(result.repositories);
+        setTotalPages(Math.ceil(result.totalCount / 9));
       }
     } catch (error) {
       console.error("Erro ao buscar repositórios:", error);

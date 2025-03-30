@@ -1,3 +1,4 @@
+// src/components/ProfileDialog.tsx - Updated version
 import { programmingLanguages, experienceLevels } from "@/lib/data";
 import { Save } from "lucide-react";
 import { Button } from "./ui/button";
@@ -9,7 +10,6 @@ import {
   DialogDescription,
   DialogTitle,
   DialogTrigger,
-  DialogClose,
 } from "./ui/dialog";
 import { ReactNode, useState, useEffect } from "react";
 import { toast } from "sonner";
@@ -27,18 +27,13 @@ export const ProfileDialog = ({ children }: ProfileDialogProps) => {
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
   const [experienceTime, setExperienceTime] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Carrega os dados do perfil do usuário quando o diálogo é aberto
+  // Load user data when the dialog opens
   useEffect(() => {
     if (isOpen && userProfile) {
-      if (userProfile.preferredLanguages) {
-        setSelectedLanguages(userProfile.preferredLanguages);
-      }
-      if (userProfile.experienceLevel) {
-        setExperienceTime(userProfile.experienceLevel);
-      } else {
-        setExperienceTime("intermediate"); // default value
-      }
+      setSelectedLanguages(userProfile.preferredLanguages || []);
+      setExperienceTime(userProfile.experienceLevel || "intermediate");
     }
   }, [isOpen, userProfile]);
 
@@ -54,18 +49,22 @@ export const ProfileDialog = ({ children }: ProfileDialogProps) => {
     }
 
     try {
+      setIsSubmitting(true);
       await saveOnboardingData(selectedLanguages, experienceTime);
       toast.success("Perfil atualizado com sucesso");
+      setIsOpen(false); // Close dialog after successful update
     } catch (error) {
       console.error("Erro ao salvar perfil:", error);
       toast.error("Erro ao atualizar o perfil");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <Dialog onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <div className="w-full">{children}</div>
+        <div className="w-full cursor-pointer">{children}</div>
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[425px]">
@@ -102,12 +101,16 @@ export const ProfileDialog = ({ children }: ProfileDialogProps) => {
         </div>
 
         <DialogFooter>
-          <DialogClose>
-            <Button className="w-full" onClick={handleProfileSave}>
-              <Save className="h-4 w-4 mr-2" />
-              Salvar Alterações
-            </Button>
-          </DialogClose>
+          <Button className="w-full" onClick={handleProfileSave} disabled={isSubmitting}>
+            {isSubmitting ? (
+              "Salvando..."
+            ) : (
+              <>
+                <Save className="h-4 w-4 mr-2" />
+                Salvar Alterações
+              </>
+            )}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -9,7 +9,7 @@ export interface Repository {
   stargazers_count: number;
   updated_at: string;
   url: string;
-  topics?: string[];
+  topics: string[];
 }
 
 export interface RepositoriesData {

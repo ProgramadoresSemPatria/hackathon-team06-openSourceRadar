@@ -1,4 +1,3 @@
-// src/pages/public/Learn/index.tsx
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { GitBranch, Github, Award, Code, BookOpen, Users } from "lucide-react";
 import { Navbar } from "@/components/Navbar";

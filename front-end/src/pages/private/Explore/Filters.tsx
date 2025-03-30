@@ -1,13 +1,16 @@
+// src/pages/private/Explore/Filters.tsx
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { languages, difficulties, starFilters, forkFilters, issueFilters, topicFilters } from "@/lib/data";
 import { Filter, Search } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface FiltersProps {
   onFilterChange: (filters: FilterValues) => void;
+  onResetFilters: () => void;
   isLoading: boolean;
+  currentFilters: FilterValues;
 }
 
 export interface FilterValues {
@@ -20,19 +23,30 @@ export interface FilterValues {
   topic: string;
 }
 
-export function Filters({ onFilterChange, isLoading }: FiltersProps) {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedLanguage, setSelectedLanguage] = useState("all");
-  const [selectedDifficulty, setSelectedDifficulty] = useState("all");
-  const [selectedStars, setSelectedStars] = useState("all");
-  const [selectedForks, setSelectedForks] = useState("all");
-  const [selectedIssues, setSelectedIssues] = useState("all");
-  const [selectedTopic, setSelectedTopic] = useState("all");
+export function Filters({ onFilterChange, onResetFilters, isLoading, currentFilters }: FiltersProps) {
+  const [searchQuery, setSearchQuery] = useState(currentFilters.searchQuery || "");
+  const [selectedLanguage, setSelectedLanguage] = useState(currentFilters.language || "all");
+  const [selectedDifficulty, setSelectedDifficulty] = useState(currentFilters.difficulty || "all");
+  const [selectedStars, setSelectedStars] = useState(currentFilters.stars || "all");
+  const [selectedForks, setSelectedForks] = useState(currentFilters.forks || "all");
+  const [selectedIssues, setSelectedIssues] = useState(currentFilters.issues || "all");
+  const [selectedTopic, setSelectedTopic] = useState(currentFilters.topic || "all");
+
+  // Sincronizar com os filtros atuais quando mudarem externamente
+  useEffect(() => {
+    setSearchQuery(currentFilters.searchQuery || "");
+    setSelectedLanguage(currentFilters.language || "all");
+    setSelectedDifficulty(currentFilters.difficulty || "all");
+    setSelectedStars(currentFilters.stars || "all");
+    setSelectedForks(currentFilters.forks || "all");
+    setSelectedIssues(currentFilters.issues || "all");
+    setSelectedTopic(currentFilters.topic || "all");
+  }, [currentFilters]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    onFilterChange({
+    const newFilters = {
       searchQuery,
       language: selectedLanguage,
       difficulty: selectedDifficulty,
@@ -40,10 +54,13 @@ export function Filters({ onFilterChange, isLoading }: FiltersProps) {
       forks: selectedForks,
       issues: selectedIssues,
       topic: selectedTopic,
-    });
+    };
+
+    onFilterChange(newFilters);
   };
 
   const handleReset = () => {
+    // Resetar os estados locais
     setSearchQuery("");
     setSelectedLanguage("all");
     setSelectedDifficulty("all");
@@ -52,15 +69,8 @@ export function Filters({ onFilterChange, isLoading }: FiltersProps) {
     setSelectedIssues("all");
     setSelectedTopic("all");
 
-    onFilterChange({
-      searchQuery: "",
-      language: "all",
-      difficulty: "all",
-      stars: "all",
-      forks: "all",
-      issues: "all",
-      topic: "all",
-    });
+    // Chamar a função de reset fornecida pelo componente pai
+    onResetFilters();
   };
 
   return (

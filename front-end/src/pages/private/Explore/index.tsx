@@ -1,22 +1,25 @@
-import { useState, useEffect, useCallback } from "react";
+// src/pages/private/Explore/index.tsx
+import { useState, useCallback } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Filters, FilterValues } from "./Filters";
 import { Pagination } from "@/components/Pagination";
 import { PageLayout } from "@/components/PageLayout";
 import { RepositoryCard } from "@/components/RespositoryCard";
+import { Button } from "@/components/ui/button";
 import { fetchRepositories, fetchFavoriteRepositories } from "@/lib/fetchRepositories";
-import { fetchRecommendedRepositories } from "@/lib/fetchRecommendedRepositories";
-import { Repository } from "@/types/repository";
+import { RepositoriesData } from "@/types/repository";
 import { Skeleton } from "@/components/RespositoryCard/skeleton";
 import { AlertCircle } from "lucide-react";
 import { useAuth } from "@/lib/AuthContext";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Explore() {
   const [activeTab, setActiveTab] = useState("recommended");
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
-  const [repositories, setRepositories] = useState<Repository[]>([]);
+  const { userProfile } = useAuth();
+  const perPage = 6; // Menos itens por página
+
+  // Estado para armazenar os filtros atuais
   const [filters, setFilters] = useState<FilterValues>({
     searchQuery: "",
     language: "all",
@@ -26,143 +29,94 @@ export default function Explore() {
     issues: "all",
     topic: "all",
   });
-  const [favoriteRepos, setFavoriteRepos] = useState<Repository[]>([]);
-  const { userProfile } = useAuth();
 
-  // Função para construir a query baseada nos filtros
-  const buildSearchQuery = useCallback(
-    (filterValues: FilterValues) => {
-      let query = filterValues.searchQuery || "";
+  // Construir a query com base nos filtros
+  const buildQuery = useCallback(() => {
+    let query = filters.searchQuery || "";
 
-      // Se estamos na aba de recomendações e não há busca específica, usar as preferências do usuário
-      if (activeTab === "recommended" && !query && userProfile?.preferredLanguages?.length) {
-        // Construir uma query baseada nas linguagens preferidas do usuário
-        const langQuery = userProfile.preferredLanguages
-          .slice(0, 3) // Limitar a 3 linguagens para não sobrecarregar a query
-          .map((lang) => `language:${lang}`)
-          .join(" OR ");
-
-        if (langQuery) {
-          query = `(${langQuery})`;
-        }
-      }
-
-      // Adicionar parâmetros de linguagem se não estiver usando as preferências
-      if (filterValues.language !== "all") {
-        query += ` language:${filterValues.language}`;
-      }
-
-      // Adicionar parâmetros de estrelas
-      if (filterValues.stars !== "all") {
-        query += ` stars:>${filterValues.stars}`;
-      }
-
-      // Adicionar parâmetros de forks
-      if (filterValues.forks !== "all") {
-        query += ` forks:>${filterValues.forks}`;
-      }
-
-      // Adicionar parâmetros de issues
-      if (filterValues.issues !== "all") {
-        if (filterValues.issues === "low") {
-          query += ` open-issues:<500`;
-        } else if (filterValues.issues === "medium") {
-          query += ` open-issues:500..2000`;
-        } else if (filterValues.issues === "high") {
-          query += ` open-issues:>2000`;
-        }
-      }
-
-      // Adicionar tópicos
-      if (filterValues.topic !== "all") {
-        query += ` topic:${filterValues.topic}`;
-      }
-
-      return query.trim() || "stars:>1000"; // Default query se nenhum filtro for aplicado
-    },
-    [activeTab, userProfile]
-  );
-
-  // Função para carregar os repositórios com base nos filtros
-  const loadRepositories = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      // Se estamos usando filtros específicos, usar a busca normal
-      if (
-        filters.searchQuery ||
-        filters.language !== "all" ||
-        filters.stars !== "all" ||
-        filters.forks !== "all" ||
-        filters.issues !== "all" ||
-        filters.topic !== "all"
-      ) {
-        const query = buildSearchQuery(filters);
-        const perPage = 9;
-
-        const data = await fetchRepositories(query, perPage, currentPage);
-
-        if (data) {
-          setRepositories(data.repositories);
-          setTotalPages(Math.ceil(Math.min(data.totalCount, 1000) / perPage));
-        } else {
-          setRepositories([]);
-          setTotalPages(1);
-        }
-      }
-      // Se não temos filtros específicos, usar recomendações personalizadas
-      else {
-        const result = await fetchRecommendedRepositories(userProfile, {
-          languages: userProfile?.preferredLanguages,
-          experienceLevel: userProfile?.experienceLevel,
-          perPage: 9,
-          page: currentPage,
-        });
-
-        setRepositories(result.repositories);
-        setTotalPages(Math.ceil(result.totalCount / 9));
-      }
-    } catch (error) {
-      console.error("Erro ao buscar repositórios:", error);
-      setRepositories([]);
-      setTotalPages(1);
-    } finally {
-      setIsLoading(false);
+    // Adicionar parâmetros de linguagem
+    if (filters.language !== "all") {
+      query += ` language:${filters.language}`;
     }
-  }, [filters, currentPage, userProfile, buildSearchQuery]);
 
-  // Efeito para carregar repositórios quando os filtros mudarem ou a página mudar
-  useEffect(() => {
-    if (activeTab === "recommended") {
-      loadRepositories();
+    // Adicionar parâmetros de estrelas
+    if (filters.stars !== "all") {
+      query += ` stars:>${filters.stars}`;
     }
-  }, [activeTab, loadRepositories]);
 
-  // Efeito para carregar repositórios favoritos quando a aba for alterada
-  useEffect(() => {
-    const loadFavorites = async () => {
-      if (activeTab === "favorites" && userProfile?.favoriteRepos && userProfile.favoriteRepos.length > 0) {
-        setIsLoading(true);
-        try {
-          const favoriteReposData = await fetchFavoriteRepositories(userProfile.favoriteRepos);
-          setFavoriteRepos(favoriteReposData);
-        } catch (error) {
-          console.error("Erro ao carregar repositórios favoritos:", error);
-          setFavoriteRepos([]);
-        } finally {
-          setIsLoading(false);
-        }
-      } else if (activeTab === "favorites") {
-        setFavoriteRepos([]);
+    // Adicionar parâmetros de forks
+    if (filters.forks !== "all") {
+      query += ` forks:>${filters.forks}`;
+    }
+
+    // Adicionar parâmetros de issues
+    if (filters.issues !== "all") {
+      if (filters.issues === "low") {
+        query += ` open-issues:<500`;
+      } else if (filters.issues === "medium") {
+        query += ` open-issues:500..2000`;
+      } else if (filters.issues === "high") {
+        query += ` open-issues:>2000`;
       }
-    };
+    }
 
-    loadFavorites();
-  }, [activeTab, userProfile]);
+    // Adicionar tópicos
+    if (filters.topic !== "all") {
+      query += ` topic:${filters.topic}`;
+    }
 
-  // Handler para quando os filtros são alterados
+    // Se não tiver nenhum filtro específico e o usuário tiver preferências
+    if (!query.trim() && userProfile?.preferredLanguages?.length) {
+      // Usar apenas a primeira linguagem preferida
+      return `language:${userProfile.preferredLanguages[0]} stars:>1000`;
+    }
+
+    // Se não tiver query, usar query padrão
+    return query.trim() || "stars:>10000";
+  }, [filters, userProfile]);
+
+  // Query para buscar repositórios recomendados
+  const recommendedQuery = useQuery<RepositoriesData | undefined>({
+    queryKey: ["repositories", buildQuery(), currentPage],
+    queryFn: () => fetchRepositories(buildQuery(), perPage, currentPage),
+    enabled: activeTab === "recommended",
+    staleTime: 5 * 60 * 1000, // 5 minutos
+    refetchOnWindowFocus: false,
+  });
+
+  // Query para buscar repositórios favoritos
+  const favoritesQuery = useQuery({
+    queryKey: ["favorites", userProfile?.favoriteRepos],
+    queryFn: () => fetchFavoriteRepositories(userProfile?.favoriteRepos || []),
+    enabled: activeTab === "favorites" && Boolean(userProfile?.favoriteRepos?.length),
+    staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
+  });
+
+  // Handler para quando os filtros são aplicados
   const handleFilterChange = (newFilters: FilterValues) => {
     setFilters(newFilters);
-    setCurrentPage(1); // Resetar para a primeira página
+    setCurrentPage(1);
+  };
+
+  // Handler para limpar filtros
+  const handleResetFilters = () => {
+    setFilters({
+      searchQuery: "",
+      language: "all",
+      difficulty: "all",
+      stars: "all",
+      forks: "all",
+      issues: "all",
+      topic: "all",
+    });
+    setCurrentPage(1);
+  };
+
+  // Handler para alterar a aba
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    setCurrentPage(1);
   };
 
   return (
@@ -175,84 +129,97 @@ export default function Explore() {
           </p>
         </div>
 
-        <Filters onFilterChange={handleFilterChange} isLoading={isLoading} />
+        <Filters
+          onFilterChange={handleFilterChange}
+          onResetFilters={handleResetFilters}
+          isLoading={recommendedQuery.isLoading}
+          currentFilters={filters}
+        />
 
         {/* Tabs and repository display */}
         <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <Tabs
-              defaultValue="recommended"
-              className="w-full md:max-w-md"
-              value={activeTab}
-              onValueChange={(value) => {
-                setActiveTab(value);
-                setCurrentPage(1);
-              }}
-            >
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="recommended">Recomendados</TabsTrigger>
-                <TabsTrigger value="favorites">Favoritos</TabsTrigger>
-              </TabsList>
+          <Tabs defaultValue="recommended" className="w-full" value={activeTab} onValueChange={handleTabChange}>
+            <TabsList className="w-full md:w-auto md:max-w-md grid grid-cols-2">
+              <TabsTrigger value="recommended">Recomendados</TabsTrigger>
+              <TabsTrigger value="favorites">Favoritos</TabsTrigger>
+            </TabsList>
 
-              <TabsContent value="recommended" className="mt-6">
-                {isLoading ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {Array.from({ length: 9 }).map((_, index) => (
+            <TabsContent value="recommended" className="mt-6">
+              {recommendedQuery.isLoading ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {Array.from({ length: perPage }).map((_, index) => (
+                    <Skeleton key={index} />
+                  ))}
+                </div>
+              ) : recommendedQuery.error ? (
+                <div className="text-center py-12 border rounded-lg bg-muted/20">
+                  <AlertCircle className="h-10 w-10 mx-auto text-destructive mb-4" />
+                  <h3 className="text-lg font-medium">Erro ao carregar repositórios</h3>
+                  <p className="text-muted-foreground mt-2">
+                    Atingimos o limite de requisições da API do GitHub. Por favor, tente novamente em alguns minutos.
+                  </p>
+                  <Button onClick={() => recommendedQuery.refetch()} variant="outline" className="mt-4">
+                    Tentar Novamente
+                  </Button>
+                </div>
+              ) : recommendedQuery.data?.repositories && recommendedQuery.data.repositories.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {recommendedQuery.data.repositories.map((repo) => (
+                    <RepositoryCard key={repo.id} repository={repo} hasFavoriteButton={true} />
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-12 border rounded-lg bg-muted/20">
+                  <AlertCircle className="h-10 w-10 mx-auto text-muted-foreground mb-4" />
+                  <h3 className="text-lg font-medium">Nenhum repositório encontrado</h3>
+                  <p className="text-muted-foreground mt-2">
+                    Tente ajustar seus filtros ou usar termos de busca diferentes.
+                  </p>
+                  <Button onClick={handleResetFilters} variant="outline" className="mt-4">
+                    Limpar filtros e tentar novamente
+                  </Button>
+                </div>
+              )}
+            </TabsContent>
+
+            <TabsContent value="favorites" className="mt-6">
+              {favoritesQuery.isLoading ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {Array.from({ length: Math.min(userProfile?.favoriteRepos?.length || 0, perPage) }).map(
+                    (_, index) => (
                       <Skeleton key={index} />
-                    ))}
-                  </div>
-                ) : repositories.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {repositories.map((repo) => (
-                      <RepositoryCard key={repo.id} repository={repo} hasFavoriteButton={true} />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-12 border rounded-lg bg-muted/20">
-                    <AlertCircle className="h-10 w-10 mx-auto text-muted-foreground mb-4" />
-                    <h3 className="text-lg font-medium">Nenhum repositório encontrado</h3>
-                    <p className="text-muted-foreground mt-2">
-                      Tente ajustar seus filtros para encontrar mais repositórios.
-                    </p>
-                  </div>
-                )}
-              </TabsContent>
+                    )
+                  )}
+                </div>
+              ) : favoritesQuery.data && favoritesQuery.data.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {favoritesQuery.data.map((repo) => (
+                    <RepositoryCard key={repo.id} repository={repo} hasFavoriteButton={true} />
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-12 border rounded-lg bg-muted/20">
+                  <AlertCircle className="h-10 w-10 mx-auto text-muted-foreground mb-4" />
+                  <h3 className="text-lg font-medium">Nenhum repositório favorito</h3>
+                  <p className="text-muted-foreground mt-2">
+                    Você ainda não adicionou nenhum repositório aos seus favoritos.
+                  </p>
+                </div>
+              )}
+            </TabsContent>
+          </Tabs>
 
-              <TabsContent value="favorites" className="mt-6">
-                {isLoading ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {Array.from({ length: Math.min(userProfile?.favoriteRepos?.length || 0, 9) }).map((_, index) => (
-                      <Skeleton key={index} />
-                    ))}
-                  </div>
-                ) : favoriteRepos.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {favoriteRepos.map((repo) => (
-                      <RepositoryCard key={repo.id} repository={repo} hasFavoriteButton={true} />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-12 border rounded-lg bg-muted/20">
-                    <AlertCircle className="h-10 w-10 mx-auto text-muted-foreground mb-4" />
-                    <h3 className="text-lg font-medium">Nenhum repositório favorito</h3>
-                    <p className="text-muted-foreground mt-2">
-                      Você ainda não adicionou nenhum repositório aos seus favoritos.
-                    </p>
-                  </div>
-                )}
-              </TabsContent>
-            </Tabs>
-          </div>
-
-          {/* Pagination - mostrar apenas na aba de recomendados */}
-          {activeTab === "recommended" && repositories.length > 0 && (
-            <Pagination
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-              totalPages={totalPages}
-              disabled={isLoading}
-            />
-          )}
+          {/* Pagination - mostrar apenas na aba de recomendados com resultados */}
+          {activeTab === "recommended" &&
+            recommendedQuery.data?.repositories &&
+            recommendedQuery.data.repositories.length > 0 && (
+              <Pagination
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                totalPages={Math.ceil(Math.min(recommendedQuery.data.totalCount || 0, 100) / perPage)}
+                disabled={recommendedQuery.isLoading}
+              />
+            )}
         </div>
       </div>
     </PageLayout>

@@ -1,17 +1,36 @@
-import { ArrowRight, Github, GitPullRequestArrow, Menu } from "lucide-react";
+import { ArrowRight, Github, Menu } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import clsx from "clsx";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "../ui/button";
 import { useAuth } from "@/lib/AuthContext";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { User } from "lucide-react";
 
+// Variável global para controlar o carregamento inicial
+let initialLogoLoadComplete = false;
+
 export const Navbar = () => {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
-  const { currentUser, signIn, logout, userProfile } = useAuth();
+  const { currentUser, signIn, logout, userProfile, loading } = useAuth();
+
+  // Estado para controlar o carregamento do logo
+  const [logoLoading, setLogoLoading] = useState(!initialLogoLoadComplete);
+
+  // Efeito para simular carregamento do logo, apenas no primeiro acesso
+  useEffect(() => {
+    if (!initialLogoLoadComplete) {
+      // Marca como carregado após um tempo (ou quando a imagem carregar)
+      const timer = setTimeout(() => {
+        setLogoLoading(false);
+        initialLogoLoadComplete = true;
+      }, 800); // Tempo suficiente para simular carregamento
+
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   const openModal = () => {
     document.body.style.overflow = "hidden";
@@ -44,7 +63,6 @@ export const Navbar = () => {
     }
   };
 
-  // Definir rotas baseadas no status de autenticação
   const publicRoutes = [
     {
       to: "/learn",
@@ -63,14 +81,37 @@ export const Navbar = () => {
     },
   ];
 
-  // Determinar quais rotas mostrar
   const navRoutes = currentUser ? [...publicRoutes, ...authenticatedRoutes] : publicRoutes;
 
   return (
     <nav className="bg-white w-full">
       <div className="max-w-[96rem] mx-auto px-6 sm:px-12 py-4 flex items-center justify-between">
-        <Link to="/">
-          <GitPullRequestArrow className="h-6 w-6" />
+        <Link to="/" className="flex items-center gap-2">
+          {logoLoading ? (
+            <>
+              {/* Estado de carregamento para o logo */}
+              <div className="h-6 w-6 bg-gray-200 animate-pulse rounded-full"></div>
+              <div className="h-6 w-32 bg-gray-200 animate-pulse rounded-md"></div>
+            </>
+          ) : (
+            <>
+              {/* Logo após o carregamento inicial */}
+              <img
+                src="../dist/radar.svg"
+                alt="Radar Icon"
+                className="h-6 w-6"
+                width="24"
+                height="24"
+                loading="eager"
+                onLoad={() => {
+                  // Garantir que o logo seja marcado como carregado quando a imagem carregar
+                  setLogoLoading(false);
+                  initialLogoLoadComplete = true;
+                }}
+              />
+              <span className="text-lg font-semibold">OpenSourceRadar</span>
+            </>
+          )}
         </Link>
 
         <button className="block sm:hidden" onClick={isOpen ? closeModal : openModal}>
@@ -78,40 +119,44 @@ export const Navbar = () => {
           <Menu size={32} />
         </button>
 
-        {/* Desktop Navbar */}
-        <div className="hidden w-fit sm:block" id="navbar-default">
-          <ul className="font-medium flex items-center space-x-8 rtl:space-x-reverse bg-white">
-            {navRoutes.map((route) => (
-              <li key={route.to}>
-                <Link
-                  to={route.to}
-                  className={clsx(
-                    "block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-muted-foreground md:p-0",
-                    location.pathname === route.to && "underline underline-offset-2"
-                  )}
-                >
-                  {route.title}
-                </Link>
-              </li>
-            ))}
+        {/* Prevent UI blink by showing a loading state */}
+        {loading ? (
+          <div className="animate-pulse h-6 w-24 bg-gray-200 rounded" />
+        ) : (
+          <div className="hidden w-fit sm:block" id="navbar-default">
+            <ul className="font-medium flex items-center space-x-8 rtl:space-x-reverse bg-white">
+              {navRoutes.map((route) => (
+                <li key={route.to}>
+                  <Link
+                    to={route.to}
+                    className={clsx(
+                      "block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-muted-foreground md:p-0",
+                      location.pathname === route.to && "underline underline-offset-2"
+                    )}
+                  >
+                    {route.title}
+                  </Link>
+                </li>
+              ))}
 
-            {currentUser ? (
-              <Link to="/dashboard">
-                <Avatar className="h-10 w-10 border-2 border-primary/20 hover:border-primary transition-colors cursor-pointer">
-                  <AvatarImage src={userProfile?.photoURL || ""} alt="Perfil" />
-                  <AvatarFallback>
-                    <User className="h-5 w-5" />
-                  </AvatarFallback>
-                </Avatar>
-              </Link>
-            ) : (
-              <Button onClick={handleLogin} variant="default" type="button" className="gap-2">
-                <Github className="h-4 w-4" />
-                Entrar com GitHub
-              </Button>
-            )}
-          </ul>
-        </div>
+              {currentUser ? (
+                <Link to="/dashboard">
+                  <Avatar className="h-10 w-10 border-2 border-primary/20 hover:border-primary transition-colors cursor-pointer">
+                    <AvatarImage src={userProfile?.photoURL || ""} alt="Perfil" />
+                    <AvatarFallback>
+                      <User className="h-5 w-5" />
+                    </AvatarFallback>
+                  </Avatar>
+                </Link>
+              ) : (
+                <Button onClick={handleLogin} variant="default" type="button" className="gap-2">
+                  <Github className="h-4 w-4" />
+                  Entrar com GitHub
+                </Button>
+              )}
+            </ul>
+          </div>
+        )}
 
         {/* Mobile Navbar */}
         <div

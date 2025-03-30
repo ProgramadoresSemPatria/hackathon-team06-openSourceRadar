@@ -1,14 +1,9 @@
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
 import { languaguesData } from "@/lib/data";
 import { Repository } from "@/types/repository";
 import { BookOpen, Star, GitFork, AlertCircle, Clock } from "lucide-react";
 import { Badge } from "../ui/badge";
+import { motion } from "framer-motion";
 
 interface RepositoryCardProps {
   repository: Repository;
@@ -19,13 +14,11 @@ interface RepositoryCardProps {
 const difficultyConfig = {
   beginner: {
     variant: "outline",
-    className:
-      "bg-green-100 text-green-800 border-green-200 hover:bg-green-100",
+    className: "bg-green-100 text-green-800 border-green-200 hover:bg-green-100",
   },
   intermediate: {
     variant: "outline",
-    className:
-      "bg-yellow-100 text-yellow-800 border-yellow-200 hover:bg-yellow-100",
+    className: "bg-yellow-100 text-yellow-800 border-yellow-200 hover:bg-yellow-100",
   },
   advanced: {
     variant: "outline",
@@ -34,10 +27,7 @@ const difficultyConfig = {
 } as const;
 
 // hasFavoriteButton it's not being used since we didn't implement the like function yet
-export const RepositoryCard = ({
-  repository,
-  hasFavoriteButton,
-}: RepositoryCardProps) => {
+export const RepositoryCard = ({ repository, hasFavoriteButton }: RepositoryCardProps) => {
   const formatNumber = (num: number) => {
     if (num >= 1000000) {
       return (num / 1000000).toFixed(1) + "M";
@@ -48,7 +38,14 @@ export const RepositoryCard = ({
   };
 
   return (
-    <a href={repository.url} target="_blank">
+    <motion.a
+      href={repository.url}
+      target="_blank"
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      whileHover={{ scale: 1.03 }}
+      transition={{ duration: 0.2 }}
+    >
       <Card className="h-full flex flex-col overflow-hidden border-2 hover:border-primary/50 transition-colors">
         <CardHeader>
           <div className="flex justify-between items-start">
@@ -56,15 +53,11 @@ export const RepositoryCard = ({
               <CardTitle className="flex items-center">
                 <BookOpen className="h-4 w-4 mr-2 shrink-0" />
                 <div>
-                  <span className="text-muted-foreground">
-                    {repository.full_name.split("/")[0]}/
-                  </span>
+                  <span className="text-muted-foreground">{repository.full_name.split("/")[0]}/</span>
                   {repository.full_name.split("/")[1]}
                 </div>
               </CardTitle>
-              <p className="text-sm text-muted-foreground mt-2 line-clamp-2">
-                {repository.description}
-              </p>
+              <p className="text-sm text-muted-foreground mt-2 line-clamp-2">{repository.description}</p>
             </div>
             {/* {hasFavoriteButton && (
             <Button
@@ -104,15 +97,11 @@ export const RepositoryCard = ({
           )}
           <div className="flex items-center justify-between mt-2">
             <div className="flex items-center">
-              <span className="text-lg mr-1">
-                {languaguesData?.[repository.language.toLowerCase()]?.icon ??
-                  "💻"}
-              </span>
+              <span className="text-lg mr-1">{languaguesData?.[repository.language.toLowerCase()]?.icon ?? "💻"}</span>
               <span
                 className="text-sm font-medium"
                 style={{
-                  color:
-                    languaguesData?.[repository.language.toLowerCase()]?.color,
+                  color: languaguesData?.[repository.language.toLowerCase()]?.color,
                 }}
               >
                 {repository.language}
@@ -147,6 +136,6 @@ export const RepositoryCard = ({
           </div>
         </CardFooter>
       </Card>
-    </a>
+    </motion.a>
   );
 };

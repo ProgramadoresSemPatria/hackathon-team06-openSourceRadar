@@ -12,6 +12,7 @@ interface AuthContextType {
   signIn: () => Promise<void>;
   logout: () => Promise<void>;
   saveOnboardingData: (languages: string[], experienceLevel: string) => Promise<boolean | undefined>;
+  toggleFavoriteRepo: (repoId: string) => Promise<void>;
 }
 
 export interface UserProfile {
@@ -130,6 +131,46 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  // Função para alternar favoritos
+  const toggleFavoriteRepo = async (repoId: string) => {
+    if (!currentUser) {
+      toast.error("Você precisa estar logado para adicionar favoritos");
+      return;
+    }
+
+    try {
+      const userDocRef = doc(db, "users", currentUser.uid);
+
+      // Obter os favoritos atuais de forma segura
+      const currentFavorites = userProfile?.favoriteRepos || [];
+
+      // Adicionar ou remover o repositório dos favoritos
+      let updatedFavorites;
+      if (currentFavorites.includes(repoId)) {
+        updatedFavorites = currentFavorites.filter((id) => id !== repoId);
+      } else {
+        updatedFavorites = [...currentFavorites, repoId];
+      }
+
+      // Atualizar no Firestore
+      await setDoc(userDocRef, { favoriteRepos: updatedFavorites, updatedAt: new Date() }, { merge: true });
+
+      // Atualizar o estado local
+      setUserProfile((prev) => {
+        if (prev) {
+          return {
+            ...prev,
+            favoriteRepos: updatedFavorites,
+          };
+        }
+        return prev;
+      });
+    } catch (error) {
+      console.error("Erro ao atualizar favoritos:", error);
+      throw error;
+    }
+  };
+
   const value = {
     currentUser,
     userProfile,
@@ -137,6 +178,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     signIn,
     logout,
     saveOnboardingData,
+    toggleFavoriteRepo,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -97,7 +97,7 @@ export const Navbar = () => {
             <>
               {/* Logo após o carregamento inicial */}
               <img
-                src="../public/radar.svg"
+                src="radar.svg"
                 alt="Radar Icon"
                 className="h-6 w-6"
                 width="24"

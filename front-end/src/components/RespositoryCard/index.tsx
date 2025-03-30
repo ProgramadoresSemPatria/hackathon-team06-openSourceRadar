@@ -1,3 +1,4 @@
+// src/components/RespositoryCard/index.tsx
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
 import { languaguesData } from "@/lib/data";
 import { Repository } from "@/types/repository";
@@ -8,6 +9,7 @@ import { Button } from "../ui/button";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/AuthContext";
 import { toast } from "sonner";
+import { ContributionGuide } from "../ContributionGuide";
 
 interface RepositoryCardProps {
   repository: Repository;
@@ -91,7 +93,7 @@ export const RepositoryCard = ({ repository, hasFavoriteButton = false }: Reposi
           </div>
         </CardHeader>
         <CardContent className="flex flex-col items-start flex-grow">
-          {repository.topics && (
+          {repository.topics && repository.topics.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-4">
               {repository.topics.slice(0, 3).map((topic) => (
                 <Badge key={topic} variant="secondary" className="text-xs">
@@ -119,25 +121,30 @@ export const RepositoryCard = ({ repository, hasFavoriteButton = false }: Reposi
             </div>
           </div>
         </CardContent>
-        <CardFooter className="border-t pt-4 flex flex-wrap gap-y-3 gap-x-4 justify-between">
-          <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-            <div className="flex items-center">
-              <Star className="h-4 w-4 mr-1 text-yellow-500" />
-              <span>{formatNumber(repository.stargazers_count)}</span>
+        <CardFooter className="border-t pt-4 flex flex-col gap-y-3">
+          <div className="flex flex-wrap gap-y-3 gap-x-4 justify-between w-full">
+            <div className="flex items-center space-x-4 text-sm text-muted-foreground">
+              <div className="flex items-center">
+                <Star className="h-4 w-4 mr-1 text-yellow-500" />
+                <span>{formatNumber(repository.stargazers_count)}</span>
+              </div>
+              <div className="flex items-center">
+                <GitFork className="h-4 w-4 mr-1" />
+                <span>{formatNumber(repository.forks_count)}</span>
+              </div>
+              <div className="flex items-center">
+                <AlertCircle className="h-4 w-4 mr-1" />
+                <span>{formatNumber(repository.open_issues_count)}</span>
+              </div>
             </div>
-            <div className="flex items-center">
-              <GitFork className="h-4 w-4 mr-1" />
-              <span>{formatNumber(repository.forks_count)}</span>
-            </div>
-            <div className="flex items-center">
-              <AlertCircle className="h-4 w-4 mr-1" />
-              <span>{formatNumber(repository.open_issues_count)}</span>
+            <div className="flex items-center text-xs text-muted-foreground">
+              <Clock className="h-3 w-3 mr-1" />
+              <span>Atualizado {repository.updated_at}</span>
             </div>
           </div>
-          <div className="flex items-center text-xs text-muted-foreground">
-            <Clock className="h-3 w-3 mr-1" />
-            <span>Atualizado {repository.updated_at}</span>
-          </div>
+
+          {/* Adicionar o componente de guia de contribuição */}
+          <ContributionGuide repository={repository} />
         </CardFooter>
       </Card>
     </motion.a>

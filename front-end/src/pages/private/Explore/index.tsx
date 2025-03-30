@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Filters, FilterValues } from "./Filters";
 import { Pagination } from "@/components/Pagination";
@@ -30,58 +30,61 @@ export default function Explore() {
   const { userProfile } = useAuth();
 
   // Função para construir a query baseada nos filtros
-  const buildSearchQuery = (filters: FilterValues) => {
-    let query = filters.searchQuery || "";
+  const buildSearchQuery = useCallback(
+    (filterValues: FilterValues) => {
+      let query = filterValues.searchQuery || "";
 
-    // Se estamos na aba de recomendações e não há busca específica, usar as preferências do usuário
-    if (activeTab === "recommended" && !query && userProfile?.preferredLanguages?.length) {
-      // Construir uma query baseada nas linguagens preferidas do usuário
-      const langQuery = userProfile.preferredLanguages
-        .slice(0, 3) // Limitar a 3 linguagens para não sobrecarregar a query
-        .map((lang) => `language:${lang}`)
-        .join(" OR ");
+      // Se estamos na aba de recomendações e não há busca específica, usar as preferências do usuário
+      if (activeTab === "recommended" && !query && userProfile?.preferredLanguages?.length) {
+        // Construir uma query baseada nas linguagens preferidas do usuário
+        const langQuery = userProfile.preferredLanguages
+          .slice(0, 3) // Limitar a 3 linguagens para não sobrecarregar a query
+          .map((lang) => `language:${lang}`)
+          .join(" OR ");
 
-      if (langQuery) {
-        query = `(${langQuery})`;
+        if (langQuery) {
+          query = `(${langQuery})`;
+        }
       }
-    }
 
-    // Adicionar parâmetros de linguagem se não estiver usando as preferências
-    if (filters.language !== "all") {
-      query += ` language:${filters.language}`;
-    }
-
-    // Adicionar parâmetros de estrelas
-    if (filters.stars !== "all") {
-      query += ` stars:>${filters.stars}`;
-    }
-
-    // Adicionar parâmetros de forks
-    if (filters.forks !== "all") {
-      query += ` forks:>${filters.forks}`;
-    }
-
-    // Adicionar parâmetros de issues
-    if (filters.issues !== "all") {
-      if (filters.issues === "low") {
-        query += ` open-issues:<500`;
-      } else if (filters.issues === "medium") {
-        query += ` open-issues:500..2000`;
-      } else if (filters.issues === "high") {
-        query += ` open-issues:>2000`;
+      // Adicionar parâmetros de linguagem se não estiver usando as preferências
+      if (filterValues.language !== "all") {
+        query += ` language:${filterValues.language}`;
       }
-    }
 
-    // Adicionar tópicos
-    if (filters.topic !== "all") {
-      query += ` topic:${filters.topic}`;
-    }
+      // Adicionar parâmetros de estrelas
+      if (filterValues.stars !== "all") {
+        query += ` stars:>${filterValues.stars}`;
+      }
 
-    return query.trim() || "stars:>1000"; // Default query se nenhum filtro for aplicado
-  };
+      // Adicionar parâmetros de forks
+      if (filterValues.forks !== "all") {
+        query += ` forks:>${filterValues.forks}`;
+      }
+
+      // Adicionar parâmetros de issues
+      if (filterValues.issues !== "all") {
+        if (filterValues.issues === "low") {
+          query += ` open-issues:<500`;
+        } else if (filterValues.issues === "medium") {
+          query += ` open-issues:500..2000`;
+        } else if (filterValues.issues === "high") {
+          query += ` open-issues:>2000`;
+        }
+      }
+
+      // Adicionar tópicos
+      if (filterValues.topic !== "all") {
+        query += ` topic:${filterValues.topic}`;
+      }
+
+      return query.trim() || "stars:>1000"; // Default query se nenhum filtro for aplicado
+    },
+    [activeTab, userProfile]
+  );
 
   // Função para carregar os repositórios com base nos filtros
-  const loadRepositories = async () => {
+  const loadRepositories = useCallback(async () => {
     setIsLoading(true);
     try {
       // Se estamos usando filtros específicos, usar a busca normal
@@ -125,14 +128,14 @@ export default function Explore() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [filters, currentPage, userProfile, buildSearchQuery]);
 
   // Efeito para carregar repositórios quando os filtros mudarem ou a página mudar
   useEffect(() => {
     if (activeTab === "recommended") {
       loadRepositories();
     }
-  }, [filters, currentPage, activeTab]);
+  }, [activeTab, loadRepositories]);
 
   // Efeito para carregar repositórios favoritos quando a aba for alterada
   useEffect(() => {

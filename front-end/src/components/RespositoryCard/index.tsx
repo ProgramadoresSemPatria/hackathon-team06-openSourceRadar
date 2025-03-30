@@ -11,23 +11,24 @@ interface RepositoryCardProps {
 }
 
 //we don't have difficulty badges yet
-const difficultyConfig = {
-  beginner: {
-    variant: "outline",
-    className: "bg-green-100 text-green-800 border-green-200 hover:bg-green-100",
-  },
-  intermediate: {
-    variant: "outline",
-    className: "bg-yellow-100 text-yellow-800 border-yellow-200 hover:bg-yellow-100",
-  },
-  advanced: {
-    variant: "outline",
-    className: "bg-red-100 text-red-800 border-red-200 hover:bg-red-100",
-  },
-} as const;
+// const difficultyConfig = {
+//   beginner: {
+//     variant: "outline",
+//     className: "bg-green-100 text-green-800 border-green-200 hover:bg-green-100",
+//   },
+//   intermediate: {
+//     variant: "outline",
+//     className: "bg-yellow-100 text-yellow-800 border-yellow-200 hover:bg-yellow-100",
+//   },
+//   advanced: {
+//     variant: "outline",
+//     className: "bg-red-100 text-red-800 border-red-200 hover:bg-red-100",
+//   },
+// } as const;
 
 // hasFavoriteButton it's not being used since we didn't implement the like function yet
-export const RepositoryCard = ({ repository, hasFavoriteButton }: RepositoryCardProps) => {
+// export const RepositoryCard = ({ repository, hasFavoriteButton }: RepositoryCardProps) => {
+export const RepositoryCard = ({ repository }: RepositoryCardProps) => {
   const formatNumber = (num: number) => {
     if (num >= 1000000) {
       return (num / 1000000).toFixed(1) + "M";

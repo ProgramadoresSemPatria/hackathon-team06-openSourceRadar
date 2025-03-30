@@ -141,7 +141,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const userDocRef = doc(db, "users", currentUser.uid);
 
-      // Obter os favoritos atuais
+      // Obter os favoritos atuais de forma segura
       const currentFavorites = userProfile?.favoriteRepos || [];
 
       // Adicionar ou remover o repositório dos favoritos

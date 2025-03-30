@@ -1,4 +1,4 @@
-import { ArrowRight, Github, GitPullRequestArrow, Menu } from "lucide-react";
+import { ArrowRight, Github, Menu } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import clsx from "clsx";
 import { useState } from "react";
@@ -67,10 +67,11 @@ export const Navbar = () => {
   const navRoutes = currentUser ? [...publicRoutes, ...authenticatedRoutes] : publicRoutes;
 
   return (
-    <nav className="bg-white w-full border-b">
+    <nav className="bg-white w-full">
       <div className="max-w-[96rem] mx-auto px-6 sm:px-12 py-4 flex items-center justify-between">
-        <Link to="/">
-          <GitPullRequestArrow className="h-6 w-6" />
+        <Link to="/" className="flex items-center gap-2">
+          <img src="../../dist/radar.svg" alt="Radar Icon" className="h-6 w-6" />
+          <span className="text-lg font-semibold">OpenSourceRadar</span>
         </Link>
 
         <button className="block sm:hidden" onClick={isOpen ? closeModal : openModal}>

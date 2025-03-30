@@ -30,7 +30,7 @@ export function HeroSection() {
 
         <div className="space-y-4">
           <h1 className="font-bold tracking-tighter text-5xl xl:text-6xl">
-            Seu radar pessoal de <span className="text-foreground">open source</span>
+            Seu radar pessoal de <span className="text-foreground">projetos open-source</span>
           </h1>
           <p className="text-muted-foreground text-base sm:text-lg xl:text-xl">
             Encontre projetos que combinam com suas habilidades, acompanhe suas contribuições e construa seu perfil de

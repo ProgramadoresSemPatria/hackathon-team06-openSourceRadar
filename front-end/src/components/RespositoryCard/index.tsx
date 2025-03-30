@@ -1,4 +1,3 @@
-// src/components/RespositoryCard/index.tsx
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
 import { languaguesData } from "@/lib/data";
 import { Repository } from "@/types/repository";

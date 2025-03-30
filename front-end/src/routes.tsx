@@ -5,6 +5,8 @@ import Onboarding from "./pages/private/Onboarding";
 import Explore from "./pages/private/Explore";
 import { LandingPage } from "./pages/public/LandingPage";
 import Learn from "./pages/public/Learn";
+import Privacy from "./pages/public/Privacy";
+import Terms from "./pages/public/Terms";
 
 export const router = createBrowserRouter([
   {
@@ -17,6 +19,14 @@ export const router = createBrowserRouter([
       {
         path: "learn",
         element: <Learn />,
+      },
+      {
+        path: "privacy",
+        element: <Privacy />,
+      },
+      {
+        path: "terms",
+        element: <Terms />,
       },
     ],
   },

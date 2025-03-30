@@ -1,18 +1,32 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../lib/AuthContext";
-import { Navbar } from "./Navbar";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function ProtectedLayout() {
-  const { currentUser } = useAuth();
+  const { currentUser, userProfile, loading } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  if (!currentUser) {
-    return <Navigate to="/login" />;
+  useEffect(() => {
+    if (
+      !loading &&
+      currentUser &&
+      userProfile &&
+      !userProfile.hasCompletedOnboarding &&
+      !location.pathname.includes("/onboarding")
+    ) {
+      navigate("/onboarding");
+    }
+  }, [currentUser, userProfile, loading, location, navigate]);
+
+  if (loading) {
+    return <div className="flex h-screen items-center justify-center">Carregando...</div>;
   }
 
-  return (
-    <div className="max-w-[96rem] mx-auto px-6 sm:px-12">
-      <Navbar />
-      <Outlet />
-    </div>
-  );
+  if (!currentUser) {
+    return <Navigate to="/" />;
+  }
+
+  return <Outlet />;
 }

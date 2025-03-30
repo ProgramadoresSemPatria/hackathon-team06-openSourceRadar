@@ -1,25 +1,36 @@
-import { ArrowRight, GitPullRequestArrow, Menu } from "lucide-react";
+import { ArrowRight, Github, Menu } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import clsx from "clsx";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "../ui/button";
-import { NavBarDropdown } from "./NavBarDropdown";
-import { ProfileDialog } from "../ProfileDialog";
+import { useAuth } from "@/lib/AuthContext";
+import { toast } from "sonner";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { User } from "lucide-react";
 
-const routes = [
-  {
-    to: "/panel/explore",
-    title: "Explore",
-  },
-  {
-    to: "/panel/dashboard",
-    title: "Dashboard",
-  },
-];
+// Variável global para controlar o carregamento inicial
+let initialLogoLoadComplete = false;
 
 export const Navbar = () => {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const { currentUser, signIn, logout, userProfile, loading } = useAuth();
+
+  // Estado para controlar o carregamento do logo
+  const [logoLoading, setLogoLoading] = useState(!initialLogoLoadComplete);
+
+  // Efeito para simular carregamento do logo, apenas no primeiro acesso
+  useEffect(() => {
+    if (!initialLogoLoadComplete) {
+      // Marca como carregado após um tempo (ou quando a imagem carregar)
+      const timer = setTimeout(() => {
+        setLogoLoading(false);
+        initialLogoLoadComplete = true;
+      }, 800); // Tempo suficiente para simular carregamento
+
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   const openModal = () => {
     document.body.style.overflow = "hidden";
@@ -31,58 +42,136 @@ export const Navbar = () => {
     setIsOpen(false);
   };
 
-  return (
-    <nav className="bg-white">
-      <div className="relative flex items-center justify-between mx-auto py-4">
-        <GitPullRequestArrow />
+  const handleLogin = async () => {
+    try {
+      await signIn();
+      closeModal();
+    } catch (err) {
+      console.error("Erro no login:", err);
+      toast.error("Falha ao entrar com GitHub. Por favor, tente novamente.");
+    }
+  };
 
-        <button
-          className="block sm:hidden"
-          onClick={isOpen ? closeModal : openModal}
-        >
-          <span className="sr-only">Open main menu</span>
+  const handleLogout = async () => {
+    try {
+      await logout();
+      closeModal();
+      toast.success("Logout realizado com sucesso");
+    } catch (error) {
+      console.error("Erro ao fazer logout:", error);
+      toast.error("Erro ao fazer logout");
+    }
+  };
+
+  const publicRoutes = [
+    {
+      to: "/learn",
+      title: "Aprender",
+    },
+  ];
+
+  const authenticatedRoutes = [
+    {
+      to: "/explore",
+      title: "Explorar",
+    },
+    {
+      to: "/dashboard",
+      title: "Dashboard",
+    },
+  ];
+
+  const navRoutes = currentUser ? [...publicRoutes, ...authenticatedRoutes] : publicRoutes;
+
+  return (
+    <nav className="bg-white w-full">
+      <div className="max-w-[96rem] mx-auto px-6 sm:px-12 py-4 flex items-center justify-between">
+        <Link to="/" className="flex items-center gap-2">
+          {logoLoading ? (
+            <>
+              {/* Estado de carregamento para o logo */}
+              <div className="h-6 w-6 bg-gray-200 animate-pulse rounded-full"></div>
+              <div className="h-6 w-32 bg-gray-200 animate-pulse rounded-md"></div>
+            </>
+          ) : (
+            <>
+              {/* Logo após o carregamento inicial */}
+              <img
+                src="radar.svg"
+                alt="Radar Icon"
+                className="h-6 w-6"
+                width="24"
+                height="24"
+                loading="eager"
+                onLoad={() => {
+                  // Garantir que o logo seja marcado como carregado quando a imagem carregar
+                  setLogoLoading(false);
+                  initialLogoLoadComplete = true;
+                }}
+              />
+              <span className="text-lg font-semibold">OpenSourceRadar</span>
+            </>
+          )}
+        </Link>
+
+        <button className="block sm:hidden" onClick={isOpen ? closeModal : openModal}>
+          <span className="sr-only">Abrir menu principal</span>
           <Menu size={32} />
         </button>
 
-        {/* Desktop Navbar */}
-        <div className="hidden w-fit sm:block" id="navbar-default">
-          <ul className="font-medium flex items-center space-x-8 rtl:space-x-reverse bg-white">
-            {routes.map((route) => (
-              <li>
-                <Link
-                  to={route.to}
-                  className={clsx(
-                    "block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-muted-foreground md:p-0",
-                    location.pathname === route.to &&
-                      "underline underline-offset-2"
-                  )}
-                >
-                  {route.title}
-                </Link>
-              </li>
-            ))}
+        {/* Prevent UI blink by showing a loading state */}
+        {loading ? (
+          <div className="animate-pulse h-6 w-24 bg-gray-200 rounded" />
+        ) : (
+          <div className="hidden w-fit sm:block" id="navbar-default">
+            <ul className="font-medium flex items-center space-x-8 rtl:space-x-reverse bg-white">
+              {navRoutes.map((route) => (
+                <li key={route.to}>
+                  <Link
+                    to={route.to}
+                    className={clsx(
+                      "block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-muted-foreground md:p-0",
+                      location.pathname === route.to && "underline underline-offset-2"
+                    )}
+                  >
+                    {route.title}
+                  </Link>
+                </li>
+              ))}
 
-            <NavBarDropdown />
-          </ul>
-        </div>
+              {currentUser ? (
+                <Link to="/dashboard">
+                  <Avatar className="h-10 w-10 border-2 border-primary/20 hover:border-primary transition-colors cursor-pointer">
+                    <AvatarImage src={userProfile?.photoURL || ""} alt="Perfil" />
+                    <AvatarFallback>
+                      <User className="h-5 w-5" />
+                    </AvatarFallback>
+                  </Avatar>
+                </Link>
+              ) : (
+                <Button onClick={handleLogin} variant="default" type="button" className="gap-2">
+                  <Github className="h-4 w-4" />
+                  Entrar com GitHub
+                </Button>
+              )}
+            </ul>
+          </div>
+        )}
 
         {/* Mobile Navbar */}
         <div
           className={clsx(
             "absolute sm:hidden top-16 left-0 w-full h-[calc(100svh-5rem)] transition-opacity bg-white z-50 mt-4 flex flex-col justify-between",
-            isOpen ? "opacity-100" : "opacity-0"
+            isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
           )}
         >
-          <ul className="font-medium flex flex-col gap-6">
-            {routes.map((route) => (
-              <li className="border-b-2 pb-4">
+          <ul className="font-medium flex flex-col gap-6 p-6">
+            {navRoutes.map((route) => (
+              <li key={route.to} className="border-b-2 pb-4">
                 <Link
                   to={route.to}
                   onClick={closeModal}
-                  className={clsx(
-                    location.pathname === route.to &&
-                      "underline underline-offset-2"
-                  )}
+                  className={clsx(location.pathname === route.to && "underline underline-offset-2")}
                 >
                   <div className="flex items-center justify-between">
                     <p>{route.title}</p>
@@ -93,23 +182,17 @@ export const Navbar = () => {
             ))}
           </ul>
 
-          <div className="space-y-2 mb-6">
-            <ProfileDialog>
-              <Button
-                onClick={closeModal}
-                variant={"default"}
-                className="w-full"
-              >
-                Preferences
+          <div className="space-y-2 p-6">
+            {currentUser ? (
+              <Button variant={"outline"} className="w-full border-red-400 text-red-400" onClick={handleLogout}>
+                Sair
               </Button>
-            </ProfileDialog>
-
-            <Button
-              variant={"outline"}
-              className="w-full border-red-400 text-red-400"
-            >
-              Log Out
-            </Button>
+            ) : (
+              <Button onClick={handleLogin} variant={"default"} className="w-full gap-2">
+                <Github className="h-4 w-4" />
+                Entrar com GitHub
+              </Button>
+            )}
           </div>
         </div>
       </div>

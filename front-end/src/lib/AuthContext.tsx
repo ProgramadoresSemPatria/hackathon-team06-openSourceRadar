@@ -1,9 +1,9 @@
-// src/lib/AuthContext.tsx
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { auth, signInWithGitHub, signOut } from "./firebase";
 import { onAuthStateChanged, User } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "./firebase";
+import { toast } from "sonner";
 
 interface AuthContextType {
   currentUser: User | null;
@@ -11,6 +11,8 @@ interface AuthContextType {
   loading: boolean;
   signIn: () => Promise<void>;
   logout: () => Promise<void>;
+  saveOnboardingData: (languages: string[], experienceLevel: string) => Promise<boolean | undefined>;
+  toggleFavoriteRepo: (repoId: string) => Promise<void>;
 }
 
 export interface UserProfile {
@@ -24,6 +26,9 @@ export interface UserProfile {
   favoriteRepos?: string[];
   createdAt?: Date;
   lastLogin?: Date;
+  hasCompletedOnboarding?: boolean;
+  experienceLevel?: string;
+  updatedAt?: Date;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -88,12 +93,92 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  // Função para salvar dados de onboarding
+  const saveOnboardingData = async (languages: string[], experienceLevel: string) => {
+    if (!currentUser) {
+      toast.error("Usuário não autenticado");
+      return false;
+    }
+
+    try {
+      const userDocRef = doc(db, "users", currentUser.uid);
+
+      // Get current user data first to prevent overwriting
+      const currentData = userProfile || {
+        uid: currentUser.uid,
+        displayName: currentUser.displayName,
+        email: currentUser.email,
+        photoURL: currentUser.photoURL,
+      };
+
+      const updatedData = {
+        ...currentData,
+        preferredLanguages: languages,
+        experienceLevel: experienceLevel,
+        hasCompletedOnboarding: true,
+        updatedAt: new Date(),
+      };
+
+      await setDoc(userDocRef, updatedData, { merge: true });
+
+      // Update local state with the new data
+      setUserProfile(updatedData as UserProfile);
+
+      return true;
+    } catch (error) {
+      console.error("Erro ao salvar dados de onboarding:", error);
+      throw error;
+    }
+  };
+
+  // Função para alternar favoritos
+  const toggleFavoriteRepo = async (repoId: string) => {
+    if (!currentUser) {
+      toast.error("Você precisa estar logado para adicionar favoritos");
+      return;
+    }
+
+    try {
+      const userDocRef = doc(db, "users", currentUser.uid);
+
+      // Obter os favoritos atuais de forma segura
+      const currentFavorites = userProfile?.favoriteRepos || [];
+
+      // Adicionar ou remover o repositório dos favoritos
+      let updatedFavorites;
+      if (currentFavorites.includes(repoId)) {
+        updatedFavorites = currentFavorites.filter((id) => id !== repoId);
+      } else {
+        updatedFavorites = [...currentFavorites, repoId];
+      }
+
+      // Atualizar no Firestore
+      await setDoc(userDocRef, { favoriteRepos: updatedFavorites, updatedAt: new Date() }, { merge: true });
+
+      // Atualizar o estado local
+      setUserProfile((prev) => {
+        if (prev) {
+          return {
+            ...prev,
+            favoriteRepos: updatedFavorites,
+          };
+        }
+        return prev;
+      });
+    } catch (error) {
+      console.error("Erro ao atualizar favoritos:", error);
+      throw error;
+    }
+  };
+
   const value = {
     currentUser,
     userProfile,
     loading,
     signIn,
     logout,
+    saveOnboardingData,
+    toggleFavoriteRepo,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

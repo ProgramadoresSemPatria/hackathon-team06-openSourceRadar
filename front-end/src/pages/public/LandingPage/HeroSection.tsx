@@ -1,67 +1,147 @@
 import { Button } from "@/components/ui/button";
-import { Compass, Lock } from "lucide-react";
+import { Compass, Github, Info, GitPullRequestIcon } from "lucide-react";
 import { Radar } from "./Radar";
 import { Link } from "react-router";
+import { useAuth } from "@/lib/AuthContext";
+import { toast } from "sonner";
+import { motion } from "framer-motion";
 
 export function HeroSection() {
+  const { currentUser, signIn } = useAuth();
+
+  const handleLogin = async () => {
+    try {
+      await signIn();
+      // Se o login foi bem-sucedido, o AuthContext redirecionará para onboarding se necessário
+      // ou para o dashboard se já tiver completado o onboarding
+    } catch (err) {
+      console.error("Erro no login:", err);
+      toast.error("Falha ao entrar com GitHub. Por favor, tente novamente.");
+    }
+  };
+
   return (
-    <section className="grid gap-12 lg:grid-cols-2 md:gap-16 items-center ">
+    <section className="grid gap-12 lg:grid-cols-2 md:gap-16 items-center">
       {/* Text container */}
-      <div className="flex flex-col gap-6">
-        <div className="inline-flex items-center rounded-full border px-3 py-1 text-sm">
+      <motion.div
+        className="flex flex-col gap-6"
+        initial={{ opacity: 0, x: -50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+      >
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="inline-flex items-center rounded-full border px-3 py-1 text-sm"
+        >
           <span className="flex h-2 w-2 rounded-full bg-foreground"></span>
-          <span className="ml-2 font-medium">Discover • Contribute • Grow</span>
-        </div>
+          <span className="ml-2 font-medium">Descobrir • Contribuir • Crescer</span>
+        </motion.div>
 
         <div className="space-y-4">
-          <h1 className="font-bold tracking-tighter text-5xl xl:text-6xl">
-            Your personal <span className="text-foreground">open source</span>{" "}
-            radar
-          </h1>
-          <p className="text-muted-foreground text-base sm:text-lg xl:text-xl">
-            Find projects that match your skills, track your contributions, and
-            build your developer profile in the open source community.
-          </p>
+          <motion.h1
+            className="font-bold tracking-tighter text-5xl xl:text-6xl"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+          >
+            Seu radar pessoal de <span className="text-foreground">projetos open-source</span>
+          </motion.h1>
+          <motion.p
+            className="text-muted-foreground text-base sm:text-lg xl:text-xl"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+          >
+            Encontre projetos que combinam com suas habilidades, acompanhe suas contribuições e construa seu perfil de
+            desenvolvedor na comunidade open source.
+          </motion.p>
         </div>
 
-        <Link to={"/panel/explore"}>
-          <Button size="lg" className="w-full md:max-w-52 gap-2">
-            <Compass className="h-5 w-5" />
-            <span>Explore more</span>
-          </Button>
-        </Link>
-      </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 1 }}
+        >
+          {currentUser ? (
+            <Link to="/explore">
+              <Button size="lg" className="w-full md:max-w-52 gap-2">
+                <Compass className="h-5 w-5" />
+                <span>Explorar projetos</span>
+              </Button>
+            </Link>
+          ) : (
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Button onClick={handleLogin} size="lg" className="w-full md:max-w-52 gap-2">
+                <Github className="h-5 w-5" />
+                <span>Entrar com GitHub</span>
+              </Button>
+              <Link to="/explore">
+                <Button variant="outline" size="lg" className="w-full md:max-w-52 gap-2">
+                  <Compass className="h-5 w-5" />
+                  <span>Explorar projetos</span>
+                </Button>
+              </Link>
+            </div>
+          )}
+        </motion.div>
+      </motion.div>
 
-      {/* Radar Card */}
-      <div className="rounded-xl border bg-card shadow-2xl px-8 py-6 space-y-4">
-        {/* Header */}
+      {/* Radar Card - Versão final com ícone e texto atualizados */}
+      <motion.div
+        className="rounded-xl border bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm shadow-xl p-6 space-y-4"
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.7, delay: 0.3 }}
+      >
+        {/* Header com ícone preto */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-foreground/10">
-              <Compass className="h-4 w-4" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
+              <Compass className="h-4 w-4 text-gray-900 dark:text-gray-200" />
             </div>
-            <h3 className="font-semibold">Project Radar</h3>
+            <h3 className="font-semibold text-gray-900 dark:text-gray-100">Radar de Projetos</h3>
           </div>
-          <div className="rounded-full bg-foreground/10 px-2 py-1 text-xs font-medium">
-            Scanning
-          </div>
+          <motion.div
+            className="rounded-full bg-blue-600 px-3 py-1 text-xs font-medium text-white"
+            animate={{
+              boxShadow: [
+                "0 0 0px rgba(59, 130, 246, 0.3)",
+                "0 0 10px rgba(59, 130, 246, 0.7)",
+                "0 0 0px rgba(59, 130, 246, 0.3)",
+              ],
+            }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            Escaneando
+          </motion.div>
         </div>
 
-        {/* Body */}
-        <div className="flex items-center justify-center py-12 w-full rounded-lg border">
+        {/* Body com o radar */}
+        <div className="flex items-center justify-center py-5 w-full">
           <Radar />
         </div>
 
-        {/* Footer */}
+        {/* Footer com ícone e texto atualizados */}
         <div className="flex items-center justify-between text-sm">
           <div className="flex items-center gap-2">
-            <Lock className="h-4 w-4 text-muted-foreground" />
-            <span className="text-muted-foreground">
-              Connect with GitHub to unlock personalized features
-            </span>
+            {currentUser ? (
+              <>
+                <GitPullRequestIcon className="h-4 w-4 text-blue-500" />
+                <span className="text-gray-700 dark:text-gray-300">
+                  Os projetos exibidos são populares na comunidade open-source.
+                </span>
+              </>
+            ) : (
+              <>
+                <Info className="h-4 w-4 text-gray-500" />
+                <span className="text-gray-500">Conecte-se com GitHub para desbloquear recursos personalizados.</span>
+              </>
+            )}
           </div>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

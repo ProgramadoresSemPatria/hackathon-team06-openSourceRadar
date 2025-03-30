@@ -3,26 +3,15 @@ import { Link, useLocation } from "react-router";
 import clsx from "clsx";
 import { useState } from "react";
 import { Button } from "../ui/button";
-import { NavBarDropdown } from "./NavBarDropdown";
-import { ProfileDialog } from "../ProfileDialog";
 import { useAuth } from "@/lib/AuthContext";
 import { toast } from "sonner";
-
-const routes = [
-  {
-    to: "/panel/explore",
-    title: "Explorar",
-  },
-  {
-    to: "/panel/dashboard",
-    title: "Dashboard",
-  },
-];
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { User } from "lucide-react";
 
 export const Navbar = () => {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
-  const { currentUser, signIn, logout } = useAuth();
+  const { currentUser, signIn, logout, userProfile } = useAuth();
 
   const openModal = () => {
     document.body.style.overflow = "hidden";
@@ -55,6 +44,28 @@ export const Navbar = () => {
     }
   };
 
+  // Define routes based on authentication status
+  const publicRoutes = [
+    {
+      to: "/learn",
+      title: "Aprender",
+    },
+  ];
+
+  const authenticatedRoutes = [
+    {
+      to: "/explore",
+      title: "Explorar",
+    },
+    {
+      to: "/dashboard",
+      title: "Dashboard",
+    },
+  ];
+
+  // Determine which routes to display
+  const navRoutes = currentUser ? [...publicRoutes, ...authenticatedRoutes] : publicRoutes;
+
   return (
     <nav className="bg-white">
       <div className="relative flex items-center justify-between mx-auto py-4">
@@ -70,7 +81,7 @@ export const Navbar = () => {
         {/* Desktop Navbar */}
         <div className="hidden w-fit sm:block" id="navbar-default">
           <ul className="font-medium flex items-center space-x-8 rtl:space-x-reverse bg-white">
-            {routes.map((route) => (
+            {navRoutes.map((route) => (
               <li key={route.to}>
                 <Link
                   to={route.to}
@@ -85,7 +96,14 @@ export const Navbar = () => {
             ))}
 
             {currentUser ? (
-              <NavBarDropdown />
+              <Link to="/dashboard">
+                <Avatar className="h-10 w-10 border-2 border-primary/20 hover:border-primary transition-colors cursor-pointer">
+                  <AvatarImage src={userProfile?.photoURL || ""} alt="Perfil" />
+                  <AvatarFallback>
+                    <User className="h-5 w-5" />
+                  </AvatarFallback>
+                </Avatar>
+              </Link>
             ) : (
               <Button onClick={handleLogin} variant="default" type="button" className="gap-2">
                 <Github className="h-4 w-4" />
@@ -103,7 +121,7 @@ export const Navbar = () => {
           )}
         >
           <ul className="font-medium flex flex-col gap-6">
-            {routes.map((route) => (
+            {navRoutes.map((route) => (
               <li key={route.to} className="border-b-2 pb-4">
                 <Link
                   to={route.to}
@@ -121,17 +139,9 @@ export const Navbar = () => {
 
           <div className="space-y-2 mb-6">
             {currentUser ? (
-              <>
-                <ProfileDialog>
-                  <Button onClick={closeModal} variant={"default"} className="w-full">
-                    Preferências
-                  </Button>
-                </ProfileDialog>
-
-                <Button variant={"outline"} className="w-full border-red-400 text-red-400" onClick={handleLogout}>
-                  Sair
-                </Button>
-              </>
+              <Button variant={"outline"} className="w-full border-red-400 text-red-400" onClick={handleLogout}>
+                Sair
+              </Button>
             ) : (
               <Button onClick={handleLogin} variant={"default"} className="w-full gap-2">
                 <Github className="h-4 w-4" />

@@ -1,3 +1,4 @@
+// src/pages/private/Onboarding.tsx
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -8,8 +9,7 @@ import { toast } from "sonner";
 import MultiSelector from "@/components/ui/multi-selector";
 import { programmingLanguages, experienceLevels } from "@/lib/data";
 import { useAuth } from "@/lib/AuthContext";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
+import { PageLayout } from "@/components/PageLayout";
 
 export default function Onboarding() {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
@@ -62,20 +62,17 @@ export default function Onboarding() {
 
   if (loading) {
     return (
-      <div className="max-w-[96rem] mx-auto px-6 sm:px-12">
-        <Navbar />
-        <div className="w-full h-svh flex items-center justify-center">
+      <PageLayout>
+        <div className="w-full h-[calc(100vh-300px)] flex items-center justify-center">
           <p>Carregando...</p>
         </div>
-        <Footer />
-      </div>
+      </PageLayout>
     );
   }
 
   return (
-    <div className="max-w-[96rem] mx-auto px-6 sm:px-12">
-      <Navbar />
-      <div className="w-full h-svh flex items-center justify-center">
+    <PageLayout>
+      <div className="w-full min-h-[calc(100vh-300px)] flex items-center justify-center py-12">
         <Card className="w-full max-w-2xl mx-auto border-0 shadow-none">
           <form onSubmit={handleSubmit}>
             <CardHeader>
@@ -115,7 +112,6 @@ export default function Onboarding() {
           </form>
         </Card>
       </div>
-      <Footer />
-    </div>
+    </PageLayout>
   );
 }

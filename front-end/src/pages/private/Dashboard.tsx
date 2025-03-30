@@ -1,4 +1,3 @@
-// src/pages/private/Dashboard.tsx
 import { useAuth } from "@/lib/AuthContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,12 +7,10 @@ import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import MultiSelector from "@/components/ui/multi-selector";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
-import { Save, User, LogOut } from "lucide-react";
+import { LogOut, Save, User } from "lucide-react";
 import { toast } from "sonner";
-import { Link } from "react-router";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router";
+import { PageLayout } from "@/components/PageLayout";
 
 export default function Dashboard() {
   const { userProfile, saveOnboardingData, logout } = useAuth();
@@ -22,7 +19,7 @@ export default function Dashboard() {
   const [experienceTime, setExperienceTime] = useState<string>(userProfile?.experienceLevel || "intermediate");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Format experience level for display
+  // Formatar nível de experiência
   const getExperienceLabel = (level: string) => {
     const experienceLookup: Record<string, string> = {
       beginner: "Menos de 1 ano",
@@ -58,17 +55,14 @@ export default function Dashboard() {
 
   if (!userProfile) {
     return (
-      <div className="max-w-[96rem] mx-auto px-6 sm:px-12">
-        <Navbar />
+      <PageLayout>
         <div className="py-6">Carregando perfil...</div>
-        <Footer />
-      </div>
+      </PageLayout>
     );
   }
 
   return (
-    <div className="max-w-[96rem] mx-auto px-6 sm:px-12">
-      <Navbar />
+    <PageLayout>
       <div className="py-6 space-y-6">
         <div className="w-full space-y-2">
           <h1 className="text-2xl sm:text-3xl font-bold">Seu Perfil</h1>
@@ -192,7 +186,6 @@ export default function Dashboard() {
           </Card>
         </div>
       </div>
-      <Footer />
-    </div>
+    </PageLayout>
   );
 }

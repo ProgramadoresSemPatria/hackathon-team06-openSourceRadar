@@ -1,4 +1,3 @@
-// src/components/ProfileDialog.tsx - Updated version
 import { programmingLanguages, experienceLevels } from "@/lib/data";
 import { Save } from "lucide-react";
 import { Button } from "./ui/button";
@@ -29,7 +28,7 @@ export const ProfileDialog = ({ children }: ProfileDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Load user data when the dialog opens
+  // Carregar os dados do usuário quando o dialog for aberto
   useEffect(() => {
     if (isOpen && userProfile) {
       setSelectedLanguages(userProfile.preferredLanguages || []);
@@ -52,7 +51,7 @@ export const ProfileDialog = ({ children }: ProfileDialogProps) => {
       setIsSubmitting(true);
       await saveOnboardingData(selectedLanguages, experienceTime);
       toast.success("Perfil atualizado com sucesso");
-      setIsOpen(false); // Close dialog after successful update
+      setIsOpen(false); // Fechar o dialog após salvar
     } catch (error) {
       console.error("Erro ao salvar perfil:", error);
       toast.error("Erro ao atualizar o perfil");

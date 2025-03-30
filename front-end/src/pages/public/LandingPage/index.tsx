@@ -1,4 +1,3 @@
-// src/pages/public/LandingPage/index.tsx
 import { HeroSection } from "./HeroSection";
 import SearchSection from "@/pages/public/LandingPage/SearchSection";
 import { Navbar } from "@/components/Navbar";

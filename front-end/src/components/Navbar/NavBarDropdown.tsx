@@ -1,4 +1,3 @@
-// src/components/Navbar/NavBarDropdown.tsx
 import { LogOut, User } from "lucide-react";
 import {
   DropdownMenu,

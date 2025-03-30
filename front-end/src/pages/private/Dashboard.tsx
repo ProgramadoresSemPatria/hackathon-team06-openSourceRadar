@@ -10,12 +10,14 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import MultiSelector from "@/components/ui/multi-selector";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { Save, User } from "lucide-react";
+import { Save, User, LogOut } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
-  const { userProfile, saveOnboardingData } = useAuth();
+  const { userProfile, saveOnboardingData, logout } = useAuth();
+  const navigate = useNavigate();
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>(userProfile?.preferredLanguages || []);
   const [experienceTime, setExperienceTime] = useState<string>(userProfile?.experienceLevel || "intermediate");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -124,6 +126,25 @@ export default function Dashboard() {
                 <Link to="/explore">
                   <Button className="w-full">Explorar Projetos</Button>
                 </Link>
+              </div>
+              <div className="mt-3">
+                <Button
+                  variant="outline"
+                  className="w-full text-red-500 border-red-500 hover:bg-red-50"
+                  onClick={async () => {
+                    try {
+                      await logout();
+                      toast.success("Logout realizado com sucesso");
+                      navigate("/");
+                    } catch (error) {
+                      console.error("Erro ao fazer logout:", error);
+                      toast.error("Erro ao fazer logout");
+                    }
+                  }}
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Sair da Conta
+                </Button>
               </div>
             </CardContent>
           </Card>

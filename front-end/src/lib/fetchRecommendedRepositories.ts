@@ -1,6 +1,5 @@
-// Arquivo: src/lib/fetchRecommendedRepositories.ts
+// src/lib/fetchRecommendedRepositories.ts
 import { Repository } from "@/types/repository";
-import { UserProfile } from "./AuthContext";
 import { octokitRequest } from "./octokitRequest";
 
 type RecommendationOptions = {
@@ -11,7 +10,7 @@ type RecommendationOptions = {
 };
 
 export const fetchRecommendedRepositories = async (
-  userProfile: UserProfile | null,
+  // userProfile: UserProfile | null,
   options: RecommendationOptions = {}
 ): Promise<{ repositories: Repository[]; totalCount: number }> => {
   const { languages = [], experienceLevel = "intermediate", perPage = 9, page = 1 } = options;
@@ -21,7 +20,7 @@ export const fetchRecommendedRepositories = async (
     let query = "";
 
     // Adicionar linguagens preferidas
-    if (languages.length > 0) {
+    if (languages && languages.length > 0) {
       const languageQuery = languages
         .slice(0, 3) // Limitar a 3 linguagens para não sobrecarregar a query
         .map((lang) => `language:${lang}`)
@@ -72,22 +71,22 @@ export const fetchRecommendedRepositories = async (
       return { repositories: [], totalCount: 0 };
     }
 
-    const repositories = response.items.map((repository: any) => ({
-      id: repository.id,
-      name: repository.name,
-      full_name: repository.full_name,
-      description: repository.description || "Sem descrição",
-      forks_count: repository.forks_count,
-      language: repository.language || "Não especificado",
-      open_issues_count: repository.open_issues_count,
-      stargazers_count: repository.stargazers_count,
-      url: repository.html_url,
-      topics: repository.topics,
-      updated_at: new Date(repository.updated_at).toLocaleDateString(),
+    const repos: Repository[] = response.items.map((repo: any) => ({
+      id: repo.id,
+      name: repo.name,
+      full_name: repo.full_name,
+      description: repo.description || "Sem descrição",
+      forks_count: repo.forks_count,
+      language: repo.language || "Não especificado",
+      open_issues_count: repo.open_issues_count,
+      stargazers_count: repo.stargazers_count,
+      url: repo.html_url,
+      topics: repo.topics || [],
+      updated_at: new Date(repo.updated_at).toLocaleDateString(),
     }));
 
     return {
-      repositories,
+      repositories: repos,
       totalCount: Math.min(response.total_count, 1000), // GitHub API limita a 1000 resultados
     };
   } catch (error) {

@@ -9,6 +9,8 @@ export default function Explore() {
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = 1;
 
+  console.log(activeTab);
+
   return (
     <PageLayout>
       <div className="py-6 space-y-8">

@@ -67,7 +67,7 @@ export const Navbar = () => {
   const navRoutes = currentUser ? [...publicRoutes, ...authenticatedRoutes] : publicRoutes;
 
   return (
-    <nav className="bg-white w-full border-b">
+    <nav className="bg-white w-full">
       <div className="max-w-[96rem] mx-auto px-6 sm:px-12 py-4 flex items-center justify-between">
         <Link to="/">
           <GitPullRequestArrow className="h-6 w-6" />

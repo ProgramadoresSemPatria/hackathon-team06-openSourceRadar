@@ -1,12 +1,10 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { GitBranch, Github, Award, Code, BookOpen, Users } from "lucide-react";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
+import { PageLayout } from "@/components/PageLayout";
 
 export default function Learn() {
   return (
-    <div className="max-w-[96rem] mx-auto px-6 sm:px-12">
-      <Navbar />
+    <PageLayout>
       <div className="py-6 space-y-8">
         <div className="w-full space-y-2">
           <h1 className="text-2xl sm:text-3xl font-bold">Aprenda sobre Open Source</h1>
@@ -126,7 +124,6 @@ export default function Learn() {
           </Card>
         </div>
       </div>
-      <Footer />
-    </div>
+    </PageLayout>
   );
 }

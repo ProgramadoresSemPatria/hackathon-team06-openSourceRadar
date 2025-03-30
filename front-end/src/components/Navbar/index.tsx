@@ -44,7 +44,7 @@ export const Navbar = () => {
     }
   };
 
-  // Define routes based on authentication status
+  // Definir rotas baseadas no status de autenticação
   const publicRoutes = [
     {
       to: "/learn",
@@ -63,14 +63,14 @@ export const Navbar = () => {
     },
   ];
 
-  // Determine which routes to display
+  // Determinar quais rotas mostrar
   const navRoutes = currentUser ? [...publicRoutes, ...authenticatedRoutes] : publicRoutes;
 
   return (
-    <nav className="bg-white">
-      <div className="relative flex items-center justify-between mx-auto py-4">
+    <nav className="bg-white w-full border-b">
+      <div className="max-w-[96rem] mx-auto px-6 sm:px-12 py-4 flex items-center justify-between">
         <Link to="/">
-          <GitPullRequestArrow />
+          <GitPullRequestArrow className="h-6 w-6" />
         </Link>
 
         <button className="block sm:hidden" onClick={isOpen ? closeModal : openModal}>
@@ -120,7 +120,7 @@ export const Navbar = () => {
             isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
           )}
         >
-          <ul className="font-medium flex flex-col gap-6">
+          <ul className="font-medium flex flex-col gap-6 p-6">
             {navRoutes.map((route) => (
               <li key={route.to} className="border-b-2 pb-4">
                 <Link
@@ -137,7 +137,7 @@ export const Navbar = () => {
             ))}
           </ul>
 
-          <div className="space-y-2 mb-6">
+          <div className="space-y-2 p-6">
             {currentUser ? (
               <Button variant={"outline"} className="w-full border-red-400 text-red-400" onClick={handleLogout}>
                 Sair

@@ -2,8 +2,7 @@ import { useState } from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Filters } from "./Filters";
 import { Pagination } from "@/components/Pagination";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
+import { PageLayout } from "@/components/PageLayout";
 
 export default function Explore() {
   const [activeTab, setActiveTab] = useState("recommended");
@@ -11,13 +10,12 @@ export default function Explore() {
   const totalPages = 1;
 
   return (
-    <div className="max-w-[96rem] mx-auto px-6 sm:px-12">
-      <Navbar />
+    <PageLayout>
       <div className="py-6 space-y-8">
         <div className="w-full space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-bold">Open source radar</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold">Open Source Radar</h1>
           <p className="text-lg sm:text-xl text-muted-foreground">
-            Discover open source projects that match your interests and skill level
+            Descubra projetos open source que combinam com seus interesses e nível de habilidade
           </p>
         </div>
 
@@ -29,10 +27,10 @@ export default function Explore() {
             <Tabs defaultValue="recommended" className="w-full md:max-w-md" onValueChange={setActiveTab}>
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="recommended" onClick={() => setCurrentPage(1)}>
-                  Recommended
+                  Recomendados
                 </TabsTrigger>
                 <TabsTrigger value="favorites" onClick={() => setCurrentPage(1)}>
-                  Favorites
+                  Favoritos
                 </TabsTrigger>
               </TabsList>
             </Tabs>
@@ -60,7 +58,6 @@ export default function Explore() {
           <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={totalPages} />
         </div>
       </div>
-      <Footer />
-    </div>
+    </PageLayout>
   );
 }

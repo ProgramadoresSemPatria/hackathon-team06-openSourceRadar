@@ -1,11 +1,8 @@
-// src/pages/public/Terms.tsx
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
+import { PageLayout } from "@/components/PageLayout";
 
 export default function Terms() {
   return (
-    <div className="max-w-[96rem] mx-auto px-6 sm:px-12">
-      <Navbar />
+    <PageLayout>
       <div className="py-6 space-y-6 max-w-3xl mx-auto">
         <h1 className="text-2xl sm:text-3xl font-bold">Termos de Serviço</h1>
 
@@ -72,7 +69,6 @@ export default function Terms() {
           </p>
         </div>
       </div>
-      <Footer />
-    </div>
+    </PageLayout>
   );
 }

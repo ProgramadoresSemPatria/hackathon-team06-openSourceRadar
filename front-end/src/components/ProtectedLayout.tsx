@@ -1,6 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../lib/AuthContext";
-import { Navbar } from "./Navbar";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 
@@ -29,10 +28,5 @@ export default function ProtectedLayout() {
     return <Navigate to="/" />;
   }
 
-  return (
-    <div className="max-w-[96rem] mx-auto px-6 sm:px-12">
-      <Navbar />
-      <Outlet />
-    </div>
-  );
+  return <Outlet />;
 }

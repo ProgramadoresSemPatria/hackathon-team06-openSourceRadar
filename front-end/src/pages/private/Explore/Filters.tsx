@@ -1,8 +1,21 @@
 // src/pages/private/Explore/Filters.tsx
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { languages, difficulties, starFilters, forkFilters, issueFilters, topicFilters } from "@/lib/data";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  languages,
+  difficulties,
+  starFilters,
+  forkFilters,
+  issueFilters,
+  topicFilters,
+} from "@/lib/data";
 import { Filter, Search } from "lucide-react";
 import { useState, useEffect } from "react";
 
@@ -23,14 +36,33 @@ export interface FilterValues {
   topic: string;
 }
 
-export function Filters({ onFilterChange, onResetFilters, isLoading, currentFilters }: FiltersProps) {
-  const [searchQuery, setSearchQuery] = useState(currentFilters.searchQuery || "");
-  const [selectedLanguage, setSelectedLanguage] = useState(currentFilters.language || "all");
-  const [selectedDifficulty, setSelectedDifficulty] = useState(currentFilters.difficulty || "all");
-  const [selectedStars, setSelectedStars] = useState(currentFilters.stars || "all");
-  const [selectedForks, setSelectedForks] = useState(currentFilters.forks || "all");
-  const [selectedIssues, setSelectedIssues] = useState(currentFilters.issues || "all");
-  const [selectedTopic, setSelectedTopic] = useState(currentFilters.topic || "all");
+export function Filters({
+  onFilterChange,
+  onResetFilters,
+  isLoading,
+  currentFilters,
+}: FiltersProps) {
+  const [searchQuery, setSearchQuery] = useState(
+    currentFilters.searchQuery || ""
+  );
+  const [selectedLanguage, setSelectedLanguage] = useState(
+    currentFilters.language || "all"
+  );
+  const [selectedDifficulty, setSelectedDifficulty] = useState(
+    currentFilters.difficulty || "all"
+  );
+  const [selectedStars, setSelectedStars] = useState(
+    currentFilters.stars || "all"
+  );
+  const [selectedForks, setSelectedForks] = useState(
+    currentFilters.forks || "all"
+  );
+  const [selectedIssues, setSelectedIssues] = useState(
+    currentFilters.issues || "all"
+  );
+  const [selectedTopic, setSelectedTopic] = useState(
+    currentFilters.topic || "all"
+  );
 
   // Sincronizar com os filtros atuais quando mudarem externamente
   useEffect(() => {
@@ -99,7 +131,10 @@ export function Filters({ onFilterChange, onResetFilters, isLoading, currentFilt
           </SelectContent>
         </Select>
 
-        <Select value={selectedDifficulty} onValueChange={setSelectedDifficulty}>
+        <Select
+          value={selectedDifficulty}
+          onValueChange={setSelectedDifficulty}
+        >
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Dificuldade" />
           </SelectTrigger>
@@ -166,7 +201,12 @@ export function Filters({ onFilterChange, onResetFilters, isLoading, currentFilt
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3 justify-end">
-        <Button type="button" variant="outline" onClick={handleReset} disabled={isLoading}>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={handleReset}
+          disabled={isLoading}
+        >
           Limpar Filtros
         </Button>
         <Button type="submit" className="gap-2" disabled={isLoading}>

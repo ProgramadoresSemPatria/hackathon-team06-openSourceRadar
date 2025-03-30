@@ -1,4 +1,4 @@
-import { RepositoriesData } from "@/types/repository";
+import { RepositoriesData, Repository } from "@/types/repository";
 import { Endpoints } from "@octokit/types";
 import { octokitRequest } from "./octokitRequest";
 
@@ -39,4 +39,55 @@ export const fetchRepositories = async (
     repositories,
     totalCount: response.total_count,
   };
+};
+
+export const fetchFavoriteRepositories = async (repoIds: string[]): Promise<Repository[]> => {
+  if (!repoIds.length) return [];
+
+  try {
+    // Como a API não permite buscar múltiplos repositórios por ID de uma vez,
+    // vamos fazer consultas individuais e combinar os resultados
+    const repositories: Repository[] = [];
+
+    // Criar um array de promessas para buscar cada repositório
+    const repoPromises = repoIds.map(async (repoId) => {
+      try {
+        // Primeiro, precisamos encontrar o full_name do repositório usando a API de busca
+        const searchResponse = await octokitRequest<any>("GET /search/repositories", {
+          q: `id:${repoId}`,
+        });
+
+        if (searchResponse && searchResponse.items && searchResponse.items.length > 0) {
+          const repo = searchResponse.items[0];
+
+          return {
+            id: repo.id,
+            name: repo.name,
+            full_name: repo.full_name,
+            description: repo.description || "Sem descrição",
+            forks_count: repo.forks_count,
+            language: repo.language || "Não especificado",
+            open_issues_count: repo.open_issues_count,
+            stargazers_count: repo.stargazers_count,
+            url: repo.html_url,
+            topics: repo.topics,
+            updated_at: new Date(repo.updated_at).toLocaleDateString(),
+          };
+        }
+        return null;
+      } catch (error) {
+        console.error(`Erro ao buscar repositório ${repoId}:`, error);
+        return null;
+      }
+    });
+
+    // Aguardar todas as promessas serem resolvidas
+    const results = await Promise.all(repoPromises);
+
+    // Filtrar os resultados nulos
+    return results.filter((repo): repo is Repository => repo !== null);
+  } catch (error) {
+    console.error("Erro ao buscar repositórios favoritos:", error);
+    throw error;
+  }
 };

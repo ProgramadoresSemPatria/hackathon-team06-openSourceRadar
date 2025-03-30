@@ -8,6 +8,8 @@ import { toast } from "sonner";
 import MultiSelector from "@/components/ui/multi-selector";
 import { programmingLanguages, experienceLevels } from "@/lib/data";
 import { useAuth } from "@/lib/AuthContext";
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
 
 export default function Onboarding() {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
@@ -18,7 +20,7 @@ export default function Onboarding() {
   // Check if onboarding is already completed
   useEffect(() => {
     if (!loading && userProfile?.hasCompletedOnboarding) {
-      navigate("/panel/dashboard");
+      navigate("/dashboard");
     }
   }, [userProfile, loading, navigate]);
 
@@ -51,7 +53,7 @@ export default function Onboarding() {
     try {
       await saveOnboardingData(selectedItems, experienceTime);
       toast.success("Perfil atualizado com sucesso!");
-      navigate("/panel/dashboard");
+      navigate("/dashboard");
     } catch (error) {
       toast.error("Erro ao salvar dados do perfil");
       console.error(error);
@@ -60,52 +62,60 @@ export default function Onboarding() {
 
   if (loading) {
     return (
-      <div className="w-full h-svh flex items-center justify-center">
-        <p>Carregando...</p>
+      <div className="max-w-[96rem] mx-auto px-6 sm:px-12">
+        <Navbar />
+        <div className="w-full h-svh flex items-center justify-center">
+          <p>Carregando...</p>
+        </div>
+        <Footer />
       </div>
     );
   }
 
   return (
-    <div className="w-full h-svh flex items-center justify-center">
-      <Card className="w-full max-w-2xl mx-auto border-0 shadow-none">
-        <form onSubmit={handleSubmit}>
-          <CardHeader>
-            <CardTitle className="text-xl font-medium">Experiência em Programação</CardTitle>
-            <CardDescription>Conte-nos sobre sua experiência em programação e linguagens preferidas.</CardDescription>
-          </CardHeader>
-          <CardContent className="my-4 space-y-4">
-            <div className="space-y-4">
-              <Label className="text-base">Quais são suas linguagens de programação preferidas?</Label>
-              <MultiSelector
-                selectedItems={selectedItems}
-                setSelectedItems={setSelectedItems}
-                items={programmingLanguages}
-                placeholder="Selecione linguagens..."
-              />
-            </div>
+    <div className="max-w-[96rem] mx-auto px-6 sm:px-12">
+      <Navbar />
+      <div className="w-full h-svh flex items-center justify-center">
+        <Card className="w-full max-w-2xl mx-auto border-0 shadow-none">
+          <form onSubmit={handleSubmit}>
+            <CardHeader>
+              <CardTitle className="text-xl font-medium">Experiência em Programação</CardTitle>
+              <CardDescription>Conte-nos sobre sua experiência em programação e linguagens preferidas.</CardDescription>
+            </CardHeader>
+            <CardContent className="my-4 space-y-4">
+              <div className="space-y-4">
+                <Label className="text-base">Quais são suas linguagens de programação preferidas?</Label>
+                <MultiSelector
+                  selectedItems={selectedItems}
+                  setSelectedItems={setSelectedItems}
+                  items={programmingLanguages}
+                  placeholder="Selecione linguagens..."
+                />
+              </div>
 
-            <div className="space-y-4">
-              <Label className="text-base">Qual é seu tempo de experiência?</Label>
-              <RadioGroup value={experienceTime} onValueChange={setExperienceTime} className="space-y-2">
-                {experienceLevels.map((level) => (
-                  <div key={level.id} className="flex items-center space-x-2">
-                    <RadioGroupItem value={level.id} id={`experience-${level.id}`} />
-                    <Label htmlFor={`experience-${level.id}`} className="text-sm font-normal cursor-pointer">
-                      {level.label}
-                    </Label>
-                  </div>
-                ))}
-              </RadioGroup>
-            </div>
-          </CardContent>
-          <CardFooter>
-            <Button type="submit" className="w-full">
-              Salvar
-            </Button>
-          </CardFooter>
-        </form>
-      </Card>
+              <div className="space-y-4">
+                <Label className="text-base">Qual é seu tempo de experiência?</Label>
+                <RadioGroup value={experienceTime} onValueChange={setExperienceTime} className="space-y-2">
+                  {experienceLevels.map((level) => (
+                    <div key={level.id} className="flex items-center space-x-2">
+                      <RadioGroupItem value={level.id} id={`experience-${level.id}`} />
+                      <Label htmlFor={`experience-${level.id}`} className="text-sm font-normal cursor-pointer">
+                        {level.label}
+                      </Label>
+                    </div>
+                  ))}
+                </RadioGroup>
+              </div>
+            </CardContent>
+            <CardFooter>
+              <Button type="submit" className="w-full">
+                Salvar
+              </Button>
+            </CardFooter>
+          </form>
+        </Card>
+      </div>
+      <Footer />
     </div>
   );
 }

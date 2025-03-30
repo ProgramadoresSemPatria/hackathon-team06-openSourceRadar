@@ -5,7 +5,7 @@ import { BookOpen, Star, GitFork, AlertCircle, Clock, Heart } from "lucide-react
 import { Badge } from "../ui/badge";
 import { motion } from "framer-motion";
 import { Button } from "../ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/AuthContext";
 import { toast } from "sonner";
 
@@ -16,8 +16,15 @@ interface RepositoryCardProps {
 
 export const RepositoryCard = ({ repository, hasFavoriteButton = false }: RepositoryCardProps) => {
   const { userProfile, toggleFavoriteRepo } = useAuth();
-  const [isFavorite, setIsFavorite] = useState(userProfile?.favoriteRepos?.includes(repository.id.toString()) || false);
+  const [isFavorite, setIsFavorite] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+
+  // Verificar se o repositório está nos favoritos
+  useEffect(() => {
+    if (userProfile?.favoriteRepos) {
+      setIsFavorite(userProfile.favoriteRepos.includes(repository.id.toString()));
+    }
+  }, [userProfile, repository.id]);
 
   const formatNumber = (num: number) => {
     if (num >= 1000000) {

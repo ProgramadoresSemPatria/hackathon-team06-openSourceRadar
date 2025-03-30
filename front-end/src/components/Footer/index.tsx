@@ -3,8 +3,8 @@ import { GitBranch, Heart } from "lucide-react";
 
 export const Footer = () => {
   return (
-    <footer className="bg-white border-t mt-20">
-      <div className="max-w-[96rem] mx-auto py-10 px-6 md:px-12">
+    <footer className="bg-white border-t w-full mt-20">
+      <div className="max-w-[96rem] mx-auto px-6 sm:px-12 py-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-1">
             <div className="flex items-center gap-2 mb-4">

@@ -2,6 +2,7 @@ import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/componen
 import { languaguesData } from "@/lib/data";
 import { Repository } from "@/types/repository";
 import { BookOpen, Star, GitFork, AlertCircle, Clock, Heart } from "lucide-react";
+import { ContributionGuide } from "../ContributionGuide";
 import { Badge } from "../ui/badge";
 import { motion } from "framer-motion";
 import { Button } from "../ui/button";
@@ -119,25 +120,30 @@ export const RepositoryCard = ({ repository, hasFavoriteButton = false }: Reposi
             </div>
           </div>
         </CardContent>
-        <CardFooter className="border-t pt-4 flex flex-wrap gap-y-3 gap-x-4 justify-between">
-          <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-            <div className="flex items-center">
-              <Star className="h-4 w-4 mr-1 text-yellow-500" />
-              <span>{formatNumber(repository.stargazers_count)}</span>
+        <CardFooter className="border-t pt-4 flex flex-col gap-y-3">
+          <div className="flex flex-wrap gap-y-3 gap-x-4 justify-between w-full">
+            <div className="flex items-center space-x-4 text-sm text-muted-foreground">
+              <div className="flex items-center">
+                <Star className="h-4 w-4 mr-1 text-yellow-500" />
+                <span>{formatNumber(repository.stargazers_count)}</span>
+              </div>
+              <div className="flex items-center">
+                <GitFork className="h-4 w-4 mr-1" />
+                <span>{formatNumber(repository.forks_count)}</span>
+              </div>
+              <div className="flex items-center">
+                <AlertCircle className="h-4 w-4 mr-1" />
+                <span>{formatNumber(repository.open_issues_count)}</span>
+              </div>
             </div>
-            <div className="flex items-center">
-              <GitFork className="h-4 w-4 mr-1" />
-              <span>{formatNumber(repository.forks_count)}</span>
-            </div>
-            <div className="flex items-center">
-              <AlertCircle className="h-4 w-4 mr-1" />
-              <span>{formatNumber(repository.open_issues_count)}</span>
+            <div className="flex items-center text-xs text-muted-foreground">
+              <Clock className="h-3 w-3 mr-1" />
+              <span>Atualizado {repository.updated_at}</span>
             </div>
           </div>
-          <div className="flex items-center text-xs text-muted-foreground">
-            <Clock className="h-3 w-3 mr-1" />
-            <span>Atualizado {repository.updated_at}</span>
-          </div>
+
+          {/* Adicionar o componente de guia de contribuição */}
+          <ContributionGuide repository={repository} />
         </CardFooter>
       </Card>
     </motion.a>

@@ -1,12 +1,6 @@
-<<<<<<< HEAD
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
-=======
-import * as React from "react"
-
-import { cn } from "@/lib/utils"
->>>>>>> e936682 (feat: add shadcn components)
 
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {
   return (
@@ -21,14 +15,7 @@ function Input({ className, type, ...props }: React.ComponentProps<"input">) {
       )}
       {...props}
     />
-<<<<<<< HEAD
   );
 }
 
 export { Input };
-=======
-  )
-}
-
-export { Input }
->>>>>>> e936682 (feat: add shadcn components)

@@ -1,14 +1,15 @@
+// src/components/RespositoryCard/index.tsx
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
 import { languaguesData } from "@/lib/data";
 import { Repository } from "@/types/repository";
 import { BookOpen, Star, GitFork, AlertCircle, Clock, Heart } from "lucide-react";
-import { ContributionGuide } from "../ContributionGuide";
 import { Badge } from "../ui/badge";
 import { motion } from "framer-motion";
 import { Button } from "../ui/button";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/AuthContext";
 import { toast } from "sonner";
+import { ContributionGuide } from "../ContributionGuide";
 
 interface RepositoryCardProps {
   repository: Repository;
@@ -92,7 +93,7 @@ export const RepositoryCard = ({ repository, hasFavoriteButton = false }: Reposi
           </div>
         </CardHeader>
         <CardContent className="flex flex-col items-start flex-grow">
-          {repository.topics && (
+          {repository.topics && repository.topics.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-4">
               {repository.topics.slice(0, 3).map((topic) => (
                 <Badge key={topic} variant="secondary" className="text-xs">

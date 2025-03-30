@@ -16,6 +16,7 @@ import MultiSelector from "./ui/multi-selector";
 import { Label } from "./ui/label";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { useAuth } from "@/lib/AuthContext";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface ProfileDialogProps {
   children: ReactNode;
@@ -66,52 +67,64 @@ export const ProfileDialog = ({ children }: ProfileDialogProps) => {
         <div className="w-full cursor-pointer">{children}</div>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Configurações do Perfil</DialogTitle>
-          <DialogDescription>
-            Atualize suas preferências de programação para obter melhores recomendações.
-          </DialogDescription>
-        </DialogHeader>
-        <div className="py-4 space-y-6">
-          <div className="space-y-4">
-            <Label>Linguagens de Programação Preferidas</Label>
-            <MultiSelector
-              selectedItems={selectedLanguages}
-              setSelectedItems={setSelectedLanguages}
-              items={programmingLanguages}
-              placeholder="Selecione linguagens..."
-            />
-          </div>
-
-          <div className="space-y-4">
-            <Label>Nível de Experiência</Label>
-            <RadioGroup value={experienceTime} onValueChange={setExperienceTime} className="space-y-2">
-              {experienceLevels.map((level) => (
-                <div key={level.id} className="flex items-center space-x-2">
-                  <RadioGroupItem value={level.id} id={`experience-${level.id}`} />
-                  <Label htmlFor={`experience-${level.id}`} className="font-normal cursor-pointer">
-                    {level.label}
-                  </Label>
+      <AnimatePresence>
+        {isOpen && (
+          <DialogContent asChild>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+              className="sm:max-w-[425px]"
+            >
+              <DialogHeader>
+                <DialogTitle>Configurações do Perfil</DialogTitle>
+                <DialogDescription>
+                  Atualize suas preferências de programação para obter melhores recomendações.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="py-4 space-y-6">
+                <div className="space-y-4">
+                  <Label>Linguagens de Programação Preferidas</Label>
+                  <MultiSelector
+                    selectedItems={selectedLanguages}
+                    setSelectedItems={setSelectedLanguages}
+                    items={programmingLanguages}
+                    placeholder="Selecione linguagens..."
+                  />
                 </div>
-              ))}
-            </RadioGroup>
-          </div>
-        </div>
 
-        <DialogFooter>
-          <Button className="w-full" onClick={handleProfileSave} disabled={isSubmitting}>
-            {isSubmitting ? (
-              "Salvando..."
-            ) : (
-              <>
-                <Save className="h-4 w-4 mr-2" />
-                Salvar Alterações
-              </>
-            )}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
+                <div className="space-y-4">
+                  <Label>Nível de Experiência</Label>
+                  <RadioGroup value={experienceTime} onValueChange={setExperienceTime} className="space-y-2">
+                    {experienceLevels.map((level) => (
+                      <div key={level.id} className="flex items-center space-x-2">
+                        <RadioGroupItem value={level.id} id={`experience-${level.id}`} />
+                        <Label htmlFor={`experience-${level.id}`} className="font-normal cursor-pointer">
+                          {level.label}
+                        </Label>
+                      </div>
+                    ))}
+                  </RadioGroup>
+                </div>
+              </div>
+
+              <DialogFooter>
+                <Button className="w-full" onClick={handleProfileSave} disabled={isSubmitting}>
+                  {isSubmitting ? (
+                    "Salvando..."
+                  ) : (
+                    <>
+                      <Save className="h-4 w-4 mr-2" />
+                      Salvar Alterações
+                    </>
+                  )}
+                </Button>
+              </DialogFooter>
+            </motion.div>
+          </DialogContent>
+        )}
+      </AnimatePresence>
     </Dialog>
   );
 };

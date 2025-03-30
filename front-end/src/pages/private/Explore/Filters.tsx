@@ -23,13 +23,49 @@ type FiltersProps = {
   handleSearchQuery: (searchQuery: string) => void;
 };
 
+type LanguageType =
+  | "all"
+  | "JavaScript"
+  | "TypeScript"
+  | "Python"
+  | "Rust"
+  | "Dart"
+  | "CSS"
+  | "Go";
+
+type TopicType =
+  | "all"
+  | "frontend"
+  | "backend"
+  | "machine-learning"
+  | "mobile"
+  | "devops";
+
+type DifficultyType = "all" | "beginner" | "intermediate" | "advanced";
+type StarsType = "all" | "1000" | "10000" | "50000" | "100000";
+type forksType = "all" | "1000" | "5000" | "20000" | "50000";
+type IssuesType = "all" | "low" | "medium" | "high";
+
+type Filters = {
+  language: LanguageType;
+  difficulty: DifficultyType;
+  stars: StarsType;
+  forks: forksType;
+  issues: IssuesType;
+  topic: TopicType;
+};
+
 export function Filters({ searchQuery, handleSearchQuery }: FiltersProps) {
-  const [selectedLanguage, setSelectedLanguage] = useState("all");
-  const [selectedDifficulty, setSelectedDifficulty] = useState("all");
-  const [selectedStars, setSelectedStars] = useState("all");
-  const [selectedForks, setSelectedForks] = useState("all");
-  const [selectedIssues, setSelectedIssues] = useState("all");
-  const [selectedTopic, setSelectedTopic] = useState("all");
+  const [filters, setFilters] = useState<Filters>({
+    language: "all",
+    difficulty: "all",
+    stars: "all",
+    forks: "all",
+    issues: "all",
+    topic: "all",
+  });
+
+  console.log(filters);
 
   return (
     <div>
@@ -45,7 +81,12 @@ export function Filters({ searchQuery, handleSearchQuery }: FiltersProps) {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
+          <Select
+            value={filters.language}
+            onValueChange={(value: LanguageType) =>
+              setFilters({ ...filters, language: value })
+            }
+          >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Language" />
             </SelectTrigger>
@@ -59,8 +100,10 @@ export function Filters({ searchQuery, handleSearchQuery }: FiltersProps) {
           </Select>
 
           <Select
-            value={selectedDifficulty}
-            onValueChange={setSelectedDifficulty}
+            value={filters.difficulty}
+            onValueChange={(value: DifficultyType) =>
+              setFilters({ ...filters, difficulty: value })
+            }
           >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Difficulty" />
@@ -74,7 +117,12 @@ export function Filters({ searchQuery, handleSearchQuery }: FiltersProps) {
             </SelectContent>
           </Select>
 
-          <Select value={selectedStars} onValueChange={setSelectedStars}>
+          <Select
+            value={filters.stars}
+            onValueChange={(value: StarsType) =>
+              setFilters({ ...filters, stars: value })
+            }
+          >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Stars" />
             </SelectTrigger>
@@ -87,7 +135,12 @@ export function Filters({ searchQuery, handleSearchQuery }: FiltersProps) {
             </SelectContent>
           </Select>
 
-          <Select value={selectedForks} onValueChange={setSelectedForks}>
+          <Select
+            value={filters.forks}
+            onValueChange={(value: forksType) =>
+              setFilters({ ...filters, forks: value })
+            }
+          >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Forks" />
             </SelectTrigger>
@@ -100,7 +153,12 @@ export function Filters({ searchQuery, handleSearchQuery }: FiltersProps) {
             </SelectContent>
           </Select>
 
-          <Select value={selectedIssues} onValueChange={setSelectedIssues}>
+          <Select
+            value={filters.issues}
+            onValueChange={(value: IssuesType) =>
+              setFilters({ ...filters, issues: value })
+            }
+          >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Open Issues" />
             </SelectTrigger>
@@ -113,7 +171,12 @@ export function Filters({ searchQuery, handleSearchQuery }: FiltersProps) {
             </SelectContent>
           </Select>
 
-          <Select value={selectedTopic} onValueChange={setSelectedTopic}>
+          <Select
+            value={filters.topic}
+            onValueChange={(value: TopicType) =>
+              setFilters({ ...filters, topic: value })
+            }
+          >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Topic" />
             </SelectTrigger>

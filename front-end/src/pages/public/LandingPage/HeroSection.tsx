@@ -65,7 +65,7 @@ export function HeroSection() {
           transition={{ duration: 0.5, delay: 1 }}
         >
           {currentUser ? (
-            <Link to="/panel/explore">
+            <Link to="/explore">
               <Button size="lg" className="w-full md:max-w-52 gap-2">
                 <Compass className="h-5 w-5" />
                 <span>Explorar projetos</span>
@@ -77,7 +77,7 @@ export function HeroSection() {
                 <Github className="h-5 w-5" />
                 <span>Entrar com GitHub</span>
               </Button>
-              <Link to="/panel/explore">
+              <Link to="/explore">
                 <Button variant="outline" size="lg" className="w-full md:max-w-52 gap-2">
                   <Compass className="h-5 w-5" />
                   <span>Explorar projetos</span>

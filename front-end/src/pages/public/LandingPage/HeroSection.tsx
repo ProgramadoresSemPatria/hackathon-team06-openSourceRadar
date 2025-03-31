@@ -1,5 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { Compass, Github, Info, GitPullRequestIcon } from "lucide-react";
+import {
+  Compass,
+  Github,
+  Info,
+  GitPullRequestIcon,
+  Search,
+} from "lucide-react";
 import { Radar } from "./Radar";
 import { Link } from "react-router";
 import { toast } from "sonner";
@@ -67,34 +73,44 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 1 }}
+          className="space-y-3"
         >
-          {currentUser ? (
-            <Link to="/explore">
-              <Button size="lg" className="w-full md:max-w-52 gap-2">
-                <Compass className="h-5 w-5" />
-                <span>Explorar projetos</span>
-              </Button>
-            </Link>
-          ) : (
-            <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-col sm:flex-row gap-4">
+            {currentUser ? (
+              <Link to="/explore">
+                <Button size="lg" className="w-full sm:w-fit gap-2">
+                  <Search className="h-5 w-5" />
+                  <span>Explorar projetos</span>
+                </Button>
+              </Link>
+            ) : (
               <Button
                 onClick={handleLogin}
                 size="lg"
-                className="w-full md:max-w-52 gap-2"
+                className="w-full sm:w-fit gap-2"
               >
                 <Github className="h-5 w-5" />
                 <span>Entrar com GitHub</span>
               </Button>
-              <Link to="/explore">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="w-full md:max-w-52 gap-2"
-                >
-                  <Compass className="h-5 w-5" />
-                  <span>Explorar projetos</span>
-                </Button>
-              </Link>
+            )}
+            <Link to="/learn">
+              <Button
+                variant="outline"
+                size="lg"
+                className="w-full sm:w-fit gap-2"
+              >
+                <Compass className="h-5 w-5" />
+                <span>Aprenda mais</span>
+              </Button>
+            </Link>
+          </div>
+          {!currentUser && (
+            <div className="flex items-center gap-2">
+              <Info className="h-4 w-4 text-gray-500" />
+              <span className="text-gray-500 text-sm">
+                Conecte-se com o GitHub para desbloquear recursos
+                personalizados.
+              </span>
             </div>
           )}
         </motion.div>
@@ -140,22 +156,10 @@ export function HeroSection() {
         {/* Footer com ícone e texto atualizados */}
         <div className="flex items-center justify-between text-sm">
           <div className="flex items-center gap-2">
-            {currentUser ? (
-              <>
-                <GitPullRequestIcon className="h-4 w-4 text-blue-500 shrink-0" />
-                <span className="text-gray-700 dark:text-gray-300">
-                  Os projetos exibidos são populares na comunidade open-source.
-                </span>
-              </>
-            ) : (
-              <>
-                <Info className="h-4 w-4 text-gray-500" />
-                <span className="text-gray-500">
-                  Conecte-se com GitHub para desbloquear recursos
-                  personalizados.
-                </span>
-              </>
-            )}
+            <GitPullRequestIcon className="h-4 w-4 text-blue-500 shrink-0" />
+            <span className="text-gray-700 dark:text-gray-300">
+              Os projetos exibidos são populares na comunidade open-source.
+            </span>
           </div>
         </div>
       </motion.div>

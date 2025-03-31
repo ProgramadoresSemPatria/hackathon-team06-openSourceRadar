@@ -7,6 +7,8 @@ import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { User } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { ThemeToggle } from "./ThemeToggle";
+import { RadarSvg } from "./RadarSvg";
 
 // Variável global para controlar o carregamento inicial
 let initialLogoLoadComplete = false;
@@ -86,7 +88,7 @@ export const Navbar = () => {
     : publicRoutes;
 
   return (
-    <nav className="bg-white w-full">
+    <nav className="bg-background w-full">
       <div className="max-w-[96rem] mx-auto px-6 sm:px-12 py-4 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
           {logoLoading ? (
@@ -98,44 +100,24 @@ export const Navbar = () => {
           ) : (
             <>
               {/* Logo após o carregamento inicial */}
-              <img
-                src="radar.svg"
-                alt="Radar Icon"
-                className="h-6 w-6"
-                width="24"
-                height="24"
-                loading="eager"
-                onLoad={() => {
-                  // Garantir que o logo seja marcado como carregado quando a imagem carregar
-                  setLogoLoading(false);
-                  initialLogoLoadComplete = true;
-                }}
-              />
+              <RadarSvg />
               <span className="text-lg font-semibold">OpenSourceRadar</span>
             </>
           )}
         </Link>
-
-        <button
-          className="block sm:hidden"
-          onClick={isOpen ? closeModal : openModal}
-        >
-          <span className="sr-only">Abrir menu principal</span>
-          <Menu size={32} />
-        </button>
 
         {/* Prevent UI blink by showing a loading state */}
         {loading ? (
           <div className="animate-pulse h-6 w-24 bg-gray-200 rounded" />
         ) : (
           <div className="hidden w-fit sm:block" id="navbar-default">
-            <ul className="font-medium flex items-center space-x-8 rtl:space-x-reverse bg-white">
+            <ul className="font-medium flex items-center space-x-8 rtl:space-x-reverse">
               {navRoutes.map((route) => (
                 <li key={route.to}>
                   <Link
                     to={route.to}
                     className={clsx(
-                      "block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-muted-foreground md:p-0",
+                      "block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 dark:text-white md:hover:bg-transparent md:border-0 md:hover:text-muted-foreground md:p-0",
                       location.pathname === route.to &&
                         "underline underline-offset-2"
                     )}
@@ -168,14 +150,24 @@ export const Navbar = () => {
                   Entrar com GitHub
                 </Button>
               )}
+
+              <ThemeToggle />
             </ul>
           </div>
         )}
 
         {/* Mobile Navbar */}
+        <button
+          className="block sm:hidden"
+          onClick={isOpen ? closeModal : openModal}
+        >
+          <span className="sr-only">Abrir menu principal</span>
+          <Menu size={32} />
+        </button>
+
         <div
           className={clsx(
-            "absolute sm:hidden top-16 left-0 w-full h-[calc(100svh-5rem)] transition-opacity bg-white z-50 mt-4 flex flex-col justify-between",
+            "absolute sm:hidden top-16 left-0 w-full h-[calc(100svh-5rem)] transition-opacity bg-background z-50 mt-4 flex flex-col justify-between",
             isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
           )}
         >

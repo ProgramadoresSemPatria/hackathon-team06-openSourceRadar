@@ -8,9 +8,9 @@ import {
 } from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { ProfileDialog } from "../ProfileDialog";
-import { useAuth } from "@/lib/AuthContext";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 export function NavBarDropdown() {
   const { logout, userProfile } = useAuth();
@@ -39,7 +39,9 @@ export function NavBarDropdown() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <ProfileDialog>
-          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>Perfil</DropdownMenuItem>
+          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+            Perfil
+          </DropdownMenuItem>
         </ProfileDialog>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogout}>

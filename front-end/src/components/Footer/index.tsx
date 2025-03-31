@@ -3,7 +3,7 @@ import { GitBranch, Heart } from "lucide-react";
 
 export const Footer = () => {
   return (
-    <footer className="bg-white border-t w-full mt-20">
+    <footer className="bg-background border-t w-full mt-20">
       <div className="max-w-[96rem] mx-auto px-6 sm:px-12 py-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-1">
@@ -12,7 +12,8 @@ export const Footer = () => {
               <span className="font-bold">Open Source Radar</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              Descubra, contribua e evolua com projetos open source que combinam com suas habilidades e interesses.
+              Descubra, contribua e evolua com projetos open source que combinam
+              com suas habilidades e interesses.
             </p>
           </div>
 
@@ -20,22 +21,34 @@ export const Footer = () => {
             <h3 className="font-semibold mb-4">Navegação</h3>
             <ul className="space-y-3">
               <li>
-                <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">
+                <Link
+                  to="/"
+                  className="text-sm text-muted-foreground hover:text-foreground"
+                >
                   Página Inicial
                 </Link>
               </li>
               <li>
-                <Link to="/explore" className="text-sm text-muted-foreground hover:text-foreground">
+                <Link
+                  to="/explore"
+                  className="text-sm text-muted-foreground hover:text-foreground"
+                >
                   Explorar Projetos
                 </Link>
               </li>
               <li>
-                <Link to="/learn" className="text-sm text-muted-foreground hover:text-foreground">
+                <Link
+                  to="/learn"
+                  className="text-sm text-muted-foreground hover:text-foreground"
+                >
                   Aprender
                 </Link>
               </li>
               <li>
-                <Link to="/dashboard" className="text-sm text-muted-foreground hover:text-foreground">
+                <Link
+                  to="/dashboard"
+                  className="text-sm text-muted-foreground hover:text-foreground"
+                >
                   Dashboard
                 </Link>
               </li>
@@ -82,18 +95,26 @@ export const Footer = () => {
             <h3 className="font-semibold mb-4">Legal</h3>
             <ul className="space-y-3">
               <li>
-                <Link to="/privacy" className="text-sm text-muted-foreground hover:text-foreground">
+                <Link
+                  to="/privacy"
+                  className="text-sm text-muted-foreground hover:text-foreground"
+                >
                   Política de Privacidade
                 </Link>
               </li>
               <li>
-                <Link to="/terms" className="text-sm text-muted-foreground hover:text-foreground">
+                <Link
+                  to="/terms"
+                  className="text-sm text-muted-foreground hover:text-foreground"
+                >
                   Termos de Serviço
                 </Link>
               </li>
             </ul>
             <div className="mt-6">
-              <p className="text-xs text-muted-foreground">Projeto desenvolvido para o hackathon Borderless Coding</p>
+              <p className="text-xs text-muted-foreground">
+                Projeto desenvolvido para o hackathon Borderless Coding
+              </p>
               <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
                 Feito com <Heart className="h-3 w-3 text-red-500" /> por
                 <a

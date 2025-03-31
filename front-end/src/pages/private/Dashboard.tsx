@@ -1,4 +1,3 @@
-import { useAuth } from "@/lib/AuthContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,12 +10,17 @@ import { LogOut, Save, User } from "lucide-react";
 import { toast } from "sonner";
 import { Link, useNavigate } from "react-router";
 import { PageLayout } from "@/components/PageLayout";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Dashboard() {
   const { userProfile, saveOnboardingData, logout } = useAuth();
   const navigate = useNavigate();
-  const [selectedLanguages, setSelectedLanguages] = useState<string[]>(userProfile?.preferredLanguages || []);
-  const [experienceTime, setExperienceTime] = useState<string>(userProfile?.experienceLevel || "intermediate");
+  const [selectedLanguages, setSelectedLanguages] = useState<string[]>(
+    userProfile?.preferredLanguages || []
+  );
+  const [experienceTime, setExperienceTime] = useState<string>(
+    userProfile?.experienceLevel || "intermediate"
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Formatar nível de experiência
@@ -32,7 +36,9 @@ export default function Dashboard() {
 
   const handleSaveProfile = async () => {
     if (selectedLanguages.length === 0) {
-      toast.error("Por favor, selecione pelo menos uma linguagem de programação");
+      toast.error(
+        "Por favor, selecione pelo menos uma linguagem de programação"
+      );
       return;
     }
 
@@ -66,7 +72,9 @@ export default function Dashboard() {
       <div className="py-6 space-y-6">
         <div className="w-full space-y-2">
           <h1 className="text-2xl sm:text-3xl font-bold">Seu Perfil</h1>
-          <p className="text-lg sm:text-xl text-muted-foreground">Gerencie suas preferências e configurações</p>
+          <p className="text-lg sm:text-xl text-muted-foreground">
+            Gerencie suas preferências e configurações
+          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -88,31 +96,44 @@ export default function Dashboard() {
                   </div>
                 )}
                 <div className="text-center">
-                  <h2 className="text-xl font-bold">{userProfile.displayName}</h2>
+                  <h2 className="text-xl font-bold">
+                    {userProfile.displayName}
+                  </h2>
                   <p className="text-muted-foreground">{userProfile.email}</p>
-                  {userProfile.githubUsername && <p className="text-sm mt-1">GitHub: @{userProfile.githubUsername}</p>}
+                  {userProfile.githubUsername && (
+                    <p className="text-sm mt-1">
+                      GitHub: @{userProfile.githubUsername}
+                    </p>
+                  )}
                 </div>
 
                 {userProfile.hasCompletedOnboarding && (
                   <div className="w-full mt-4">
                     <h3 className="font-medium mb-2">Nível de Experiência</h3>
-                    <p>{getExperienceLabel(userProfile.experienceLevel || "")}</p>
+                    <p>
+                      {getExperienceLabel(userProfile.experienceLevel || "")}
+                    </p>
 
-                    {userProfile.preferredLanguages && userProfile.preferredLanguages.length > 0 && (
-                      <div className="mt-4">
-                        <h3 className="font-medium mb-2">Linguagens Preferidas</h3>
-                        <div className="flex flex-wrap gap-2">
-                          {userProfile.preferredLanguages.map((lang) => {
-                            const language = programmingLanguages.find((l) => l.value === lang);
-                            return (
-                              <Badge key={lang} variant="secondary">
-                                {language?.label || lang}
-                              </Badge>
-                            );
-                          })}
+                    {userProfile.preferredLanguages &&
+                      userProfile.preferredLanguages.length > 0 && (
+                        <div className="mt-4">
+                          <h3 className="font-medium mb-2">
+                            Linguagens Preferidas
+                          </h3>
+                          <div className="flex flex-wrap gap-2">
+                            {userProfile.preferredLanguages.map((lang) => {
+                              const language = programmingLanguages.find(
+                                (l) => l.value === lang
+                              );
+                              return (
+                                <Badge key={lang} variant="secondary">
+                                  {language?.label || lang}
+                                </Badge>
+                              );
+                            })}
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )}
                   </div>
                 )}
               </div>
@@ -149,7 +170,9 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-4">
-                <Label className="text-base">Linguagens de Programação Preferidas</Label>
+                <Label className="text-base">
+                  Linguagens de Programação Preferidas
+                </Label>
                 <MultiSelector
                   selectedItems={selectedLanguages}
                   setSelectedItems={setSelectedLanguages}
@@ -160,11 +183,21 @@ export default function Dashboard() {
 
               <div className="space-y-4">
                 <Label className="text-base">Nível de Experiência</Label>
-                <RadioGroup value={experienceTime} onValueChange={setExperienceTime} className="space-y-2">
+                <RadioGroup
+                  value={experienceTime}
+                  onValueChange={setExperienceTime}
+                  className="space-y-2"
+                >
                   {experienceLevels.map((level) => (
                     <div key={level.id} className="flex items-center space-x-2">
-                      <RadioGroupItem value={level.id} id={`experience-${level.id}`} />
-                      <Label htmlFor={`experience-${level.id}`} className="font-normal cursor-pointer">
+                      <RadioGroupItem
+                        value={level.id}
+                        id={`experience-${level.id}`}
+                      />
+                      <Label
+                        htmlFor={`experience-${level.id}`}
+                        className="font-normal cursor-pointer"
+                      >
                         {level.label}
                       </Label>
                     </div>
@@ -172,7 +205,11 @@ export default function Dashboard() {
                 </RadioGroup>
               </div>
 
-              <Button onClick={handleSaveProfile} className="w-full" disabled={isSubmitting}>
+              <Button
+                onClick={handleSaveProfile}
+                className="w-full"
+                disabled={isSubmitting}
+              >
                 {isSubmitting ? (
                   "Salvando..."
                 ) : (

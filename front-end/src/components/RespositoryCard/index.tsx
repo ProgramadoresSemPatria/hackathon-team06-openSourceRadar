@@ -19,9 +19,9 @@ import { Badge } from "../ui/badge";
 import { motion } from "framer-motion";
 import { Button } from "../ui/button";
 import { useState } from "react";
-import { useAuth } from "@/lib/AuthContext";
 import { toast } from "sonner";
 import { ContributionGuide } from "../ContributionGuide";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface RepositoryCardProps {
   repository: Repository;

@@ -1,14 +1,19 @@
 import { Octokit, RequestError } from "octokit";
 import { Endpoints, RequestParameters } from "@octokit/types";
 import { toast } from "sonner";
+import { useTokenStore } from "@/contexts/useTokenStore";
 
-export const octokit = new Octokit();
+export const getOctokit = () => {
+  const token = useTokenStore.getState().token;
+  return new Octokit({ auth: token });
+};
 
 export const octokitRequest = async <T>(
   route: keyof Endpoints,
   options: RequestParameters
 ): Promise<T | undefined> => {
   try {
+    const octokit = getOctokit();
     const response = await octokit.request(route, options);
 
     // Log dos headers de rate limit após a requisição

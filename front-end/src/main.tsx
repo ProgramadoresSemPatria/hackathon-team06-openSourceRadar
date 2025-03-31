@@ -2,10 +2,10 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./routes";
-import { AuthProvider } from "./lib/AuthContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./index.css";
 import { Toaster } from "sonner";
+import { AuthProvider } from "./contexts/AuthContext";
 
 // Create a client with updated properties
 const queryClient = new QueryClient({

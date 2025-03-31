@@ -1,11 +1,12 @@
 import { GraphQlRepository, Repository } from "@/types/repository";
-import { octokit } from "./octokitRequest";
+import { getOctokit } from "./octokitRequest";
 
 export const fetchFavoriteRepositories = async (
   repoIds: string[]
 ): Promise<Repository[]> => {
   if (!repoIds.length) return [];
 
+  const octokit = getOctokit();
   const query = buildFavoriteRepositoriesQuery(repoIds);
   const response = (await octokit.graphql(query)) as Record<
     string,

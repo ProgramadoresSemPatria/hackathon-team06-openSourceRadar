@@ -10,9 +10,9 @@ import { fetchRepositories } from "@/lib/fetchers/fetchRepositories";
 import { RepositoriesData } from "@/types/repository";
 import { Skeleton } from "@/components/RespositoryCard/skeleton";
 import { AlertCircle } from "lucide-react";
-import { useAuth } from "@/lib/AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { fetchFavoriteRepositories } from "@/lib/fetchers/fetchFavoriteRepositories";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Explore() {
   const [activeTab, setActiveTab] = useState("recommended");

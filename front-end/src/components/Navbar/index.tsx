@@ -1,7 +1,7 @@
 import { ArrowRight, Github, Menu } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import clsx from "clsx";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
@@ -10,29 +10,10 @@ import { useAuth } from "@/contexts/AuthContext";
 import { ThemeToggle } from "./ThemeToggle";
 import { RadarSvg } from "./RadarSvg";
 
-// Variável global para controlar o carregamento inicial
-let initialLogoLoadComplete = false;
-
 export const Navbar = () => {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const { currentUser, signIn, logout, userProfile, loading } = useAuth();
-
-  // Estado para controlar o carregamento do logo
-  const [logoLoading, setLogoLoading] = useState(!initialLogoLoadComplete);
-
-  // Efeito para simular carregamento do logo, apenas no primeiro acesso
-  useEffect(() => {
-    if (!initialLogoLoadComplete) {
-      // Marca como carregado após um tempo (ou quando a imagem carregar)
-      const timer = setTimeout(() => {
-        setLogoLoading(false);
-        initialLogoLoadComplete = true;
-      }, 800); // Tempo suficiente para simular carregamento
-
-      return () => clearTimeout(timer);
-    }
-  }, []);
 
   const openModal = () => {
     document.body.style.overflow = "hidden";
@@ -91,19 +72,8 @@ export const Navbar = () => {
     <nav className="bg-background w-full">
       <div className="max-w-[96rem] mx-auto px-6 sm:px-12 py-4 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
-          {logoLoading ? (
-            <>
-              {/* Estado de carregamento para o logo */}
-              <div className="h-6 w-6 bg-gray-200 animate-pulse rounded-full"></div>
-              <div className="h-6 w-32 bg-gray-200 animate-pulse rounded-md"></div>
-            </>
-          ) : (
-            <>
-              {/* Logo após o carregamento inicial */}
-              <RadarSvg />
-              <span className="text-lg font-semibold">OpenSourceRadar</span>
-            </>
-          )}
+          <RadarSvg />
+          <span className="text-lg font-semibold">OpenSourceRadar</span>
         </Link>
 
         {/* Prevent UI blink by showing a loading state */}

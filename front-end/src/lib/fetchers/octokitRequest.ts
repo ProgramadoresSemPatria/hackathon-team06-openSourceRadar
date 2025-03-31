@@ -1,7 +1,7 @@
 import { Octokit, RequestError } from "octokit";
 import { Endpoints, RequestParameters } from "@octokit/types";
 import { toast } from "sonner";
-import { useTokenStore } from "@/contexts/useTokenStore";
+import { useTokenStore } from "@/hooks/useTokenStore";
 
 export const getOctokit = () => {
   const token = useTokenStore.getState().token;

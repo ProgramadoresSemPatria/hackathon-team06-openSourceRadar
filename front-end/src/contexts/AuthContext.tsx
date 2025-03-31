@@ -10,7 +10,7 @@ import { onAuthStateChanged, User } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { toast } from "sonner";
-import { useTokenStore } from "./useTokenStore";
+import { useTokenStore } from "../hooks/useTokenStore";
 
 interface AuthContextType {
   currentUser: User | null;

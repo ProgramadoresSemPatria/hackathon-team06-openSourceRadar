@@ -1,11 +1,11 @@
 import { Search } from "lucide-react";
 import { Input } from "../../../components/ui/input";
 import { useEffect, useState } from "react";
-import { useDebounce } from "@/lib/useDebounce";
+import { useDebounce } from "@/hooks/useDebounce";
 import { useQuery } from "@tanstack/react-query";
 import { RepositoryCard } from "../../../components/RespositoryCard";
 import { RepositoriesData, Repository } from "@/types/repository";
-import { fetchRepositories } from "@/lib/fetchRepositories";
+import { fetchRepositories } from "@/lib/fetchers/fetchRepositories";
 import { Skeleton } from "@/components/RespositoryCard/skeleton";
 import { Pagination } from "@/components/Pagination";
 

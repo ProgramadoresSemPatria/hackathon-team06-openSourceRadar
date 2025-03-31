@@ -2,9 +2,9 @@ import { Button } from "@/components/ui/button";
 import { Compass, Github, Info, GitPullRequestIcon } from "lucide-react";
 import { Radar } from "./Radar";
 import { Link } from "react-router";
-import { useAuth } from "@/lib/AuthContext";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
+import { useAuth } from "@/contexts/AuthContext";
 
 export function HeroSection() {
   const { currentUser, signIn } = useAuth();
@@ -36,7 +36,9 @@ export function HeroSection() {
           className="inline-flex items-center rounded-full border px-3 py-1 text-sm"
         >
           <span className="flex h-2 w-2 rounded-full bg-foreground"></span>
-          <span className="ml-2 font-medium">Descobrir • Contribuir • Crescer</span>
+          <span className="ml-2 font-medium">
+            Descobrir • Contribuir • Crescer
+          </span>
         </motion.div>
 
         <div className="space-y-4">
@@ -46,7 +48,8 @@ export function HeroSection() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.6 }}
           >
-            Seu radar pessoal de <span className="text-foreground">projetos open-source</span>
+            Seu radar pessoal de{" "}
+            <span className="text-foreground">projetos open-source</span>
           </motion.h1>
           <motion.p
             className="text-muted-foreground text-base sm:text-lg xl:text-xl"
@@ -54,8 +57,9 @@ export function HeroSection() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.8 }}
           >
-            Encontre projetos que combinam com suas habilidades, acompanhe suas contribuições e construa seu perfil de
-            desenvolvedor na comunidade open source.
+            Encontre projetos que combinam com suas habilidades, acompanhe suas
+            contribuições e construa seu perfil de desenvolvedor na comunidade
+            open source.
           </motion.p>
         </div>
 
@@ -73,12 +77,20 @@ export function HeroSection() {
             </Link>
           ) : (
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button onClick={handleLogin} size="lg" className="w-full md:max-w-52 gap-2">
+              <Button
+                onClick={handleLogin}
+                size="lg"
+                className="w-full md:max-w-52 gap-2"
+              >
                 <Github className="h-5 w-5" />
                 <span>Entrar com GitHub</span>
               </Button>
               <Link to="/explore">
-                <Button variant="outline" size="lg" className="w-full md:max-w-52 gap-2">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="w-full md:max-w-52 gap-2"
+                >
                   <Compass className="h-5 w-5" />
                   <span>Explorar projetos</span>
                 </Button>
@@ -101,7 +113,9 @@ export function HeroSection() {
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
               <Compass className="h-4 w-4 text-gray-900 dark:text-gray-200" />
             </div>
-            <h3 className="font-semibold text-gray-900 dark:text-gray-100">Radar de Projetos</h3>
+            <h3 className="font-semibold text-gray-900 dark:text-gray-100">
+              Radar de Projetos
+            </h3>
           </div>
           <motion.div
             className="rounded-full bg-blue-600 px-3 py-1 text-xs font-medium text-white"
@@ -136,7 +150,10 @@ export function HeroSection() {
             ) : (
               <>
                 <Info className="h-4 w-4 text-gray-500" />
-                <span className="text-gray-500">Conecte-se com GitHub para desbloquear recursos personalizados.</span>
+                <span className="text-gray-500">
+                  Conecte-se com GitHub para desbloquear recursos
+                  personalizados.
+                </span>
               </>
             )}
           </div>

@@ -15,8 +15,8 @@ import { toast } from "sonner";
 import MultiSelector from "./ui/multi-selector";
 import { Label } from "./ui/label";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
-import { useAuth } from "@/lib/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface ProfileDialogProps {
   children: ReactNode;
@@ -39,7 +39,9 @@ export const ProfileDialog = ({ children }: ProfileDialogProps) => {
 
   const handleProfileSave = async () => {
     if (selectedLanguages.length === 0) {
-      toast.error("Por favor, selecione pelo menos uma linguagem de programação");
+      toast.error(
+        "Por favor, selecione pelo menos uma linguagem de programação"
+      );
       return;
     }
 
@@ -80,7 +82,8 @@ export const ProfileDialog = ({ children }: ProfileDialogProps) => {
               <DialogHeader>
                 <DialogTitle>Configurações do Perfil</DialogTitle>
                 <DialogDescription>
-                  Atualize suas preferências de programação para obter melhores recomendações.
+                  Atualize suas preferências de programação para obter melhores
+                  recomendações.
                 </DialogDescription>
               </DialogHeader>
               <div className="py-4 space-y-6">
@@ -96,11 +99,24 @@ export const ProfileDialog = ({ children }: ProfileDialogProps) => {
 
                 <div className="space-y-4">
                   <Label>Nível de Experiência</Label>
-                  <RadioGroup value={experienceTime} onValueChange={setExperienceTime} className="space-y-2">
+                  <RadioGroup
+                    value={experienceTime}
+                    onValueChange={setExperienceTime}
+                    className="space-y-2"
+                  >
                     {experienceLevels.map((level) => (
-                      <div key={level.id} className="flex items-center space-x-2">
-                        <RadioGroupItem value={level.id} id={`experience-${level.id}`} />
-                        <Label htmlFor={`experience-${level.id}`} className="font-normal cursor-pointer">
+                      <div
+                        key={level.id}
+                        className="flex items-center space-x-2"
+                      >
+                        <RadioGroupItem
+                          value={level.id}
+                          id={`experience-${level.id}`}
+                        />
+                        <Label
+                          htmlFor={`experience-${level.id}`}
+                          className="font-normal cursor-pointer"
+                        >
                           {level.label}
                         </Label>
                       </div>
@@ -110,7 +126,11 @@ export const ProfileDialog = ({ children }: ProfileDialogProps) => {
               </div>
 
               <DialogFooter>
-                <Button className="w-full" onClick={handleProfileSave} disabled={isSubmitting}>
+                <Button
+                  className="w-full"
+                  onClick={handleProfileSave}
+                  disabled={isSubmitting}
+                >
                   {isSubmitting ? (
                     "Salvando..."
                   ) : (

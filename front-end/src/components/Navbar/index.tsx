@@ -3,10 +3,10 @@ import { Link, useLocation } from "react-router";
 import clsx from "clsx";
 import { useState, useEffect } from "react";
 import { Button } from "../ui/button";
-import { useAuth } from "@/lib/AuthContext";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { User } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 // Variável global para controlar o carregamento inicial
 let initialLogoLoadComplete = false;
@@ -81,7 +81,9 @@ export const Navbar = () => {
     },
   ];
 
-  const navRoutes = currentUser ? [...publicRoutes, ...authenticatedRoutes] : publicRoutes;
+  const navRoutes = currentUser
+    ? [...publicRoutes, ...authenticatedRoutes]
+    : publicRoutes;
 
   return (
     <nav className="bg-white w-full">
@@ -114,7 +116,10 @@ export const Navbar = () => {
           )}
         </Link>
 
-        <button className="block sm:hidden" onClick={isOpen ? closeModal : openModal}>
+        <button
+          className="block sm:hidden"
+          onClick={isOpen ? closeModal : openModal}
+        >
           <span className="sr-only">Abrir menu principal</span>
           <Menu size={32} />
         </button>
@@ -131,7 +136,8 @@ export const Navbar = () => {
                     to={route.to}
                     className={clsx(
                       "block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-muted-foreground md:p-0",
-                      location.pathname === route.to && "underline underline-offset-2"
+                      location.pathname === route.to &&
+                        "underline underline-offset-2"
                     )}
                   >
                     {route.title}
@@ -142,14 +148,22 @@ export const Navbar = () => {
               {currentUser ? (
                 <Link to="/dashboard">
                   <Avatar className="h-10 w-10 border-2 border-primary/20 hover:border-primary transition-colors cursor-pointer">
-                    <AvatarImage src={userProfile?.photoURL || ""} alt="Perfil" />
+                    <AvatarImage
+                      src={userProfile?.photoURL || ""}
+                      alt="Perfil"
+                    />
                     <AvatarFallback>
                       <User className="h-5 w-5" />
                     </AvatarFallback>
                   </Avatar>
                 </Link>
               ) : (
-                <Button onClick={handleLogin} variant="default" type="button" className="gap-2">
+                <Button
+                  onClick={handleLogin}
+                  variant="default"
+                  type="button"
+                  className="gap-2"
+                >
                   <Github className="h-4 w-4" />
                   Entrar com GitHub
                 </Button>
@@ -171,7 +185,10 @@ export const Navbar = () => {
                 <Link
                   to={route.to}
                   onClick={closeModal}
-                  className={clsx(location.pathname === route.to && "underline underline-offset-2")}
+                  className={clsx(
+                    location.pathname === route.to &&
+                      "underline underline-offset-2"
+                  )}
                 >
                   <div className="flex items-center justify-between">
                     <p>{route.title}</p>
@@ -184,11 +201,19 @@ export const Navbar = () => {
 
           <div className="space-y-2 p-6">
             {currentUser ? (
-              <Button variant={"outline"} className="w-full border-red-400 text-red-400" onClick={handleLogout}>
+              <Button
+                variant={"outline"}
+                className="w-full border-red-400 text-red-400"
+                onClick={handleLogout}
+              >
                 Sair
               </Button>
             ) : (
-              <Button onClick={handleLogin} variant={"default"} className="w-full gap-2">
+              <Button
+                onClick={handleLogin}
+                variant={"default"}
+                className="w-full gap-2"
+              >
                 <Github className="h-4 w-4" />
                 Entrar com GitHub
               </Button>

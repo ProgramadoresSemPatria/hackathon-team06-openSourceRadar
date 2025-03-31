@@ -51,6 +51,10 @@ export const Navbar = () => {
       to: "/learn",
       title: "Aprender",
     },
+    {
+      to: "/support",
+      title: "Suporte",
+    },
   ];
 
   const authenticatedRoutes = [
@@ -58,14 +62,10 @@ export const Navbar = () => {
       to: "/explore",
       title: "Explorar",
     },
-    {
-      to: "/dashboard",
-      title: "Dashboard",
-    },
   ];
 
   const navRoutes = currentUser
-    ? [...publicRoutes, ...authenticatedRoutes]
+    ? [...authenticatedRoutes, ...publicRoutes]
     : publicRoutes;
 
   return (

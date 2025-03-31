@@ -7,6 +7,7 @@ import { LandingPage } from "./pages/public/LandingPage";
 import Learn from "./pages/public/Learn";
 import Privacy from "./pages/public/Privacy";
 import Terms from "./pages/public/Terms";
+import Support from "./pages/public/Support";
 
 export const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ export const router = createBrowserRouter([
       {
         path: "terms",
         element: <Terms />,
+      },
+      {
+        path: "support",
+        element: <Support />,
       },
     ],
   },

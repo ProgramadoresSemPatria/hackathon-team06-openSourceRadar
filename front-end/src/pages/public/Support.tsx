@@ -21,6 +21,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { PageLayout } from "@/components/PageLayout";
+import { motion } from "framer-motion";
 
 export default function Support() {
   const buyMeACoffeeUrl = "https://buymeacoffee.com/opensourceradar";
@@ -36,31 +37,51 @@ export default function Support() {
             <div className="inline-block p-3 bg-background rounded-full shadow-md mb-6">
               <Coffee className="h-10 w-10 text-amber-500" />
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            <motion.h1
+              className="text-4xl md:text-5xl font-bold mb-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4, delay: 0 }}
+            >
               Support Our Mission
-            </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4, delay: 0.2 }}
+              className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8"
+            >
               Help us empower developers to contribute to open source and build
               a stronger community.
-            </p>
-            <Button size="lg" className="gap-2" asChild>
-              <a
-                href={buyMeACoffeeUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Coffee className="h-5 w-5" />
-                Buy Me a Coffee
-                <ExternalLink className="h-4 w-4 ml-1" />
-              </a>
-            </Button>
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+            >
+              <Button size="lg" className="gap-2" asChild>
+                <a
+                  href={buyMeACoffeeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Coffee className="h-5 w-5" />
+                  Buy Me a Coffee
+                  <ExternalLink className="h-4 w-4 ml-1" />
+                </a>
+              </Button>
+            </motion.div>
           </div>
         </section>
 
         <main className="flex-1 container mx-auto py-12 px-4">
           <div className="max-w-3xl mx-auto space-y-12">
             {/* Why support section */}
-            <section>
+            <motion.section
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0 }}
+            >
               <h2 className="text-3xl font-bold mb-6 text-center">
                 Why Support Us?
               </h2>
@@ -110,11 +131,16 @@ export default function Support() {
                   </CardContent>
                 </Card>
               </div>
-            </section>
+            </motion.section>
 
             <Separator />
 
-            <section className="text-center">
+            <motion.section
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0 }}
+              className="text-center"
+            >
               <h2 className="text-3xl font-bold mb-6">Other Ways to Help</h2>
               <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
                 Financial support isn't the only way to contribute. Here are
@@ -199,7 +225,7 @@ export default function Support() {
                   </CardFooter>
                 </Card>
               </div>
-            </section>
+            </motion.section>
 
             {/* CTA section */}
             <section className="bg-primary/10 rounded-lg p-8 text-center">

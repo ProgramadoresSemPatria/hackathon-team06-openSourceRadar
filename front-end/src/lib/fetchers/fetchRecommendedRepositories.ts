@@ -1,6 +1,7 @@
 // src/lib/fetchRecommendedRepositories.ts
 import { Repository } from "@/types/repository";
 import { octokitRequest } from "./octokitRequest";
+import { Endpoints } from "@octokit/types";
 
 type RecommendationOptions = {
   languages?: string[];
@@ -9,11 +10,18 @@ type RecommendationOptions = {
   page?: number;
 };
 
+type Response = Endpoints["GET /search/repositories"]["response"]["data"];
+
 export const fetchRecommendedRepositories = async (
   // userProfile: UserProfile | null,
   options: RecommendationOptions = {}
 ): Promise<{ repositories: Repository[]; totalCount: number }> => {
-  const { languages = [], experienceLevel = "intermediate", perPage = 9, page = 1 } = options;
+  const {
+    languages = [],
+    experienceLevel = "intermediate",
+    perPage = 9,
+    page = 1,
+  } = options;
 
   try {
     // Construir uma consulta baseada nas preferências do usuário
@@ -59,20 +67,24 @@ export const fetchRecommendedRepositories = async (
     query += " is:public archived:false";
 
     // Buscar repositórios
-    const response = await octokitRequest<any>("GET /search/repositories", {
-      q: query,
-      sort: "stars",
-      order: "desc",
-      per_page: perPage,
-      page: page,
-    });
+    const response = await octokitRequest<Response>(
+      "GET /search/repositories",
+      {
+        q: query,
+        sort: "stars",
+        order: "desc",
+        per_page: perPage,
+        page: page,
+      }
+    );
 
     if (!response) {
       return { repositories: [], totalCount: 0 };
     }
 
-    const repos: Repository[] = response.items.map((repo: any) => ({
+    const repos: Repository[] = response.items.map((repo) => ({
       id: repo.id,
+      nodeId: repo.node_id,
       name: repo.name,
       full_name: repo.full_name,
       description: repo.description || "Sem descrição",
@@ -84,6 +96,8 @@ export const fetchRecommendedRepositories = async (
       topics: repo.topics || [],
       updated_at: new Date(repo.updated_at).toLocaleDateString(),
     }));
+
+    console.log(repos);
 
     return {
       repositories: repos,

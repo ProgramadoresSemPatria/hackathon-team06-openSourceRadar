@@ -22,6 +22,7 @@ export default function SearchSection() {
 
   const repositories = data?.repositories ?? [];
   const totalCount = data?.totalCount ?? 0;
+  const totalPages = data?.totalCount ? Math.ceil(totalCount / perPage) : 0;
 
   useEffect(() => {
     setCurrentPage(1);
@@ -71,7 +72,7 @@ export default function SearchSection() {
       <Pagination
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
-        totalPages={totalCount}
+        totalPages={totalPages}
         disabled={isLoading}
       />
     </section>

@@ -11,6 +11,7 @@ export const fetchRepositories = async (
 ): Promise<RepositoriesData | undefined> => {
   // Adicione is:public para filtrar apenas repositórios públicos
   // Isso pode reduzir o número total de resultados
+  console.log(searchParam);
   const query = `${searchParam || "stars:>10000"} is:public`;
 
   const response = await octokitRequest<Response>("GET /search/repositories", {
@@ -20,6 +21,8 @@ export const fetchRepositories = async (
     per_page: perPage,
     page: currentPage,
   });
+
+  console.log(response);
 
   if (!response) return;
 
@@ -38,11 +41,9 @@ export const fetchRepositories = async (
     updated_at: new Date(repository.updated_at).toLocaleDateString(),
   }));
 
-  console.log(repositories);
-
   // Limitando o número total de repositórios que reportamos
   // para evitar cálculos excessivos de paginação
-  const totalCount = Math.min(response.total_count, 100);
+  const totalCount = Math.min(response.total_count, 1000);
 
   return {
     repositories,

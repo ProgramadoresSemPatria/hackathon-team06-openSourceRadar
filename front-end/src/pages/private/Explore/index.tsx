@@ -18,9 +18,8 @@ export default function Explore() {
   const [activeTab, setActiveTab] = useState("recommended");
   const [currentPage, setCurrentPage] = useState(1);
   const { userProfile } = useAuth();
-  const perPage = 6; // Menos itens por página
+  const perPage = 12;
 
-  // Estado para armazenar os filtros atuais
   const [filters, setFilters] = useState<FilterValues>({
     searchQuery: "",
     language: "all",
@@ -31,26 +30,21 @@ export default function Explore() {
     topic: "all",
   });
 
-  // Construir a query com base nos filtros
   const buildQuery = useCallback(() => {
     let query = filters.searchQuery || "";
 
-    // Adicionar parâmetros de linguagem
     if (filters.language !== "all") {
       query += ` language:${filters.language}`;
     }
 
-    // Adicionar parâmetros de estrelas
     if (filters.stars !== "all") {
       query += ` stars:>${filters.stars}`;
     }
 
-    // Adicionar parâmetros de forks
     if (filters.forks !== "all") {
       query += ` forks:>${filters.forks}`;
     }
 
-    // Adicionar parâmetros de issues
     if (filters.issues !== "all") {
       if (filters.issues === "low") {
         query += ` open-issues:<500`;
@@ -61,7 +55,6 @@ export default function Explore() {
       }
     }
 
-    // Adicionar tópicos
     if (filters.topic !== "all") {
       query += ` topic:${filters.topic}`;
     }
@@ -253,9 +246,11 @@ export default function Explore() {
               <Pagination
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
-                totalPages={Math.ceil(
-                  Math.min(recommendedQuery.data.totalCount || 0, 100) / perPage
-                )}
+                totalPages={
+                  recommendedQuery.data?.totalCount
+                    ? Math.ceil(recommendedQuery.data.totalCount / perPage)
+                    : 0
+                }
                 disabled={recommendedQuery.isLoading}
               />
             )}

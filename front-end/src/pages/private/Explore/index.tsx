@@ -23,10 +23,8 @@ export default function Explore() {
   const [filters, setFilters] = useState<FilterValues>({
     searchQuery: "",
     language: "all",
-    difficulty: "all",
     stars: "all",
     forks: "all",
-    issues: "all",
     topic: "all",
   });
 
@@ -43,16 +41,6 @@ export default function Explore() {
 
     if (filters.forks !== "all") {
       query += ` forks:>${filters.forks}`;
-    }
-
-    if (filters.issues !== "all") {
-      if (filters.issues === "low") {
-        query += ` open-issues:<500`;
-      } else if (filters.issues === "medium") {
-        query += ` open-issues:500..2000`;
-      } else if (filters.issues === "high") {
-        query += ` open-issues:>2000`;
-      }
     }
 
     if (filters.topic !== "all") {
@@ -98,10 +86,8 @@ export default function Explore() {
     setFilters({
       searchQuery: "",
       language: "all",
-      difficulty: "all",
       stars: "all",
       forks: "all",
-      issues: "all",
       topic: "all",
     });
     setCurrentPage(1);

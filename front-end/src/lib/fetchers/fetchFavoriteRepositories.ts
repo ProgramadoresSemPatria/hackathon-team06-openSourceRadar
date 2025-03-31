@@ -1,37 +1,43 @@
 import { GraphQlRepository, Repository } from "@/types/repository";
 import { getOctokit } from "./octokitRequest";
+import { toast } from "sonner";
 
 export const fetchFavoriteRepositories = async (
   repoIds: string[]
 ): Promise<Repository[]> => {
   if (!repoIds.length) return [];
 
-  const octokit = getOctokit();
-  const query = buildFavoriteRepositoriesQuery(repoIds);
-  const response = (await octokit.graphql(query)) as Record<
-    string,
-    GraphQlRepository
-  >;
-  const repositories: Repository[] = [];
+  try {
+    const octokit = getOctokit();
+    const query = buildFavoriteRepositoriesQuery(repoIds);
+    const response = (await octokit.graphql(query)) as Record<
+      string,
+      GraphQlRepository
+    >;
+    const repositories: Repository[] = [];
 
-  Object.values(response).forEach((repo) => {
-    repositories.push({
-      nodeId: repo.id,
-      full_name: repo.nameWithOwner,
-      description: repo.description || "",
-      forks_count: repo.forkCount,
-      language: repo.primaryLanguage ? repo.primaryLanguage.name : "",
-      open_issues_count: repo.openIssues.totalCount,
-      stargazers_count: repo.stargazerCount,
-      updated_at: new Date(repo.updatedAt).toLocaleDateString(),
-      url: repo.url,
-      topics: repo.repositoryTopics.nodes.map(
-        (node: { topic: { name: string } }) => node.topic.name
-      ),
+    Object.values(response).forEach((repo) => {
+      repositories.push({
+        nodeId: repo.id,
+        full_name: repo.nameWithOwner,
+        description: repo.description || "",
+        forks_count: repo.forkCount,
+        language: repo.primaryLanguage ? repo.primaryLanguage.name : "",
+        open_issues_count: repo.openIssues.totalCount,
+        stargazers_count: repo.stargazerCount,
+        updated_at: new Date(repo.updatedAt).toLocaleDateString(),
+        url: repo.url,
+        topics: repo.repositoryTopics.nodes.map(
+          (node: { topic: { name: string } }) => node.topic.name
+        ),
+      });
     });
-  });
 
-  return repositories;
+    return repositories;
+  } catch {
+    toast.error("Erro ao buscar favoritos");
+    return [];
+  }
 };
 
 const buildFavoriteRepositoriesQuery = (repoIds: string[]) => {

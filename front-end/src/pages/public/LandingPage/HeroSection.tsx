@@ -100,7 +100,7 @@ export function HeroSection() {
         </motion.div>
       </motion.div>
 
-      {/* Radar Card - Versão final com ícone e texto atualizados */}
+      {/* Radar Card */}
       <motion.div
         className="rounded-xl border bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm shadow-xl p-6 space-y-4"
         initial={{ opacity: 0, scale: 0.9 }}
@@ -142,7 +142,7 @@ export function HeroSection() {
           <div className="flex items-center gap-2">
             {currentUser ? (
               <>
-                <GitPullRequestIcon className="h-4 w-4 text-blue-500" />
+                <GitPullRequestIcon className="h-4 w-4 text-blue-500 shrink-0" />
                 <span className="text-gray-700 dark:text-gray-300">
                   Os projetos exibidos são populares na comunidade open-source.
                 </span>

@@ -69,7 +69,7 @@ export const RepositoryCard = ({
     >
       <Card className="group h-full flex flex-col overflow-hidden border-2 hover:border-primary/50 transition-colors">
         <CardHeader>
-          <div className="flex justify-between items-start">
+          <div className="flex justify-between items-start gap-4">
             <div>
               <CardTitle className="flex items-center">
                 <BookOpen className="h-4 w-4 mr-2 shrink-0" />

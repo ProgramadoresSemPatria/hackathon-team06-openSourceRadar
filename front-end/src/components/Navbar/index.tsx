@@ -167,7 +167,7 @@ export const Navbar = () => {
 
         <div
           className={clsx(
-            "absolute sm:hidden top-16 left-0 w-full h-[calc(100svh-5rem)] transition-opacity bg-white z-50 mt-4 flex flex-col justify-between",
+            "absolute sm:hidden top-16 left-0 w-full h-[calc(100svh-5rem)] transition-opacity bg-background z-50 mt-4 flex flex-col justify-between",
             isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
           )}
         >

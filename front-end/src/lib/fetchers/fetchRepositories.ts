@@ -5,14 +5,14 @@ import { octokitRequest } from "./octokitRequest";
 type Response = Endpoints["GET /search/repositories"]["response"]["data"];
 
 export const fetchRepositories = async (
-  searchParam: string,
+  searchParam?: string,
   perPage: number = 9,
   currentPage: number = 1
 ): Promise<RepositoriesData | undefined> => {
   // Adicione is:public para filtrar apenas repositórios públicos
   // Isso pode reduzir o número total de resultados
   console.log(searchParam);
-  const query = `${searchParam || "stars:>10000"} is:public`;
+  const query = `${searchParam || "stars:>1000"} is:public`;
 
   const response = await octokitRequest<Response>("GET /search/repositories", {
     q: query,
@@ -21,8 +21,6 @@ export const fetchRepositories = async (
     per_page: perPage,
     page: currentPage,
   });
-
-  console.log(response);
 
   if (!response) return;
 

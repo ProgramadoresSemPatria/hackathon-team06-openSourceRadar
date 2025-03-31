@@ -61,12 +61,11 @@ export default function Explore() {
 
     // Se não tiver nenhum filtro específico e o usuário tiver preferências
     if (!query.trim() && userProfile?.preferredLanguages?.length) {
-      // Usar apenas a primeira linguagem preferida
-      return `language:${userProfile.preferredLanguages[0]} stars:>1000`;
+      const languages = userProfile.preferredLanguages.join(",");
+      return `language:${languages}`;
     }
 
-    // Se não tiver query, usar query padrão
-    return query.trim() || "stars:>10000";
+    return query.trim();
   }, [filters, userProfile]);
 
   // Query para buscar repositórios recomendados

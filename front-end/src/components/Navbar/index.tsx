@@ -9,6 +9,7 @@ import { User } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { ThemeToggle } from "./ThemeToggle";
 import { RadarSvg } from "./RadarSvg";
+import { LanguageToggle } from "./LanguagueToggle";
 
 export const Navbar = () => {
   const location = useLocation();
@@ -121,7 +122,10 @@ export const Navbar = () => {
                 </Button>
               )}
 
-              <ThemeToggle />
+              <div className="flex items-center gap-4">
+                <ThemeToggle />
+                <LanguageToggle />
+              </div>
             </ul>
           </div>
         )}

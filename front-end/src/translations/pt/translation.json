@@ -1,0 +1,9 @@
+{
+  "landingPage": {
+    "title": "Seu radar pessoal de projetos open-source",
+    "subtitle": "Encontre projetos que combinam com suas habilidades, acompanhe suas contribuições e construa seu perfil de desenvolvedor na comunidade open source.",
+    "loginInButton": "Entrar com Github",
+    "exploreButton": "Explorar projetos",
+    "learnButton": "Aprenda mais"
+  }
+}

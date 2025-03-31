@@ -1,11 +1,24 @@
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
 import { languaguesData } from "@/lib/data";
 import { Repository } from "@/types/repository";
-import { BookOpen, Star, GitFork, AlertCircle, Clock, Heart } from "lucide-react";
+import {
+  BookOpen,
+  Star,
+  GitFork,
+  AlertCircle,
+  Clock,
+  Heart,
+} from "lucide-react";
 import { Badge } from "../ui/badge";
 import { motion } from "framer-motion";
 import { Button } from "../ui/button";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useAuth } from "@/lib/AuthContext";
 import { toast } from "sonner";
 import { ContributionGuide } from "../ContributionGuide";
@@ -15,17 +28,13 @@ interface RepositoryCardProps {
   hasFavoriteButton?: boolean;
 }
 
-export const RepositoryCard = ({ repository, hasFavoriteButton = false }: RepositoryCardProps) => {
+export const RepositoryCard = ({
+  repository,
+  hasFavoriteButton = false,
+}: RepositoryCardProps) => {
   const { userProfile, toggleFavoriteRepo } = useAuth();
-  const [isFavorite, setIsFavorite] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
-
-  // Verificar se o repositório está nos favoritos
-  useEffect(() => {
-    if (userProfile?.favoriteRepos) {
-      setIsFavorite(userProfile.favoriteRepos.includes(repository.id.toString()));
-    }
-  }, [userProfile, repository.id]);
+  const isFavorite = userProfile?.favoriteRepos?.includes(repository.nodeId);
 
   const formatNumber = (num: number) => {
     if (num >= 1000000) {
@@ -40,13 +49,14 @@ export const RepositoryCard = ({ repository, hasFavoriteButton = false }: Reposi
     e.preventDefault();
     e.stopPropagation();
 
-    if (!toggleFavoriteRepo) return;
-
     try {
       setIsUpdating(true);
-      await toggleFavoriteRepo(repository.id.toString());
-      setIsFavorite(!isFavorite);
-      toast.success(isFavorite ? "Repositório removido dos favoritos" : "Repositório adicionado aos favoritos");
+      await toggleFavoriteRepo(repository.nodeId);
+      toast.success(
+        isFavorite
+          ? "Repositório removido dos favoritos"
+          : "Repositório adicionado aos favoritos"
+      );
     } catch (error) {
       toast.error("Erro ao atualizar favoritos");
       console.error(error);
@@ -71,22 +81,35 @@ export const RepositoryCard = ({ repository, hasFavoriteButton = false }: Reposi
               <CardTitle className="flex items-center">
                 <BookOpen className="h-4 w-4 mr-2 shrink-0" />
                 <div>
-                  <span className="text-muted-foreground">{repository.full_name.split("/")[0]}/</span>
+                  <span className="text-muted-foreground">
+                    {repository.full_name.split("/")[0]}/
+                  </span>
                   {repository.full_name.split("/")[1]}
                 </div>
               </CardTitle>
-              <p className="text-sm text-muted-foreground mt-2 line-clamp-2">{repository.description}</p>
+              <p className="text-sm text-muted-foreground mt-2 line-clamp-2">
+                {repository.description}
+              </p>
             </div>
             {hasFavoriteButton && (
               <Button
                 variant="ghost"
                 size="icon"
-                className={isFavorite ? "text-red-500" : "text-muted-foreground"}
+                className={
+                  isFavorite ? "text-red-500" : "text-muted-foreground"
+                }
                 onClick={handleToggleFavorite}
                 disabled={isUpdating}
               >
-                <Heart className="h-5 w-5" fill={isFavorite ? "currentColor" : "none"} />
-                <span className="sr-only">{isFavorite ? "Remover dos favoritos" : "Adicionar aos favoritos"}</span>
+                <Heart
+                  className="h-5 w-5"
+                  fill={isFavorite ? "currentColor" : "none"}
+                />
+                <span className="sr-only">
+                  {isFavorite
+                    ? "Remover dos favoritos"
+                    : "Adicionar aos favoritos"}
+                </span>
               </Button>
             )}
           </div>
@@ -108,11 +131,15 @@ export const RepositoryCard = ({ repository, hasFavoriteButton = false }: Reposi
           )}
           <div className="flex items-center justify-between mt-2">
             <div className="flex items-center">
-              <span className="text-lg mr-1">{languaguesData?.[repository.language.toLowerCase()]?.icon ?? "💻"}</span>
+              <span className="text-lg mr-1">
+                {languaguesData?.[repository.language.toLowerCase()]?.icon ??
+                  "💻"}
+              </span>
               <span
                 className="text-sm font-medium"
                 style={{
-                  color: languaguesData?.[repository.language.toLowerCase()]?.color,
+                  color:
+                    languaguesData?.[repository.language.toLowerCase()]?.color,
                 }}
               >
                 {repository.language}

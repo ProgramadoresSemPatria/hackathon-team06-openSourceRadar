@@ -5,7 +5,7 @@ import { useDebounce } from "@/lib/useDebounce";
 import { useQuery } from "@tanstack/react-query";
 import { RepositoryCard } from "../../../components/RespositoryCard";
 import { RepositoriesData, Repository } from "@/types/repository";
-import { fetchRepositories } from "@/lib/fetchRepositories";
+import { fetchRepositories } from "@/lib/fetchers/fetchRepositories";
 import { Skeleton } from "@/components/RespositoryCard/skeleton";
 import { Pagination } from "@/components/Pagination";
 

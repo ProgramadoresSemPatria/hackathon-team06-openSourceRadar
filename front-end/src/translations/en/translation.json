@@ -82,5 +82,32 @@
     "previous": "Previous",
     "next": "Next",
     "more": "More pages"
+  },
+  "dashboard": {
+    "text1": "Less than 1 year",
+    "text2": "1-3 years",
+    "text3": "3-5 years",
+    "text4": "5+ years",
+    "text5": "Please select at least one programming language",
+    "text6": "Please select your experience time",
+    "text7": "Profile updated successfully",
+    "text8": "Error updating profile",
+    "text9": "Loading profile...",
+    "text10": "Your Profile",
+    "text11": "Manage your preferences and settings",
+    "text12": "Personal Information",
+    "text13": "Experience Level",
+    "text14": "Preferred Languages",
+    "text15": "Explore Projects",
+    "text16": "Logout successful",
+    "text17": "Error logging out",
+    "text18": "Log Out",
+    "text19": "Profile Settings",
+    "text20": "Preferred Programming Languages",
+    "text21": "Experience Level",
+    "text22": "Saving...",
+    "text23": "Save Changes",
+    "text24": "User",
+    "text25": "Select languages..."
   }
 }

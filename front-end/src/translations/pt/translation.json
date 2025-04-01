@@ -83,5 +83,32 @@
     "previous": "Anterior",
     "next": "Próximo",
     "more": "Mais páginas"
+  },
+  "dashboard": {
+    "text1": "Menos de 1 ano",
+    "text2": "1-3 anos",
+    "text3": "3-5 anos",
+    "text4": "5+ anos",
+    "text5": "Por favor, selecione pelo menos uma linguagem de programação",
+    "text6": "Por favor, selecione seu tempo de experiência",
+    "text7": "Perfil atualizado com sucesso",
+    "text8": "Erro ao atualizar o perfil",
+    "text9": "Carregando perfil...",
+    "text10": "Seu Perfil",
+    "text11": "Gerencie suas preferências e configurações",
+    "text12": "Informações Pessoais",
+    "text13": "Nível de Experiência",
+    "text14": "Linguagens Preferidas",
+    "text15": "Explorar Projetos",
+    "text16": "Logout realizado com sucesso",
+    "text17": "Erro ao fazer logout",
+    "text18": "Sair da Conta",
+    "text19": "Configurações do Perfil",
+    "text20": "Linguagens de Programação Preferidas",
+    "text21": "Nível de Experiência",
+    "text22": "Salvando...",
+    "text23": "Salvar Alterações",
+    "text24": "Usuário",
+    "text25": "Selecione linguagens..."
   }
 }

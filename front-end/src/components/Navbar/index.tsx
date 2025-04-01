@@ -10,8 +10,10 @@ import { useAuth } from "@/contexts/AuthContext";
 import { ThemeToggle } from "./ThemeToggle";
 import { RadarSvg } from "./RadarSvg";
 import { LanguageToggle } from "./LanguagueToggle";
+import { useTranslation } from "react-i18next";
 
 export const Navbar = () => {
+  const { t } = useTranslation();
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const { currentUser, signIn, logout, userProfile, loading } = useAuth();
@@ -50,18 +52,18 @@ export const Navbar = () => {
   const publicRoutes = [
     {
       to: "/learn",
-      title: "Aprender",
+      translationKey: "learn",
     },
     {
       to: "/support",
-      title: "Suporte",
+      translationKey: "support",
     },
   ];
 
   const authenticatedRoutes = [
     {
       to: "/explore",
-      title: "Explorar",
+      translationKey: "explore",
     },
   ];
 
@@ -93,7 +95,7 @@ export const Navbar = () => {
                         "underline underline-offset-2"
                     )}
                   >
-                    {route.title}
+                    {t(`navbar.${route.translationKey}`)}
                   </Link>
                 </li>
               ))}

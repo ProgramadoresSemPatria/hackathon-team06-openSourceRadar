@@ -11,5 +11,10 @@
     "radarFooter": "The projects displayed are popular in the open-source community.",
     "searchTitle": "Discover open source projects that match your interests and skill level",
     "searchPlaceholder": "Search repositories..."
+  },
+  "navbar": {
+    "explore": "Explore",
+    "learn": "Learn",
+    "support": "Support"
   }
 }

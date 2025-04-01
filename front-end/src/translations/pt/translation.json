@@ -11,5 +11,10 @@
     "radarFooter": "Os projetos exibidos são populares na comunidade open-source.",
     "searchTitle": "Descubra projetos open source que correspondem aos seus interesses e nível de habilidade",
     "searchPlaceholder": "Pesquisar repositórios..."
+  },
+  "navbar": {
+    "explore": "Explorar",
+    "learn": "Aprender",
+    "support": "Suporte"
   }
 }

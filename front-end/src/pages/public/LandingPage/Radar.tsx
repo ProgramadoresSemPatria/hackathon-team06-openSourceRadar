@@ -1,3 +1,5 @@
+// Este componente foi criado com o auxílio de inteligência artificial, para gerar a animação e comportamento do radar. Poderíamos ter colocado um vídeo, mas estávamos sem tempo!
+
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 
@@ -122,14 +124,8 @@ export function Radar() {
         ))}
 
         {/* Grade em cruz */}
-        <div
-          className="absolute w-full h-px bg-blue-500/20"
-          style={{ top: "50%", left: 0 }}
-        />
-        <div
-          className="absolute w-px h-full bg-blue-500/20"
-          style={{ left: "50%", top: 0 }}
-        />
+        <div className="absolute w-full h-px bg-blue-500/20" style={{ top: "50%", left: 0 }} />
+        <div className="absolute w-px h-full bg-blue-500/20" style={{ left: "50%", top: 0 }} />
 
         {/* Linha de varredura animada */}
         <motion.div
@@ -154,10 +150,7 @@ export function Radar() {
             transform: "translate(-50%, -50%)",
           }}
           animate={{
-            boxShadow: [
-              "0 0 0 0 rgba(59, 130, 246, 0.7)",
-              "0 0 0 10px rgba(59, 130, 246, 0)",
-            ],
+            boxShadow: ["0 0 0 0 rgba(59, 130, 246, 0.7)", "0 0 0 10px rgba(59, 130, 246, 0)"],
           }}
           transition={{
             duration: 2,
@@ -194,15 +187,7 @@ interface ProjectDotProps {
   onMouseLeave: () => void;
 }
 
-function ProjectDot({
-  posX,
-  posY,
-  repo,
-  delay,
-  isHighlighted,
-  onMouseEnter,
-  onMouseLeave,
-}: ProjectDotProps) {
+function ProjectDot({ posX, posY, repo, delay, isHighlighted, onMouseEnter, onMouseLeave }: ProjectDotProps) {
   // Converter posições relativas (-1 a 1) para porcentagens
   const left = `${50 + posX * 50}%`;
   const top = `${50 + posY * 50}%`;
@@ -268,8 +253,7 @@ function ProjectDot({
       <motion.div
         className="rounded-full bg-blue-500 h-3 w-3"
         style={{
-          boxShadow:
-            "0 0 8px rgba(59, 130, 246, 0.8), 0 0 12px rgba(59, 130, 246, 0.3)",
+          boxShadow: "0 0 8px rgba(59, 130, 246, 0.8), 0 0 12px rgba(59, 130, 246, 0.3)",
         }}
         whileHover={{ scale: 1.5 }}
         animate={

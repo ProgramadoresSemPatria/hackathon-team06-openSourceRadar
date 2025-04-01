@@ -81,7 +81,7 @@ export const Navbar = () => {
         {loading ? (
           <div className="animate-pulse h-6 w-24 bg-gray-200 rounded" />
         ) : (
-          <div className="hidden w-fit sm:block" id="navbar-default">
+          <div className="hidden w-fit lg:block" id="navbar-default">
             <ul className="font-medium flex items-center space-x-8 rtl:space-x-reverse">
               {navRoutes.map((route) => (
                 <li key={route.to}>
@@ -121,15 +121,20 @@ export const Navbar = () => {
           </div>
         )}
 
-        {/* Mobile Navbar */}
-        <button className="block sm:hidden" onClick={isOpen ? closeModal : openModal}>
-          <span className="sr-only">Abrir menu principal</span>
-          <Menu size={32} />
-        </button>
 
+        {/* Mobile header controls */}
+        <div className="flex items-center gap-4 lg:hidden">
+          <ThemeToggle />
+          <button onClick={isOpen ? closeModal : openModal}>
+            <span className="sr-only">Abrir menu principal</span>
+            <Menu size={32} />
+          </button>
+        </div>
+
+        {/* Mobile Navbar */}
         <div
           className={clsx(
-            "absolute sm:hidden top-16 left-0 w-full h-[calc(100svh-5rem)] transition-opacity bg-background z-50 mt-4 flex flex-col justify-between",
+            "absolute lg:hidden top-16 left-0 w-full h-[calc(100svh-5rem)] transition-opacity bg-background z-50 mt-4 flex flex-col justify-between",
             isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
           )}
         >

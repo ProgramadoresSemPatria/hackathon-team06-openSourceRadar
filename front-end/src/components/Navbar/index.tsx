@@ -120,7 +120,7 @@ export const Navbar = () => {
                   className="gap-2"
                 >
                   <Github className="h-4 w-4" />
-                  Entrar com GitHub
+                  {t("landingPage.loginInButton")}
                 </Button>
               )}
 
@@ -159,7 +159,7 @@ export const Navbar = () => {
                   )}
                 >
                   <div className="flex items-center justify-between">
-                    <p>{route.title}</p>
+                    <p>{t(`navbar.${route.translationKey}`)}</p>
                     <ArrowRight />
                   </div>
                 </Link>
@@ -174,7 +174,7 @@ export const Navbar = () => {
                 className="w-full border-red-400 text-red-400"
                 onClick={handleLogout}
               >
-                Sair
+                {t("navbar.exitMobileButton")}
               </Button>
             ) : (
               <Button
@@ -183,7 +183,7 @@ export const Navbar = () => {
                 className="w-full gap-2"
               >
                 <Github className="h-4 w-4" />
-                Entrar com GitHub
+                {t("landingPage.loginInButton")}
               </Button>
             )}
           </div>

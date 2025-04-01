@@ -15,6 +15,7 @@
   "navbar": {
     "explore": "Explore",
     "learn": "Learn",
-    "support": "Support"
+    "support": "Support",
+    "exitMobileButton": "Log out"
   }
 }

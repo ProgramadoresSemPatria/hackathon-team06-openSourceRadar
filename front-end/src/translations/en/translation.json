@@ -163,5 +163,33 @@
     "text22": "We reserve the right to modify these Terms at any time. Changes will take effect immediately upon publication. Continued use of the platform constitutes acceptance of the new Terms.",
     "text23": "9. Governing Law",
     "text24": "These Terms are governed by and interpreted in accordance with the laws of Brazil, regardless of its conflict of law principles."
+  },
+  "privacy": {
+    "text1": "Privacy Policy",
+    "text2": "Last updated: March 29, 2025",
+    "text3": "1. Introduction",
+    "text4": "Open Source Radar ('we', 'our', or 'platform') is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and protect your information when you use our service.",
+    "text5": "2. Information We Collect",
+    "text6": "To provide our services, we collect the following information:",
+    "text7": "GitHub account information you share when logging in (name, email, username, profile picture)",
+    "text8": "Programming language preferences and experience level",
+    "text9": "Favorited projects and interactions with the platform",
+    "text10": "3. How We Use Your Information",
+    "text11": "We use your information to:",
+    "text12": "Personalize open-source project recommendations",
+    "text13": "Improve our services and user experience",
+    "text14": "Communicate updates and relevant information",
+    "text15": "4. Data Sharing",
+    "text16": "We do not sell your information to third parties. We only share data:",
+    "text17": "With the GitHub API to access repositories and public data",
+    "text18": "With service providers that help us operate the platform (such as Firebase)",
+    "text19": "5. Security",
+    "text20": "We implement appropriate security measures to protect your information from unauthorized access or alteration.",
+    "text21": "6. Your Rights",
+    "text22": "You have the right to access, correct, or request the deletion of your information. To exercise these rights, contact us.",
+    "text23": "7. Changes to This Policy",
+    "text24": "We may update this policy occasionally. We recommend reviewing it periodically to stay informed about any changes.",
+    "text25": "8. Contact",
+    "text26": "If you have any questions about this Privacy Policy, contact us through our GitHub."
   }
 }

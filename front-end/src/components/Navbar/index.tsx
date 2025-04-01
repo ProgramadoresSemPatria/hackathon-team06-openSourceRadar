@@ -1,36 +1,22 @@
 import { ArrowRight, Github, Menu } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import clsx from "clsx";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "../ui/button";
-import { useAuth } from "@/lib/AuthContext";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { User } from "lucide-react";
-
-// Variável global para controlar o carregamento inicial
-let initialLogoLoadComplete = false;
+import { useAuth } from "@/contexts/AuthContext";
+import { ThemeToggle } from "./ThemeToggle";
+import { RadarSvg } from "./RadarSvg";
+import { LanguageToggle } from "./LanguagueToggle";
+import { useTranslation } from "react-i18next";
 
 export const Navbar = () => {
+  const { t } = useTranslation();
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const { currentUser, signIn, logout, userProfile, loading } = useAuth();
-
-  // Estado para controlar o carregamento do logo
-  const [logoLoading, setLogoLoading] = useState(!initialLogoLoadComplete);
-
-  // Efeito para simular carregamento do logo, apenas no primeiro acesso
-  useEffect(() => {
-    if (!initialLogoLoadComplete) {
-      // Marca como carregado após um tempo (ou quando a imagem carregar)
-      const timer = setTimeout(() => {
-        setLogoLoading(false);
-        initialLogoLoadComplete = true;
-      }, 800); // Tempo suficiente para simular carregamento
-
-      return () => clearTimeout(timer);
-    }
-  }, []);
 
   const openModal = () => {
     document.body.style.overflow = "hidden";
@@ -66,75 +52,47 @@ export const Navbar = () => {
   const publicRoutes = [
     {
       to: "/learn",
-      title: "Aprender",
+      translationKey: "learn",
+    },
+    {
+      to: "/support",
+      translationKey: "support",
     },
   ];
 
   const authenticatedRoutes = [
     {
       to: "/explore",
-      title: "Explorar",
-    },
-    {
-      to: "/dashboard",
-      title: "Dashboard",
+      translationKey: "explore",
     },
   ];
 
-  const navRoutes = currentUser ? [...publicRoutes, ...authenticatedRoutes] : publicRoutes;
+  const navRoutes = currentUser ? [...authenticatedRoutes, ...publicRoutes] : publicRoutes;
 
   return (
-    <nav className="bg-white w-full">
+    <nav className="bg-background w-full">
       <div className="max-w-[96rem] mx-auto px-6 sm:px-12 py-4 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
-          {logoLoading ? (
-            <>
-              {/* Estado de carregamento para o logo */}
-              <div className="h-6 w-6 bg-gray-200 animate-pulse rounded-full"></div>
-              <div className="h-6 w-32 bg-gray-200 animate-pulse rounded-md"></div>
-            </>
-          ) : (
-            <>
-              {/* Logo após o carregamento inicial */}
-              <img
-                src="radar.svg"
-                alt="Radar Icon"
-                className="h-6 w-6"
-                width="24"
-                height="24"
-                loading="eager"
-                onLoad={() => {
-                  // Garantir que o logo seja marcado como carregado quando a imagem carregar
-                  setLogoLoading(false);
-                  initialLogoLoadComplete = true;
-                }}
-              />
-              <span className="text-lg font-semibold">OpenSourceRadar</span>
-            </>
-          )}
+          <RadarSvg />
+          <span className="text-lg font-semibold">OpenSourceRadar</span>
         </Link>
 
-        <button className="block sm:hidden" onClick={isOpen ? closeModal : openModal}>
-          <span className="sr-only">Abrir menu principal</span>
-          <Menu size={32} />
-        </button>
-
-        {/* Prevent UI blink by showing a loading state */}
+        {/* Loading State */}
         {loading ? (
           <div className="animate-pulse h-6 w-24 bg-gray-200 rounded" />
         ) : (
-          <div className="hidden w-fit sm:block" id="navbar-default">
-            <ul className="font-medium flex items-center space-x-8 rtl:space-x-reverse bg-white">
+          <div className="hidden w-fit lg:block" id="navbar-default">
+            <ul className="font-medium flex items-center space-x-8 rtl:space-x-reverse">
               {navRoutes.map((route) => (
                 <li key={route.to}>
                   <Link
                     to={route.to}
                     className={clsx(
-                      "block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-muted-foreground md:p-0",
+                      "block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 dark:text-white md:hover:bg-transparent md:border-0 md:hover:text-muted-foreground md:p-0",
                       location.pathname === route.to && "underline underline-offset-2"
                     )}
                   >
-                    {route.title}
+                    {t(`navbar.${route.translationKey}`)}
                   </Link>
                 </li>
               ))}
@@ -151,17 +109,32 @@ export const Navbar = () => {
               ) : (
                 <Button onClick={handleLogin} variant="default" type="button" className="gap-2">
                   <Github className="h-4 w-4" />
-                  Entrar com GitHub
+                  {t("landingPage.loginInButton")}
                 </Button>
               )}
+
+              <div className="flex items-center gap-4">
+                <ThemeToggle />
+                <LanguageToggle />
+              </div>
             </ul>
           </div>
         )}
 
+
+        {/* Mobile header controls */}
+        <div className="flex items-center gap-4 lg:hidden">
+          <ThemeToggle />
+          <button onClick={isOpen ? closeModal : openModal}>
+            <span className="sr-only">Abrir menu principal</span>
+            <Menu size={32} />
+          </button>
+        </div>
+
         {/* Mobile Navbar */}
         <div
           className={clsx(
-            "absolute sm:hidden top-16 left-0 w-full h-[calc(100svh-5rem)] transition-opacity bg-white z-50 mt-4 flex flex-col justify-between",
+            "absolute lg:hidden top-16 left-0 w-full h-[calc(100svh-5rem)] transition-opacity bg-background z-50 mt-4 flex flex-col justify-between",
             isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
           )}
         >
@@ -174,7 +147,7 @@ export const Navbar = () => {
                   className={clsx(location.pathname === route.to && "underline underline-offset-2")}
                 >
                   <div className="flex items-center justify-between">
-                    <p>{route.title}</p>
+                    <p>{t(`navbar.${route.translationKey}`)}</p>
                     <ArrowRight />
                   </div>
                 </Link>
@@ -182,15 +155,23 @@ export const Navbar = () => {
             ))}
           </ul>
 
-          <div className="space-y-2 p-6">
+          <div className="space-y-4 p-6">
+            <div className="flex items-center justify-between mb-4 border-b-2 pb-4">
+              <span className="text-muted-foreground">{t("navbar.appearance") || "Aparência"}</span>
+              <div className="flex items-center gap-4">
+                <ThemeToggle />
+                <LanguageToggle />
+              </div>
+            </div>
+
             {currentUser ? (
-              <Button variant={"outline"} className="w-full border-red-400 text-red-400" onClick={handleLogout}>
-                Sair
+              <Button variant="outline" className="w-full border-red-400 text-red-400" onClick={handleLogout}>
+                {t("navbar.exitMobileButton")}
               </Button>
             ) : (
-              <Button onClick={handleLogin} variant={"default"} className="w-full gap-2">
+              <Button onClick={handleLogin} variant="default" className="w-full gap-2">
                 <Github className="h-4 w-4" />
-                Entrar com GitHub
+                {t("landingPage.loginInButton")}
               </Button>
             )}
           </div>

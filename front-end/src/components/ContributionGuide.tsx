@@ -28,19 +28,20 @@ export function ContributionGuide({ repository }: ContributionGuideProps) {
             e.stopPropagation();
             setIsOpen(true);
           }}
-          className="w-full mt-4 flex items-center justify-center gap-2"
+          className="w-full flex items-center justify-center gap-2"
         >
-          <Info className="h-4 w-4" />
-          <span>Como contribuir</span>
+          <Info className="h-4 w-4" strokeWidth={1.4} />
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <GitPullRequest className="h-5 w-5" />
-            Como contribuir para {repository.name}
+            Como contribuir para {repository.full_name.split("/")[1]}
           </DialogTitle>
-          <DialogDescription>Um guia passo a passo para começar suas contribuições neste projeto</DialogDescription>
+          <DialogDescription>
+            Um guia passo a passo para começar suas contribuições neste projeto
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6 py-4">
@@ -52,13 +53,16 @@ export function ContributionGuide({ repository }: ContributionGuideProps) {
             <ol className="space-y-2 list-decimal list-inside text-sm text-muted-foreground">
               <li>Faça um fork do repositório para sua conta GitHub</li>
               <li>
-                Clone seu fork localmente: <code>git clone {repository.url}.git</code>
+                Clone seu fork localmente:{" "}
+                <code>git clone {repository.url}.git</code>
               </li>
               <li>
-                Adicione o repositório original como remote: <code>git remote add upstream {repository.url}.git</code>
+                Adicione o repositório original como remote:{" "}
+                <code>git remote add upstream {repository.url}.git</code>
               </li>
               <li>
-                Crie uma branch para suas alterações: <code>git checkout -b feature/sua-feature</code>
+                Crie uma branch para suas alterações:{" "}
+                <code>git checkout -b feature/sua-feature</code>
               </li>
             </ol>
           </div>
@@ -69,15 +73,26 @@ export function ContributionGuide({ repository }: ContributionGuideProps) {
               Trabalhando no código
             </h3>
             <ol className="space-y-2 list-decimal list-inside text-sm text-muted-foreground">
-              <li>Certifique-se de ler a documentação de contribuição (se existir)</li>
+              <li>
+                Certifique-se de ler a documentação de contribuição (se existir)
+              </li>
               <li>
                 Procure por issues rotuladas como{" "}
-                <span className="bg-green-100 text-green-800 py-0.5 px-1.5 rounded text-xs">good first issue</span> ou{" "}
-                <span className="bg-blue-100 text-blue-800 py-0.5 px-1.5 rounded text-xs">help wanted</span>
+                <span className="bg-green-100 text-green-800 py-0.5 px-1.5 rounded text-xs">
+                  good first issue
+                </span>{" "}
+                ou{" "}
+                <span className="bg-blue-100 text-blue-800 py-0.5 px-1.5 rounded text-xs">
+                  help wanted
+                </span>
               </li>
-              <li>Faça suas alterações seguindo o estilo de código do projeto</li>
+              <li>
+                Faça suas alterações seguindo o estilo de código do projeto
+              </li>
               <li>Adicione testes para suas alterações quando possível</li>
-              <li>Certifique-se de que os testes existentes continuam passando</li>
+              <li>
+                Certifique-se de que os testes existentes continuam passando
+              </li>
             </ol>
           </div>
 
@@ -88,10 +103,12 @@ export function ContributionGuide({ repository }: ContributionGuideProps) {
             </h3>
             <ol className="space-y-2 list-decimal list-inside text-sm text-muted-foreground">
               <li>
-                Faça o commit das suas alterações: <code>git commit -m "feat: descrição da sua alteração"</code>
+                Faça o commit das suas alterações:{" "}
+                <code>git commit -m "feat: descrição da sua alteração"</code>
               </li>
               <li>
-                Faça o push para seu fork: <code>git push origin feature/sua-feature</code>
+                Faça o push para seu fork:{" "}
+                <code>git push origin feature/sua-feature</code>
               </li>
               <li>Abra um Pull Request no repositório original</li>
               <li>Descreva detalhadamente suas alterações no PR</li>
@@ -106,12 +123,20 @@ export function ContributionGuide({ repository }: ContributionGuideProps) {
             </h3>
             <ul className="space-y-2 list-disc list-inside text-sm text-muted-foreground">
               <li>
-                <a href={`${repository.url}/issues`} target="_blank" className="text-blue-600 hover:underline">
+                <a
+                  href={`${repository.url}/issues`}
+                  target="_blank"
+                  className="text-blue-600 hover:underline"
+                >
                   Ver issues abertas
                 </a>
               </li>
               <li>
-                <a href={`${repository.url}/pulls`} target="_blank" className="text-blue-600 hover:underline">
+                <a
+                  href={`${repository.url}/pulls`}
+                  target="_blank"
+                  className="text-blue-600 hover:underline"
+                >
                   Ver pull requests
                 </a>
               </li>
@@ -128,7 +153,10 @@ export function ContributionGuide({ repository }: ContributionGuideProps) {
           </div>
 
           <div className="pt-2">
-            <Button className="w-full" onClick={() => window.open(repository.url, "_blank")}>
+            <Button
+              className="w-full"
+              onClick={() => window.open(repository.url, "_blank")}
+            >
               Visitar repositório
             </Button>
           </div>

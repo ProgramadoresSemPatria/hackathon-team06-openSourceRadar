@@ -1,3 +1,5 @@
+// Este componente foi criado com o auxílio de inteligência artificial, para gerar a animação e comportamento do radar. Poderíamos ter colocado um vídeo, mas estávamos sem tempo!
+
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 
@@ -101,7 +103,7 @@ export function Radar() {
   };
 
   return (
-    <div className="relative h-72 w-72 flex items-center justify-center">
+    <div className="relative aspect-square size-full max-w-72 max-h-72 flex items-center justify-center">
       {/* Background do radar */}
       <div className="absolute inset-0 rounded-full bg-black/5 dark:bg-white/5" />
 

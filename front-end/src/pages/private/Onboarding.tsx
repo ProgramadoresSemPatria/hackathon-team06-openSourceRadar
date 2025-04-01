@@ -2,14 +2,21 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "sonner";
 import MultiSelector from "@/components/ui/multi-selector";
 import { programmingLanguages, experienceLevels } from "@/lib/data";
-import { useAuth } from "@/lib/AuthContext";
 import { PageLayout } from "@/components/PageLayout";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Onboarding() {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
@@ -27,7 +34,10 @@ export default function Onboarding() {
   // Load user preferences if they exist
   useEffect(() => {
     if (userProfile) {
-      if (userProfile.preferredLanguages && userProfile.preferredLanguages.length > 0) {
+      if (
+        userProfile.preferredLanguages &&
+        userProfile.preferredLanguages.length > 0
+      ) {
         setSelectedItems(userProfile.preferredLanguages);
       }
 
@@ -41,7 +51,9 @@ export default function Onboarding() {
     e.preventDefault();
 
     if (selectedItems.length === 0) {
-      toast.error("Por favor, selecione pelo menos uma linguagem de programação");
+      toast.error(
+        "Por favor, selecione pelo menos uma linguagem de programação"
+      );
       return;
     }
 
@@ -76,12 +88,19 @@ export default function Onboarding() {
         <Card className="w-full max-w-2xl mx-auto border-0 shadow-none">
           <form onSubmit={handleSubmit}>
             <CardHeader>
-              <CardTitle className="text-xl font-medium">Experiência em Programação</CardTitle>
-              <CardDescription>Conte-nos sobre sua experiência em programação e linguagens preferidas.</CardDescription>
+              <CardTitle className="text-xl font-medium">
+                Experiência em Programação
+              </CardTitle>
+              <CardDescription>
+                Conte-nos sobre sua experiência em programação e linguagens
+                preferidas.
+              </CardDescription>
             </CardHeader>
             <CardContent className="my-4 space-y-4">
               <div className="space-y-4">
-                <Label className="text-base">Quais são suas linguagens de programação preferidas?</Label>
+                <Label className="text-base">
+                  Quais são suas linguagens de programação preferidas?
+                </Label>
                 <MultiSelector
                   selectedItems={selectedItems}
                   setSelectedItems={setSelectedItems}
@@ -91,12 +110,24 @@ export default function Onboarding() {
               </div>
 
               <div className="space-y-4">
-                <Label className="text-base">Qual é seu tempo de experiência?</Label>
-                <RadioGroup value={experienceTime} onValueChange={setExperienceTime} className="space-y-2">
+                <Label className="text-base">
+                  Qual é seu tempo de experiência?
+                </Label>
+                <RadioGroup
+                  value={experienceTime}
+                  onValueChange={setExperienceTime}
+                  className="space-y-2"
+                >
                   {experienceLevels.map((level) => (
                     <div key={level.id} className="flex items-center space-x-2">
-                      <RadioGroupItem value={level.id} id={`experience-${level.id}`} />
-                      <Label htmlFor={`experience-${level.id}`} className="text-sm font-normal cursor-pointer">
+                      <RadioGroupItem
+                        value={level.id}
+                        id={`experience-${level.id}`}
+                      />
+                      <Label
+                        htmlFor={`experience-${level.id}`}
+                        className="text-sm font-normal cursor-pointer"
+                      >
                         {level.label}
                       </Label>
                     </div>

@@ -1,13 +1,21 @@
 import { Button } from "@/components/ui/button";
-import { Compass, Github, Info, GitPullRequestIcon } from "lucide-react";
+import {
+  Compass,
+  Github,
+  Info,
+  GitPullRequestIcon,
+  Search,
+} from "lucide-react";
 import { Radar } from "./Radar";
 import { Link } from "react-router";
-import { useAuth } from "@/lib/AuthContext";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
+import { useAuth } from "@/contexts/AuthContext";
+import { useTranslation } from "react-i18next";
 
 export function HeroSection() {
   const { currentUser, signIn } = useAuth();
+  const { t } = useTranslation();
 
   const handleLogin = async () => {
     try {
@@ -36,7 +44,9 @@ export function HeroSection() {
           className="inline-flex items-center rounded-full border px-3 py-1 text-sm"
         >
           <span className="flex h-2 w-2 rounded-full bg-foreground"></span>
-          <span className="ml-2 font-medium">Descobrir • Contribuir • Crescer</span>
+          <span className="ml-2 font-medium">
+            {t("landingPage.bulletText")}
+          </span>
         </motion.div>
 
         <div className="space-y-4">
@@ -46,7 +56,7 @@ export function HeroSection() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.6 }}
           >
-            Seu radar pessoal de <span className="text-foreground">projetos open-source</span>
+            {t("landingPage.title")}
           </motion.h1>
           <motion.p
             className="text-muted-foreground text-base sm:text-lg xl:text-xl"
@@ -54,8 +64,7 @@ export function HeroSection() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.8 }}
           >
-            Encontre projetos que combinam com suas habilidades, acompanhe suas contribuições e construa seu perfil de
-            desenvolvedor na comunidade open source.
+            {t("landingPage.subtitle")}
           </motion.p>
         </div>
 
@@ -63,32 +72,49 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 1 }}
+          className="space-y-3"
         >
-          {currentUser ? (
-            <Link to="/explore">
-              <Button size="lg" className="w-full md:max-w-52 gap-2">
-                <Compass className="h-5 w-5" />
-                <span>Explorar projetos</span>
-              </Button>
-            </Link>
-          ) : (
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button onClick={handleLogin} size="lg" className="w-full md:max-w-52 gap-2">
-                <Github className="h-5 w-5" />
-                <span>Entrar com GitHub</span>
-              </Button>
+          <div className="flex flex-col sm:flex-row gap-4">
+            {currentUser ? (
               <Link to="/explore">
-                <Button variant="outline" size="lg" className="w-full md:max-w-52 gap-2">
-                  <Compass className="h-5 w-5" />
-                  <span>Explorar projetos</span>
+                <Button size="lg" className="w-full sm:w-fit gap-2">
+                  <Search className="h-5 w-5" />
+                  <span>{t("landingPage.exploreButton")}</span>
                 </Button>
               </Link>
+            ) : (
+              <Button
+                onClick={handleLogin}
+                size="lg"
+                className="w-full sm:w-fit gap-2"
+              >
+                <Github className="h-5 w-5" />
+                <span>{t("landingPage.loginInButton")}</span>
+              </Button>
+            )}
+            <Link to="/learn">
+              <Button
+                variant="outline"
+                size="lg"
+                className="w-full sm:w-fit gap-2"
+              >
+                <Compass className="h-5 w-5" />
+                <span>{t("landingPage.learnButton")}</span>
+              </Button>
+            </Link>
+          </div>
+          {!currentUser && (
+            <div className="flex items-center gap-2">
+              <Info className="h-4 w-4 text-gray-500" />
+              <span className="text-gray-500 text-sm">
+                {t("landingPage.disclaimer")}
+              </span>
             </div>
           )}
         </motion.div>
       </motion.div>
 
-      {/* Radar Card - Versão final com ícone e texto atualizados */}
+      {/* Radar Card */}
       <motion.div
         className="rounded-xl border bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm shadow-xl p-6 space-y-4"
         initial={{ opacity: 0, scale: 0.9 }}
@@ -101,7 +127,9 @@ export function HeroSection() {
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
               <Compass className="h-4 w-4 text-gray-900 dark:text-gray-200" />
             </div>
-            <h3 className="font-semibold text-gray-900 dark:text-gray-100">Radar de Projetos</h3>
+            <h3 className="font-semibold text-gray-900 dark:text-gray-100">
+              {t("landingPage.radarTitle")}
+            </h3>
           </div>
           <motion.div
             className="rounded-full bg-blue-600 px-3 py-1 text-xs font-medium text-white"
@@ -126,19 +154,10 @@ export function HeroSection() {
         {/* Footer com ícone e texto atualizados */}
         <div className="flex items-center justify-between text-sm">
           <div className="flex items-center gap-2">
-            {currentUser ? (
-              <>
-                <GitPullRequestIcon className="h-4 w-4 text-blue-500" />
-                <span className="text-gray-700 dark:text-gray-300">
-                  Os projetos exibidos são populares na comunidade open-source.
-                </span>
-              </>
-            ) : (
-              <>
-                <Info className="h-4 w-4 text-gray-500" />
-                <span className="text-gray-500">Conecte-se com GitHub para desbloquear recursos personalizados.</span>
-              </>
-            )}
+            <GitPullRequestIcon className="h-4 w-4 text-blue-500 shrink-0" />
+            <span className="text-gray-700 dark:text-gray-300">
+              {t("landingPage.radarFooter")}
+            </span>
           </div>
         </div>
       </motion.div>

@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "../lib/AuthContext";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function ProtectedLayout() {
   const { currentUser, userProfile, loading } = useAuth();
@@ -21,7 +21,11 @@ export default function ProtectedLayout() {
   }, [currentUser, userProfile, loading, location, navigate]);
 
   if (loading) {
-    return <div className="flex h-screen items-center justify-center">Carregando...</div>;
+    return (
+      <div className="flex h-screen items-center justify-center">
+        Carregando...
+      </div>
+    );
   }
 
   if (!currentUser) {

@@ -1,15 +1,24 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { GitBranch, Github, Award, Code, BookOpen, Users } from "lucide-react";
 import { PageLayout } from "@/components/PageLayout";
+import { useTranslation } from "react-i18next";
 
 export default function Learn() {
+  const { t } = useTranslation();
+
   return (
     <PageLayout>
       <div className="py-6 space-y-8">
         <div className="w-full space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-bold">Aprenda sobre Open Source</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold">{t("learns.title")}</h1>
           <p className="text-lg sm:text-xl text-muted-foreground">
-            Descubra como contribuir para projetos open source e ampliar seu potencial como desenvolvedor
+            {t("learns.subtitle")}
           </p>
         </div>
 
@@ -17,19 +26,14 @@ export default function Learn() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <BookOpen className="h-5 w-5 text-primary" />O que é Open Source?
+                <BookOpen className="h-5 w-5 text-primary" />
+                {t("learns.text1")}
               </CardTitle>
-              <CardDescription>Entenda os conceitos básicos do universo open source</CardDescription>
+              <CardDescription>{t("learns.text2")}</CardDescription>
             </CardHeader>
             <CardContent>
-              <p>
-                Software open source é um tipo de software cujo código fonte é disponibilizado publicamente, permitindo
-                que qualquer pessoa visualize, utilize, modifique e distribua o código conforme suas necessidades.
-              </p>
-              <p className="mt-4">
-                Essa abordagem colaborativa possibilita que desenvolvedores de todo o mundo trabalhem juntos,
-                compartilhem conhecimento e criem soluções melhores através da transparência e cooperação.
-              </p>
+              <p>{t("learns.text3")}</p>
+              <p className="mt-4">{t("learns.text4")}</p>
             </CardContent>
           </Card>
 
@@ -37,19 +41,19 @@ export default function Learn() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Code className="h-5 w-5 text-primary" />
-                Como Contribuir
+                {t("learns.text5")}
               </CardTitle>
-              <CardDescription>Primeiros passos para contribuir em projetos</CardDescription>
+              <CardDescription>{t("learns.text6")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <ol className="list-decimal list-inside space-y-2">
-                <li>Encontre um projeto que se alinhe com seus interesses e habilidades</li>
-                <li>Leia a documentação e guias de contribuição do projeto</li>
-                <li>Explore issues marcadas como "good first issue" ou "beginner friendly"</li>
-                <li>Faça um fork do repositório e clone-o localmente</li>
-                <li>Crie uma branch para sua contribuição</li>
-                <li>Desenvolva sua solução e teste-a</li>
-                <li>Envie um pull request com suas mudanças</li>
+                <li>{t("learns.text7")}</li>
+                <li>{t("learns.text8")}</li>
+                <li>{t("learns.text9")}</li>
+                <li>{t("learns.text10")}</li>
+                <li>{t("learns.text11")}</li>
+                <li>{t("learns.text12")}</li>
+                <li>{t("learns.text13")}</li>
               </ol>
             </CardContent>
           </Card>
@@ -58,40 +62,40 @@ export default function Learn() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Award className="h-5 w-5 text-primary" />
-                Benefícios de Contribuir
+                {t("learns.text14")}
               </CardTitle>
-              <CardDescription>Por que participar da comunidade open source?</CardDescription>
+              <CardDescription>{t("learns.text15")}</CardDescription>
             </CardHeader>
             <CardContent>
               <ul className="space-y-2">
                 <li className="flex items-start gap-2">
                   <div className="mt-1 h-1.5 w-1.5 rounded-full bg-primary" />
                   <span>
-                    <strong>Portfólio:</strong> Demonstre suas habilidades através de contribuições reais
+                    <strong>{t("learns.text16")}</strong> {t("learns.text17")}
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 h-1.5 w-1.5 rounded-full bg-primary" />
                   <span>
-                    <strong>Networking:</strong> Conecte-se com desenvolvedores do mundo todo
+                    <strong>{t("learns.text18")}</strong> {t("learns.text19")}
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 h-1.5 w-1.5 rounded-full bg-primary" />
                   <span>
-                    <strong>Aprendizado:</strong> Aprenda práticas de código de projetos estabelecidos
+                    <strong>{t("learns.text20")}</strong> {t("learns.text21")}
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 h-1.5 w-1.5 rounded-full bg-primary" />
                   <span>
-                    <strong>Visibilidade:</strong> Ganhe reconhecimento na comunidade técnica
+                    <strong>{t("learns.text22")}</strong> {t("learns.text23")}
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 h-1.5 w-1.5 rounded-full bg-primary" />
                   <span>
-                    <strong>Oportunidades:</strong> Encontre possibilidades de trabalho remoto global
+                    <strong>{t("learns.text24")}</strong> {t("learns.text25")}
                   </span>
                 </li>
               </ul>
@@ -102,20 +106,13 @@ export default function Learn() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Users className="h-5 w-5 text-primary" />
-                Comunidade Global
+                {t("learns.text26")}
               </CardTitle>
-              <CardDescription>Faça parte de uma comunidade sem fronteiras</CardDescription>
+              <CardDescription>{t("learns.text27")}</CardDescription>
             </CardHeader>
             <CardContent>
-              <p>
-                Contribuir para projetos open source é uma forma de ultrapassar barreiras geográficas e conectar-se com
-                desenvolvedores do mundo todo. É uma oportunidade de colaborar em projetos significativos e construir
-                relacionamentos profissionais internacionais.
-              </p>
-              <p className="mt-4">
-                Através dessa experiência, você pode expandir sua rede de contatos, aprimorar habilidades de comunicação
-                em inglês e aumentar suas chances de conquistar oportunidades de trabalho remoto global.
-              </p>
+              <p>{t("learns.text28")}</p>
+              <p className="mt-4">{t("learns.text29")}</p>
               <div className="flex items-center gap-3 mt-4">
                 <Github className="h-5 w-5" />
                 <GitBranch className="h-5 w-5" />

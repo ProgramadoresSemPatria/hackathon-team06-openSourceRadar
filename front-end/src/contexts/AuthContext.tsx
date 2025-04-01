@@ -1,9 +1,16 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { auth, signInWithGitHub, signOut } from "./firebase";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import { auth, signInWithGitHub, signOut } from "@/lib/firebase";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { db } from "./firebase";
+import { db } from "@/lib/firebase";
 import { toast } from "sonner";
+import { useTokenStore } from "../hooks/useTokenStore";
 
 interface AuthContextType {
   currentUser: User | null;
@@ -11,7 +18,10 @@ interface AuthContextType {
   loading: boolean;
   signIn: () => Promise<void>;
   logout: () => Promise<void>;
-  saveOnboardingData: (languages: string[], experienceLevel: string) => Promise<boolean | undefined>;
+  saveOnboardingData: (
+    languages: string[],
+    experienceLevel: string
+  ) => Promise<boolean | undefined>;
   toggleFavoriteRepo: (repoId: string) => Promise<void>;
 }
 
@@ -50,7 +60,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           const userDoc = await getDoc(userDocRef);
 
           if (userDoc.exists()) {
-            setUserProfile(userDoc.data() as UserProfile);
+            const userProfile = userDoc.data() as UserProfile;
+            setUserProfile(userProfile);
+            useTokenStore.setState({ token: userProfile.githubToken });
           } else {
             console.log("User doc doesn't exist in Firestore");
           }
@@ -94,7 +106,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   // Função para salvar dados de onboarding
-  const saveOnboardingData = async (languages: string[], experienceLevel: string) => {
+  const saveOnboardingData = async (
+    languages: string[],
+    experienceLevel: string
+  ) => {
     if (!currentUser) {
       toast.error("Usuário não autenticado");
       return false;
@@ -153,7 +168,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       // Atualizar no Firestore
-      await setDoc(userDocRef, { favoriteRepos: updatedFavorites, updatedAt: new Date() }, { merge: true });
+      await setDoc(
+        userDocRef,
+        { favoriteRepos: updatedFavorites, updatedAt: new Date() },
+        { merge: true }
+      );
 
       // Atualizar o estado local
       setUserProfile((prev) => {

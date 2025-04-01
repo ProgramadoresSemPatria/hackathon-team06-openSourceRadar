@@ -1,6 +1,6 @@
 export interface Repository {
-  id: number;
-  name: string;
+  id?: number;
+  nodeId: string;
   full_name: string;
   description: string;
   forks_count: number;
@@ -10,6 +10,19 @@ export interface Repository {
   updated_at: string;
   url: string;
   topics: string[];
+}
+
+export interface GraphQlRepository {
+  id: string;
+  nameWithOwner: string;
+  description: string;
+  forkCount: number;
+  primaryLanguage: { name: string };
+  openIssues: { totalCount: number };
+  stargazerCount: number;
+  updatedAt: string;
+  url: string;
+  repositoryTopics: { nodes: { topic: { name: string } }[] };
 }
 
 export interface RepositoriesData {

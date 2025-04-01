@@ -137,5 +137,31 @@
     "text24": "Ready to Support Our Mission?",
     "text25": "Every contribution, no matter how small, helps us continue our work in making open source more accessible to everyone.",
     "text26": "Buy Me a Coffee"
+  },
+  "team": {
+    "text1": "Terms of Service",
+    "text2": "Last updated: March 29, 2025",
+    "text3": "1. Acceptance of Terms",
+    "text4": "By accessing or using the Open Source Radar ('platform'), you agree to these Terms of Service. If you do not agree with any part of these terms, do not use our services.",
+    "text5": "2. Service Description",
+    "text6": "Open Source Radar is a platform that helps developers find relevant open-source projects to contribute to, based on their skills and interests.",
+    "text7": "3. User Account",
+    "text8": "To use our services, you need to log in with your GitHub account. You are responsible for maintaining the confidentiality of your account and for all activities that occur under it.",
+    "text9": "4. Acceptable Use",
+    "text10": "You agree to use our platform only for lawful purposes and in accordance with these Terms. You must not:",
+    "text11": "Violate applicable laws or regulations",
+    "text12": "Interfere with the platform's operation",
+    "text13": "Attempt to access restricted areas without authorization",
+    "text14": "Use the platform to distribute malicious content",
+    "text15": "5. Intellectual Property",
+    "text16": "All content and features available on the platform are the property of Open Source Radar or its licensors and are protected by intellectual property laws.",
+    "text17": "6. Disclaimer of Warranties",
+    "text18": "The platform is provided 'as is', without warranties of any kind, express or implied. We do not guarantee that the platform will be uninterrupted, secure, or error-free.",
+    "text19": "7. Limitation of Liability",
+    "text20": "Under no circumstances shall we be liable for direct, indirect, incidental, special, or consequential damages resulting from the use or inability to use our platform.",
+    "text21": "8. Changes to the Terms",
+    "text22": "We reserve the right to modify these Terms at any time. Changes will take effect immediately upon publication. Continued use of the platform constitutes acceptance of the new Terms.",
+    "text23": "9. Governing Law",
+    "text24": "These Terms are governed by and interpreted in accordance with the laws of Brazil, regardless of its conflict of law principles."
   }
 }

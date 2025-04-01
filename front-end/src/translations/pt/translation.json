@@ -138,5 +138,31 @@
     "text24": "Pronto para apoiar nossa missão?",
     "text25": "Toda contribuição, por menor que seja, nos ajuda a continuar nosso trabalho para tornar o open source mais acessível a todos.",
     "text26": "Me pague um café"
+  },
+  "team": {
+    "text1": "Termos de Serviço",
+    "text2": "Última atualização: 29 de Março, 2025",
+    "text3": "1. Aceitação dos Termos",
+    "text4": "Ao acessar ou usar o Open Source Radar ('plataforma'), você concorda com estes Termos de Serviço. Se você não concordar com algum aspecto destes termos, não utilize nossos serviços.",
+    "text5": "2. Descrição do Serviço",
+    "text6": "O Open Source Radar é uma plataforma que ajuda desenvolvedores a encontrar projetos open source relevantes para contribuir, com base em suas habilidades e interesses.",
+    "text7": "3. Conta do Usuário",
+    "text8": "Para utilizar nossos serviços, você precisa fazer login com sua conta do GitHub. Você é responsável por manter a confidencialidade de sua conta e por todas as atividades que ocorrem nela.",
+    "text9": "4. Uso Aceitável",
+    "text10": "Você concorda em usar nossa plataforma apenas para fins legais e de acordo com estes Termos. Você não deve:",
+    "text11": "Violar leis ou regulamentos aplicáveis",
+    "text12": "Interferir no funcionamento da plataforma",
+    "text13": "Tentar acessar áreas restritas sem autorização",
+    "text14": "Utilizar a plataforma para distribuir conteúdo malicioso",
+    "text15": "5. Propriedade Intelectual",
+    "text16": "Todo o conteúdo e funcionalidades disponíveis na plataforma são propriedade do Open Source Radar ou de seus licenciadores e são protegidos por leis de propriedade intelectual.",
+    "text17": "6. Isenção de Garantias",
+    "text18": "A plataforma é fornecida 'como está', sem garantias de qualquer tipo, expressas ou implícitas. Não garantimos que a plataforma será ininterrupta, segura ou livre de erros.",
+    "text19": "7. Limitação de Responsabilidade",
+    "text20": "Em nenhuma circunstância seremos responsáveis por danos diretos, indiretos, incidentais, especiais ou consequentes resultantes do uso ou da incapacidade de usar nossa plataforma.",
+    "text21": "8. Modificações dos Termos",
+    "text22": "Reservamo-nos o direito de modificar estes Termos a qualquer momento. As alterações entrarão em vigor imediatamente após sua publicação. O uso contínuo da plataforma constitui aceitação dos novos Termos.",
+    "text23": "9. Lei Aplicável",
+    "text24": "Estes Termos são regidos e interpretados de acordo com as leis do Brasil, independentemente de seus princípios de conflito de leis."
   }
 }

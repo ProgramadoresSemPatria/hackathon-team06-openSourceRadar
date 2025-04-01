@@ -164,5 +164,33 @@
     "text22": "Reservamo-nos o direito de modificar estes Termos a qualquer momento. As alterações entrarão em vigor imediatamente após sua publicação. O uso contínuo da plataforma constitui aceitação dos novos Termos.",
     "text23": "9. Lei Aplicável",
     "text24": "Estes Termos são regidos e interpretados de acordo com as leis do Brasil, independentemente de seus princípios de conflito de leis."
+  },
+  "privacy": {
+    "text1": "Política de Privacidade",
+    "text2": "Última atualização: 29 de Março, 2025",
+    "text3": "1. Introdução",
+    "text4": "Open Source Radar ('nós', 'nosso', ou 'plataforma') está comprometido em proteger sua privacidade. Esta Política de Privacidade explica como coletamos, usamos e protegemos suas informações quando você utiliza nosso serviço.",
+    "text5": "2. Informações que Coletamos",
+    "text6": "Para fornecer nossos serviços, coletamos as seguintes informações:",
+    "text7": "Informações da conta GitHub que você compartilha ao fazer login (nome, email, nome de usuário, foto)",
+    "text8": "Preferências de linguagem de programação e nível de experiência",
+    "text9": "Projetos favoritados e interações com a plataforma",
+    "text10": "3. Como Usamos suas Informações",
+    "text11": "Utilizamos suas informações para:",
+    "text12": "Personalizar recomendações de projetos open source",
+    "text13": "Melhorar nossos serviços e experiência do usuário",
+    "text14": "Comunicar atualizações e informações relevantes",
+    "text15": "4. Compartilhamento de Dados",
+    "text16": "Não vendemos suas informações a terceiros. Compartilhamos dados apenas:",
+    "text17": "Com a API do GitHub para acessar repositórios e dados públicos",
+    "text18": "Com fornecedores de serviços que nos ajudam a operar a plataforma (como Firebase)",
+    "text19": "5. Segurança",
+    "text20": "Implementamos medidas de segurança apropriadas para proteger suas informações contra acesso não autorizado ou alteração.",
+    "text21": "6. Seus Direitos",
+    "text22": "Você tem o direito de acessar, corrigir ou solicitar a exclusão de suas informações. Para exercer esses direitos, entre em contato conosco.",
+    "text23": "7. Alterações nesta Política",
+    "text24": "Podemos atualizar esta política ocasionalmente. Recomendamos revisar periodicamente para estar ciente das alterações.",
+    "text25": "8. Contato",
+    "text26": "Se você tiver dúvidas sobre esta Política de Privacidade, entre em contato conosco através de nosso GitHub."
   }
 }

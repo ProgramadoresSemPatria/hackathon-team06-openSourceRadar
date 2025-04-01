@@ -80,14 +80,14 @@ export const Navbar = () => {
         {loading ? (
           <div className="animate-pulse h-6 w-24 bg-gray-200 rounded" />
         ) : (
-          <div className="hidden w-fit sm:block" id="navbar-default">
+          <div className="hidden w-fit lg:block" id="navbar-default">
             <ul className="font-medium flex items-center space-x-8 rtl:space-x-reverse">
               {navRoutes.map((route) => (
                 <li key={route.to}>
                   <Link
                     to={route.to}
                     className={clsx(
-                      "block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 dark:text-white md:hover:bg-transparent md:border-0 md:hover:text-muted-foreground md:p-0",
+                      "block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 dark:text-white md:hover:bg-transparent md:border-0 md:hover:text-muted-foreground sm:p-0",
                       location.pathname === route.to &&
                         "underline underline-offset-2"
                     )}
@@ -128,7 +128,7 @@ export const Navbar = () => {
 
         {/* Mobile Navbar */}
         <button
-          className="block sm:hidden"
+          className="block lg:hidden"
           onClick={isOpen ? closeModal : openModal}
         >
           <span className="sr-only">Abrir menu principal</span>

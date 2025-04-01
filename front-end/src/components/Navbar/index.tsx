@@ -9,8 +9,11 @@ import { User } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { ThemeToggle } from "./ThemeToggle";
 import { RadarSvg } from "./RadarSvg";
+import { LanguageToggle } from "./LanguagueToggle";
+import { useTranslation } from "react-i18next";
 
 export const Navbar = () => {
+  const { t } = useTranslation();
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const { currentUser, signIn, logout, userProfile, loading } = useAuth();
@@ -49,18 +52,18 @@ export const Navbar = () => {
   const publicRoutes = [
     {
       to: "/learn",
-      title: "Aprender",
+      translationKey: "learn",
     },
     {
       to: "/support",
-      title: "Apoie",
+      translationKey: "support",
     },
   ];
 
   const authenticatedRoutes = [
     {
       to: "/explore",
-      title: "Explorar",
+      translationKey: "explore",
     },
   ];
 
@@ -74,7 +77,7 @@ export const Navbar = () => {
           <span className="text-lg font-semibold">OpenSourceRadar</span>
         </Link>
 
-        {/* Prevent UI blink by showing a loading state */}
+        {/* Loading State */}
         {loading ? (
           <div className="animate-pulse h-6 w-24 bg-gray-200 rounded" />
         ) : (
@@ -85,11 +88,11 @@ export const Navbar = () => {
                   <Link
                     to={route.to}
                     className={clsx(
-                      "block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 dark:text-white md:hover:bg-transparent md:border-0 md:hover:text-muted-foreground sm:p-0",
+                      "block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 dark:text-white md:hover:bg-transparent md:border-0 md:hover:text-muted-foreground md:p-0",
                       location.pathname === route.to && "underline underline-offset-2"
                     )}
                   >
-                    {route.title}
+                    {t(`navbar.${route.translationKey}`)}
                   </Link>
                 </li>
               ))}
@@ -106,14 +109,18 @@ export const Navbar = () => {
               ) : (
                 <Button onClick={handleLogin} variant="default" type="button" className="gap-2">
                   <Github className="h-4 w-4" />
-                  Entrar com GitHub
+                  {t("landingPage.loginInButton")}
                 </Button>
               )}
 
-              <ThemeToggle />
+              <div className="flex items-center gap-4">
+                <ThemeToggle />
+                <LanguageToggle />
+              </div>
             </ul>
           </div>
         )}
+
 
         {/* Mobile header controls */}
         <div className="flex items-center gap-4 lg:hidden">
@@ -140,7 +147,7 @@ export const Navbar = () => {
                   className={clsx(location.pathname === route.to && "underline underline-offset-2")}
                 >
                   <div className="flex items-center justify-between">
-                    <p>{route.title}</p>
+                    <p>{t(`navbar.${route.translationKey}`)}</p>
                     <ArrowRight />
                   </div>
                 </Link>
@@ -148,15 +155,23 @@ export const Navbar = () => {
             ))}
           </ul>
 
-          <div className="space-y-2 p-6">
+          <div className="space-y-4 p-6">
+            <div className="flex items-center justify-between mb-4 border-b-2 pb-4">
+              <span className="text-muted-foreground">{t("navbar.appearance") || "Aparência"}</span>
+              <div className="flex items-center gap-4">
+                <ThemeToggle />
+                <LanguageToggle />
+              </div>
+            </div>
+
             {currentUser ? (
-              <Button variant={"outline"} className="w-full border-red-400 text-red-400" onClick={handleLogout}>
-                Sair
+              <Button variant="outline" className="w-full border-red-400 text-red-400" onClick={handleLogout}>
+                {t("navbar.exitMobileButton")}
               </Button>
             ) : (
-              <Button onClick={handleLogin} variant={"default"} className="w-full gap-2">
+              <Button onClick={handleLogin} variant="default" className="w-full gap-2">
                 <Github className="h-4 w-4" />
-                Entrar com GitHub
+                {t("landingPage.loginInButton")}
               </Button>
             )}
           </div>

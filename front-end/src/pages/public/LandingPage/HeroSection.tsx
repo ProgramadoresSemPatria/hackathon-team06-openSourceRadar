@@ -11,9 +11,11 @@ import { Link } from "react-router";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTranslation } from "react-i18next";
 
 export function HeroSection() {
   const { currentUser, signIn } = useAuth();
+  const { t } = useTranslation();
 
   const handleLogin = async () => {
     try {
@@ -43,7 +45,7 @@ export function HeroSection() {
         >
           <span className="flex h-2 w-2 rounded-full bg-foreground"></span>
           <span className="ml-2 font-medium">
-            Descobrir • Contribuir • Crescer
+            {t("landingPage.bulletText")}
           </span>
         </motion.div>
 
@@ -54,8 +56,7 @@ export function HeroSection() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.6 }}
           >
-            Seu radar pessoal de{" "}
-            <span className="text-foreground">projetos open-source</span>
+            {t("landingPage.title")}
           </motion.h1>
           <motion.p
             className="text-muted-foreground text-base sm:text-lg xl:text-xl"
@@ -63,9 +64,7 @@ export function HeroSection() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.8 }}
           >
-            Encontre projetos que combinam com suas habilidades, acompanhe suas
-            contribuições e construa seu perfil de desenvolvedor na comunidade
-            open source.
+            {t("landingPage.subtitle")}
           </motion.p>
         </div>
 
@@ -80,7 +79,7 @@ export function HeroSection() {
               <Link to="/explore">
                 <Button size="lg" className="w-full sm:w-fit gap-2">
                   <Search className="h-5 w-5" />
-                  <span>Explorar projetos</span>
+                  <span>{t("landingPage.exploreButton")}</span>
                 </Button>
               </Link>
             ) : (
@@ -90,7 +89,7 @@ export function HeroSection() {
                 className="w-full sm:w-fit gap-2"
               >
                 <Github className="h-5 w-5" />
-                <span>Entrar com GitHub</span>
+                <span>{t("landingPage.loginInButton")}</span>
               </Button>
             )}
             <Link to="/learn">
@@ -100,7 +99,7 @@ export function HeroSection() {
                 className="w-full sm:w-fit gap-2"
               >
                 <Compass className="h-5 w-5" />
-                <span>Aprenda mais</span>
+                <span>{t("landingPage.learnButton")}</span>
               </Button>
             </Link>
           </div>
@@ -108,8 +107,7 @@ export function HeroSection() {
             <div className="flex items-center gap-2">
               <Info className="h-4 w-4 text-gray-500" />
               <span className="text-gray-500 text-sm">
-                Conecte-se com o GitHub para desbloquear recursos
-                personalizados.
+                {t("landingPage.disclaimer")}
               </span>
             </div>
           )}
@@ -130,7 +128,7 @@ export function HeroSection() {
               <Compass className="h-4 w-4 text-gray-900 dark:text-gray-200" />
             </div>
             <h3 className="font-semibold text-gray-900 dark:text-gray-100">
-              Radar de Projetos
+              {t("landingPage.radarTitle")}
             </h3>
           </div>
           <motion.div
@@ -158,7 +156,7 @@ export function HeroSection() {
           <div className="flex items-center gap-2">
             <GitPullRequestIcon className="h-4 w-4 text-blue-500 shrink-0" />
             <span className="text-gray-700 dark:text-gray-300">
-              Os projetos exibidos são populares na comunidade open-source.
+              {t("landingPage.radarFooter")}
             </span>
           </div>
         </div>

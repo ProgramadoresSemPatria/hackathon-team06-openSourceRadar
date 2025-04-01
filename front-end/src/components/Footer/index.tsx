@@ -1,7 +1,10 @@
 import { Link } from "react-router";
 import { GitBranch, Heart } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export const Footer = () => {
+  const { t } = useTranslation();
+
   return (
     <footer className="bg-background border-t w-full mt-20">
       <div className="max-w-[96rem] mx-auto px-6 sm:px-12 py-10">
@@ -12,20 +15,19 @@ export const Footer = () => {
               <span className="font-bold">Open Source Radar</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              Descubra, contribua e evolua com projetos open source que combinam
-              com suas habilidades e interesses.
+              {t("footer.mainText")}
             </p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-4">Navegação</h3>
+            <h3 className="font-semibold mb-4">{t("footer.navigation")}</h3>
             <ul className="space-y-3">
               <li>
                 <Link
                   to="/"
                   className="text-sm text-muted-foreground hover:text-foreground"
                 >
-                  Página Inicial
+                  {t("footer.initialPage")}
                 </Link>
               </li>
               <li>
@@ -33,7 +35,7 @@ export const Footer = () => {
                   to="/explore"
                   className="text-sm text-muted-foreground hover:text-foreground"
                 >
-                  Explorar Projetos
+                  {t("navbar.explore")}
                 </Link>
               </li>
               <li>
@@ -41,7 +43,7 @@ export const Footer = () => {
                   to="/learn"
                   className="text-sm text-muted-foreground hover:text-foreground"
                 >
-                  Aprender
+                  {t("navbar.learn")}
                 </Link>
               </li>
               <li>
@@ -56,7 +58,7 @@ export const Footer = () => {
           </div>
 
           <div>
-            <h3 className="font-semibold mb-4">Recursos</h3>
+            <h3 className="font-semibold mb-4">{t("footer.resources")}</h3>
             <ul className="space-y-3">
               <li>
                 <a
@@ -75,7 +77,7 @@ export const Footer = () => {
                   rel="noopener noreferrer"
                   className="text-sm text-muted-foreground hover:text-foreground"
                 >
-                  Primeiros Passos no GitHub
+                  {t("footer.firstSteps")}
                 </a>
               </li>
               <li>
@@ -85,7 +87,7 @@ export const Footer = () => {
                   rel="noopener noreferrer"
                   className="text-sm text-muted-foreground hover:text-foreground"
                 >
-                  Guia Open Source
+                  {t("footer.openSourceGuide")}
                 </a>
               </li>
             </ul>
@@ -99,7 +101,7 @@ export const Footer = () => {
                   to="/privacy"
                   className="text-sm text-muted-foreground hover:text-foreground"
                 >
-                  Política de Privacidade
+                  {t("footer.privacyPolicy")}
                 </Link>
               </li>
               <li>
@@ -107,7 +109,7 @@ export const Footer = () => {
                   to="/terms"
                   className="text-sm text-muted-foreground hover:text-foreground"
                 >
-                  Termos de Serviço
+                  {t("footer.termsOfService")}
                 </Link>
               </li>
             </ul>

@@ -17,5 +17,15 @@
     "learn": "Learn",
     "support": "Support",
     "exitMobileButton": "Log out"
+  },
+  "footer": {
+    "mainText": "Discover, contribute, and grow with open-source projects that match your skills and interests.",
+    "navigation": "Navigation",
+    "resources": "Resources",
+    "firstSteps": "First steps on Github",
+    "openSourceGuide": "Open source guide",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "initialPage": "Initial page"
   }
 }

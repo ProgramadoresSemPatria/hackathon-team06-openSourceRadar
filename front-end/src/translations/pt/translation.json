@@ -17,5 +17,15 @@
     "learn": "Aprender",
     "support": "Suporte",
     "exitMobileButton": "Sair"
+  },
+  "footer": {
+    "mainText": "Descubra, contribua e evolua com projetos open source que combinam com suas habilidades e interesses.",
+    "navigation": "Navegação",
+    "resources": "Recursos",
+    "firstSteps": "Primeiros Passos no GitHub",
+    "openSourceGuide": "Guia open source",
+    "privacyPolicy": "Política de privacidade",
+    "termsOfService": "Termos de serviço",
+    "initialPage": "Página inicial"
   }
 }

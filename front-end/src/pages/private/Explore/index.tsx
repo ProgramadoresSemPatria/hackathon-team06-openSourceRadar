@@ -13,8 +13,11 @@ import { AlertCircle } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchFavoriteRepositories } from "@/lib/fetchers/fetchFavoriteRepositories";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTranslation } from "react-i18next";
 
 export default function Explore() {
+  const { t } = useTranslation();
+
   const [activeTab, setActiveTab] = useState("recommended");
   const [currentPage, setCurrentPage] = useState(1);
   const { userProfile } = useAuth();
@@ -105,8 +108,7 @@ export default function Explore() {
         <div className="w-full space-y-2">
           <h1 className="text-2xl sm:text-3xl font-bold">Open Source Radar</h1>
           <p className="text-lg sm:text-xl text-muted-foreground">
-            Descubra projetos open source que combinam com seus interesses e
-            nível de habilidade
+            {t("explore.text1")}
           </p>
         </div>
 
@@ -126,8 +128,10 @@ export default function Explore() {
             onValueChange={handleTabChange}
           >
             <TabsList className="w-full md:w-auto md:max-w-md grid grid-cols-2">
-              <TabsTrigger value="recommended">Recomendados</TabsTrigger>
-              <TabsTrigger value="favorites">Favoritos</TabsTrigger>
+              <TabsTrigger value="recommended">
+                {t("explore.text2")}
+              </TabsTrigger>
+              <TabsTrigger value="favorites">{t("explore.text3")}</TabsTrigger>
             </TabsList>
 
             <TabsContent value="recommended" className="mt-6">
@@ -140,19 +144,16 @@ export default function Explore() {
               ) : recommendedQuery.error ? (
                 <div className="text-center py-12 border rounded-lg bg-muted/20">
                   <AlertCircle className="h-10 w-10 mx-auto text-destructive mb-4" />
-                  <h3 className="text-lg font-medium">
-                    Erro ao carregar repositórios
-                  </h3>
+                  <h3 className="text-lg font-medium">{t("explore.text4")}</h3>
                   <p className="text-muted-foreground mt-2">
-                    Atingimos o limite de requisições da API do GitHub. Por
-                    favor, tente novamente em alguns minutos.
+                    {t("explore.text5")}
                   </p>
                   <Button
                     onClick={() => recommendedQuery.refetch()}
                     variant="outline"
                     className="mt-4"
                   >
-                    Tentar Novamente
+                    {t("explore.text6")}
                   </Button>
                 </div>
               ) : recommendedQuery.data?.repositories &&
@@ -169,19 +170,16 @@ export default function Explore() {
               ) : (
                 <div className="text-center py-12 border rounded-lg bg-muted/20">
                   <AlertCircle className="h-10 w-10 mx-auto text-muted-foreground mb-4" />
-                  <h3 className="text-lg font-medium">
-                    Nenhum repositório encontrado
-                  </h3>
+                  <h3 className="text-lg font-medium">{t("explore.text7")}</h3>
                   <p className="text-muted-foreground mt-2">
-                    Tente ajustar seus filtros ou usar termos de busca
-                    diferentes.
+                    {t("explore.text8")}
                   </p>
                   <Button
                     onClick={handleResetFilters}
                     variant="outline"
                     className="mt-4"
                   >
-                    Limpar filtros e tentar novamente
+                    {t("explore.text9")}
                   </Button>
                 </div>
               )}
@@ -212,12 +210,9 @@ export default function Explore() {
               ) : (
                 <div className="text-center py-12 border rounded-lg bg-muted/20">
                   <AlertCircle className="h-10 w-10 mx-auto text-muted-foreground mb-4" />
-                  <h3 className="text-lg font-medium">
-                    Nenhum repositório favorito
-                  </h3>
+                  <h3 className="text-lg font-medium">{t("explore.text10")}</h3>
                   <p className="text-muted-foreground mt-2">
-                    Você ainda não adicionou nenhum repositório aos seus
-                    favoritos.
+                    {t("explore.text11")}
                   </p>
                 </div>
               )}

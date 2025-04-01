@@ -11,6 +11,7 @@ import {
 import { languages, starFilters, forkFilters, topicFilters } from "@/lib/data";
 import { Filter, Search } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 interface FiltersProps {
   onFilterChange: (filters: FilterValues) => void;
@@ -33,6 +34,8 @@ export function Filters({
   isLoading,
   currentFilters,
 }: FiltersProps) {
+  const { t } = useTranslation();
+
   const [searchQuery, setSearchQuery] = useState(
     currentFilters.searchQuery || ""
   );
@@ -89,7 +92,7 @@ export function Filters({
       <div className="relative flex-grow">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input
-          placeholder="Buscar repositórios..."
+          placeholder={t("filterExplore.text1")}
           className="pl-10"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
@@ -157,11 +160,11 @@ export function Filters({
           onClick={handleReset}
           disabled={isLoading}
         >
-          Limpar Filtros
+          {t("filterExplore.text2")}
         </Button>
         <Button type="submit" className="gap-2" disabled={isLoading}>
           <Filter className="h-4 w-4" />
-          Aplicar Filtros
+          {t("filterExplore.text3")}
         </Button>
       </div>
     </form>

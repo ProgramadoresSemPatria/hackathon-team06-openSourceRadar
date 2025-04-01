@@ -59,5 +59,28 @@
     "text27": "Be part of a community without borders",
     "text28": "Contributing to open source projects is a way to overcome geographical barriers and connect with developers from all over the world. It is an opportunity to collaborate on meaningful projects and build international professional relationships.",
     "text29": "Through this experience, you can expand your network, improve your English communication skills, and increase your chances of landing global remote work opportunities."
+  },
+  "explore": {
+    "text1": "Discover open source projects that match your interests and skill level",
+    "text2": "Recommended",
+    "text3": "Favorites",
+    "text4": "Error loading repositories",
+    "text5": "We've reached the GitHub API request limit. Please try again in a few minutes.",
+    "text6": "Try Again",
+    "text7": "No repository found",
+    "text8": "Try adjusting your filters or using different search terms.",
+    "text9": "Clear filters and try again",
+    "text10": "No favorite repository",
+    "text11": "You haven't added any repositories to your favorites yet."
+  },
+  "filterExplore": {
+    "text1": "Search repositories...",
+    "text2": "Clear Filters",
+    "text3": "Apply Filters"
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next",
+    "more": "More pages"
   }
 }

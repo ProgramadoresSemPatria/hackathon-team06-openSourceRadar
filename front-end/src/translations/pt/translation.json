@@ -60,5 +60,28 @@
     "text27": "Faça parte de uma comunidade sem fronteiras",
     "text28": "Contribuir para projetos open source é uma forma de ultrapassar barreiras geográficas e conectar-se com desenvolvedores do mundo todo. É uma oportunidade de colaborar em projetos significativos e construir relacionamentos profissionais internacionais.",
     "text29": "Através dessa experiência, você pode expandir sua rede de contatos, aprimorar habilidades de comunicação em inglês e aumentar suas chances de conquistar oportunidades de trabalho remoto global."
+  },
+  "explore": {
+    "text1": "Descubra projetos open source que combinam com seus interesses e nível de habilidade",
+    "text2": "Recomendados",
+    "text3": "Favoritos",
+    "text4": "Erro ao carregar repositórios",
+    "text5": "Atingimos o limite de requisições da API do GitHub. Por favor, tente novamente em alguns minutos.",
+    "text6": "Tentar Novamente",
+    "text7": "Nenhum repositório encontrado",
+    "text8": "Tente ajustar seus filtros ou usar termos de busca diferentes.",
+    "text9": "Limpar filtros e tentar novamente",
+    "text10": "Nenhum repositório favorito",
+    "text11": "Você ainda não adicionou nenhum repositório aos seus favoritos."
+  },
+  "filterExplore": {
+    "text1": "Buscar repositórios...",
+    "text2": "Limpar Filtros",
+    "text3": "Aplicar Filtros"
+  },
+  "pagination": {
+    "previous": "Anterior",
+    "next": "Próximo",
+    "more": "Mais páginas"
   }
 }

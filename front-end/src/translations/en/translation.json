@@ -2,8 +2,14 @@
   "landingPage": {
     "title": "Your personal radar for open-source projects",
     "subtitle": "Find projects that match your skills, track your contributions, and build your developer profile in the open-source community.",
-    "loginInButton": "SignIn with Github",
+    "loginInButton": "Sign in with Github",
     "exploreButton": "Explore projects",
-    "learnButton": "Learn more"
+    "learnButton": "Learn more",
+    "disclaimer": "Connect with GitHub to unlock personalized features.",
+    "bulletText": "Discover • Contribute • Grow",
+    "radarTitle": "Project Radar",
+    "radarFooter": "The projects displayed are popular in the open-source community.",
+    "searchTitle": "Discover open source projects that match your interests and skill level",
+    "searchPlaceholder": "Search repositories..."
   }
 }

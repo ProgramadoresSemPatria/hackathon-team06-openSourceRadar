@@ -4,6 +4,12 @@
     "subtitle": "Encontre projetos que combinam com suas habilidades, acompanhe suas contribuições e construa seu perfil de desenvolvedor na comunidade open source.",
     "loginInButton": "Entrar com Github",
     "exploreButton": "Explorar projetos",
-    "learnButton": "Aprenda mais"
+    "learnButton": "Aprenda mais",
+    "disclaimer": "Conecte-se com o GitHub para desbloquear recursos personalizados.",
+    "bulletText": "Descobrir • Contribuir • Crescer",
+    "radarTitle": "Radar de Projetos",
+    "radarFooter": "Os projetos exibidos são populares na comunidade open-source.",
+    "searchTitle": "Descubra projetos open source que correspondem aos seus interesses e nível de habilidade",
+    "searchPlaceholder": "Pesquisar repositórios..."
   }
 }

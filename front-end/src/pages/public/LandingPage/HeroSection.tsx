@@ -45,7 +45,7 @@ export function HeroSection() {
         >
           <span className="flex h-2 w-2 rounded-full bg-foreground"></span>
           <span className="ml-2 font-medium">
-            Descobrir • Contribuir • Crescer
+            {t("landingPage.bulletText")}
           </span>
         </motion.div>
 
@@ -107,8 +107,7 @@ export function HeroSection() {
             <div className="flex items-center gap-2">
               <Info className="h-4 w-4 text-gray-500" />
               <span className="text-gray-500 text-sm">
-                Conecte-se com o GitHub para desbloquear recursos
-                personalizados.
+                {t("landingPage.disclaimer")}
               </span>
             </div>
           )}
@@ -129,7 +128,7 @@ export function HeroSection() {
               <Compass className="h-4 w-4 text-gray-900 dark:text-gray-200" />
             </div>
             <h3 className="font-semibold text-gray-900 dark:text-gray-100">
-              Radar de Projetos
+              {t("landingPage.radarTitle")}
             </h3>
           </div>
           <motion.div
@@ -157,7 +156,7 @@ export function HeroSection() {
           <div className="flex items-center gap-2">
             <GitPullRequestIcon className="h-4 w-4 text-blue-500 shrink-0" />
             <span className="text-gray-700 dark:text-gray-300">
-              Os projetos exibidos são populares na comunidade open-source.
+              {t("landingPage.radarFooter")}
             </span>
           </div>
         </div>

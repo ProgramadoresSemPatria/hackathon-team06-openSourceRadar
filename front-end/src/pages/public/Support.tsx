@@ -22,8 +22,11 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { PageLayout } from "@/components/PageLayout";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 export default function Support() {
+  const { t } = useTranslation();
+
   const buyMeACoffeeUrl = "https://buymeacoffee.com/opensourceradar";
   const githubUrl =
     "https://github.com/ProgramadoresSemPatria/hackathon-team06-openSourceRadar";
@@ -43,7 +46,7 @@ export default function Support() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.4, delay: 0 }}
             >
-              Support Our Mission
+              {t("suport.text1")}
             </motion.h1>
             <motion.p
               initial={{ opacity: 0 }}
@@ -51,8 +54,7 @@ export default function Support() {
               transition={{ duration: 0.4, delay: 0.2 }}
               className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8"
             >
-              Help us empower developers to contribute to open source and build
-              a stronger community.
+              {t("suport.text2")}
             </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 10 }}
@@ -66,7 +68,7 @@ export default function Support() {
                   rel="noopener noreferrer"
                 >
                   <Coffee className="h-5 w-5" />
-                  Buy Me a Coffee
+                  {t("suport.text3")}
                   <ExternalLink className="h-4 w-4 ml-1" />
                 </a>
               </Button>
@@ -83,7 +85,7 @@ export default function Support() {
               transition={{ duration: 0.8, delay: 0 }}
             >
               <h2 className="text-3xl font-bold mb-6 text-center">
-                Why Support Us?
+                {t("suport.text4")}
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <Card>
@@ -91,12 +93,11 @@ export default function Support() {
                     <div className="mx-auto bg-primary/10 p-3 rounded-full w-14 h-14 flex items-center justify-center mb-2">
                       <Coffee className="h-7 w-7 text-primary" />
                     </div>
-                    <CardTitle>Fuel Development</CardTitle>
+                    <CardTitle>{t("suport.text5")}</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <p className="text-center text-muted-foreground">
-                      Your support helps us maintain servers and develop new
-                      features for the platform.
+                      {t("suport.text6")}
                     </p>
                   </CardContent>
                 </Card>
@@ -106,12 +107,11 @@ export default function Support() {
                     <div className="mx-auto bg-primary/10 p-3 rounded-full w-14 h-14 flex items-center justify-center mb-2">
                       <Heart className="h-7 w-7 text-red-500" />
                     </div>
-                    <CardTitle>Support Education</CardTitle>
+                    <CardTitle>{t("suport.text7")}</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <p className="text-center text-muted-foreground">
-                      Help us create more educational content to guide new
-                      contributors to open source.
+                      {t("suport.text8")}
                     </p>
                   </CardContent>
                 </Card>
@@ -121,12 +121,11 @@ export default function Support() {
                     <div className="mx-auto bg-primary/10 p-3 rounded-full w-14 h-14 flex items-center justify-center mb-2">
                       <CheckCircle2 className="h-7 w-7 text-green-500" />
                     </div>
-                    <CardTitle>Ensure Sustainability</CardTitle>
+                    <CardTitle>{t("suport.text9")}</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <p className="text-center text-muted-foreground">
-                      Your donations help ensure the long-term sustainability of
-                      this free community resource.
+                      {t("suport.text10")}
                     </p>
                   </CardContent>
                 </Card>
@@ -141,10 +140,9 @@ export default function Support() {
               transition={{ duration: 0.8, delay: 0 }}
               className="text-center"
             >
-              <h2 className="text-3xl font-bold mb-6">Other Ways to Help</h2>
+              <h2 className="text-3xl font-bold mb-6">{t("suport.text11")}</h2>
               <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Financial support isn't the only way to contribute. Here are
-                other valuable ways you can help:
+                {t("suport.text12")}
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -154,16 +152,15 @@ export default function Support() {
                     <div className="mx-auto bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 p-3 rounded-full w-14 h-14 flex items-center justify-center mb-2">
                       <Share2 className="h-7 w-7" />
                     </div>
-                    <CardTitle>Spread the Word</CardTitle>
+                    <CardTitle>{t("suport.text13")}</CardTitle>
                   </CardHeader>
                   <CardContent className="text-center pb-4">
                     <p className="text-muted-foreground mb-4">
-                      Share our platform with your network and help us reach
-                      more developers.
+                      {t("suport.text14")}
                     </p>
                   </CardContent>
                   <CardFooter className="pt-0 justify-center mt-auto">
-                    <Badge variant="secondary">Community Impact</Badge>
+                    <Badge variant="secondary">{t("suport.text15")}</Badge>
                   </CardFooter>
                 </Card>
 
@@ -173,12 +170,11 @@ export default function Support() {
                     <div className="mx-auto bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 p-3 rounded-full w-14 h-14 flex items-center justify-center mb-2">
                       <Code className="h-7 w-7" />
                     </div>
-                    <CardTitle>Contribute Code</CardTitle>
+                    <CardTitle>{t("suport.text16")}</CardTitle>
                   </CardHeader>
                   <CardContent className="text-center pb-4">
                     <p className="text-muted-foreground mb-4">
-                      Help improve our platform by contributing to our open
-                      source codebase.
+                      {t("suport.text17")}
                     </p>
                     <Button variant="outline" className="gap-2" asChild>
                       <a
@@ -187,12 +183,12 @@ export default function Support() {
                         rel="noopener noreferrer"
                       >
                         <Github className="h-4 w-4" />
-                        View Repository
+                        {t("suport.text18")}
                       </a>
                     </Button>
                   </CardContent>
                   <CardFooter className="mt-auto pt-0 justify-center">
-                    <Badge variant="secondary">Technical Contribution</Badge>
+                    <Badge variant="secondary">{t("suport.text19")}</Badge>
                   </CardFooter>
                 </Card>
 
@@ -202,12 +198,11 @@ export default function Support() {
                     <div className="mx-auto bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 p-3 rounded-full w-14 h-14 flex items-center justify-center mb-2">
                       <MessageSquare className="h-7 w-7" />
                     </div>
-                    <CardTitle>Provide Feedback</CardTitle>
+                    <CardTitle>{t("suport.text20")}</CardTitle>
                   </CardHeader>
                   <CardContent className="text-center pb-4">
                     <p className="text-muted-foreground mb-4">
-                      Share your ideas and suggestions to make the platform
-                      better.
+                      {t("suport.text21")}
                     </p>
                     <Button variant="outline" className="gap-2" asChild>
                       <a
@@ -216,12 +211,12 @@ export default function Support() {
                         rel="noopener noreferrer"
                       >
                         <MessageSquare className="h-4 w-4" />
-                        Submit Feedback
+                        {t("suport.text22")}
                       </a>
                     </Button>
                   </CardContent>
                   <CardFooter className="mt-auto pt-0 justify-center">
-                    <Badge variant="secondary">User Insights</Badge>
+                    <Badge variant="secondary">{t("suport.text23")}</Badge>
                   </CardFooter>
                 </Card>
               </div>
@@ -229,12 +224,9 @@ export default function Support() {
 
             {/* CTA section */}
             <section className="bg-primary/10 rounded-lg p-8 text-center">
-              <h2 className="text-2xl font-bold mb-4">
-                Ready to Support Our Mission?
-              </h2>
+              <h2 className="text-2xl font-bold mb-4">{t("suport.text24")}</h2>
               <p className="text-muted-foreground max-w-2xl mx-auto mb-6">
-                Every contribution, no matter how small, helps us continue our
-                work in making open source more accessible to everyone.
+                {t("suport.text25")}
               </p>
               <Button size="lg" className="gap-2" asChild>
                 <a
@@ -243,7 +235,7 @@ export default function Support() {
                   rel="noopener noreferrer"
                 >
                   <Coffee className="h-5 w-5" />
-                  Buy Me a Coffee
+                  {t("suport.text26")}
                   <ExternalLink className="h-4 w-4 ml-1" />
                 </a>
               </Button>

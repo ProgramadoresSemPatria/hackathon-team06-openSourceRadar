@@ -4,7 +4,29 @@
     "subtitle": "Encontre projetos que combinam com suas habilidades, acompanhe suas contribuições e construa seu perfil de desenvolvedor na comunidade open source.",
     "loginInButton": "Entrar com Github",
     "exploreButton": "Explorar projetos",
-    "learnButton": "Aprenda mais"
+    "learnButton": "Aprenda mais",
+    "disclaimer": "Conecte-se com o GitHub para desbloquear recursos personalizados.",
+    "bulletText": "Descobrir • Contribuir • Crescer",
+    "radarTitle": "Radar de Projetos",
+    "radarFooter": "Os projetos exibidos são populares na comunidade open-source.",
+    "searchTitle": "Descubra projetos open source que correspondem aos seus interesses e nível de habilidade",
+    "searchPlaceholder": "Pesquisar repositórios..."
+  },
+  "navbar": {
+    "explore": "Explorar",
+    "learn": "Aprender",
+    "support": "Suporte",
+    "exitMobileButton": "Sair"
+  },
+  "footer": {
+    "mainText": "Descubra, contribua e evolua com projetos open source que combinam com suas habilidades e interesses.",
+    "navigation": "Navegação",
+    "resources": "Recursos",
+    "firstSteps": "Primeiros Passos no GitHub",
+    "openSourceGuide": "Guia open source",
+    "privacyPolicy": "Política de privacidade",
+    "termsOfService": "Termos de serviço",
+    "initialPage": "Página inicial"
   },
   "learns": {
     "title": "Aprenda sobre Open Source",
